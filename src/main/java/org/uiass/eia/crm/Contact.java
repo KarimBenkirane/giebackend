@@ -19,7 +19,7 @@ public abstract class Contact implements Serializable {
     @Column(name="fax")
     protected String fax;
     @OneToOne
-    @JoinColumn(name = "id_adresse")
+    @JoinColumn(name = "adresse_id")
     protected Adresse adresse;
 
     public Contact() {
