@@ -15,8 +15,8 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        Adresse a1 = new Adresse("Rue Lotissement Kerimate",11,"Amerchich","Marrakech","Maroc");
-        Particulier p1 = new Particulier("0612345678", "test@email.com", "05241567920",a1, "Benkirane", "Mohamed Karim");
+        Adresse a1 = new Adresse("L'hivernage",7,"Gueliz","Marrakech","Maroc");
+        Particulier p1 = new Particulier("0612345678", "test@email.com", "0512345678",a1, "Benkirane", "Karim");
         ParticulierDao particulierDao = new ParticulierDao();
         particulierDao.addParticulier(p1);
     }
