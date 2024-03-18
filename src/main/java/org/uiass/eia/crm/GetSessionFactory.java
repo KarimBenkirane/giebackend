@@ -20,8 +20,11 @@ public class GetSessionFactory {
             configuration.configure("hibernate.cfg.xml");
             configuration.setProperty("hibernate.connection.autocommit", "true");
             
-            configuration.addAnnotatedClass(Client.class);
-           
+            configuration.addAnnotatedClass(Contact.class);
+            configuration.addAnnotatedClass(Entreprise.class);
+            configuration.addAnnotatedClass(Particulier.class);
+            configuration.addAnnotatedClass(Adresse.class);
+
             // Create Session Factory
             sessionFactory = configuration.buildSessionFactory();
         }

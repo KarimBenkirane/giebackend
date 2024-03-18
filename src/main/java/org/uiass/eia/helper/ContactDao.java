@@ -1,32 +1,27 @@
-package org.uiass.eia.crm;
+package org.uiass.eia.helper;
 
-import org.uiass.eia.helper.HibernateUtility;
+import org.uiass.eia.crm.Contact;
 
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-
-public class ClientDao {
+public class ContactDao {
 	private EntityManager em;
 	private EntityTransaction tr;
 
 
-	public ClientDao() {
+	public ContactDao() {
 
 		this.em= HibernateUtility.getEntityManger();
 		tr=em.getTransaction();
 	}
 
 
-	public void addClient(Client cli) {
+	public void addContact(Contact contact) {
 		// TODO Auto-generated method stub
 		try {
 			tr.begin();
-			em.persist(cli);
+			em.persist(contact);
 			tr.commit();
 
 		}
@@ -37,11 +32,11 @@ public class ClientDao {
 		}
 	}
 
-	public void deleteClient(Client cli) {
+	public void deleteContact(Contact contact) {
 		// TODO Auto-generated method stub
 		try {
 			tr.begin();
-			Client entity = em.find(Client.class,cli);
+			Contact entity = em.find(Contact.class,contact);
 			if (entity != null) { // vérifier que l'objet existe
 				em.remove(entity);
 			}
@@ -55,19 +50,19 @@ public class ClientDao {
 
 	}
 
-	public List<Client> getAllClients() {
+	public List<Contact> getAllClients() {
 		// TODO Auto-generated method stub
-		Query query= em.createQuery("from Client");
+		Query query= em.createQuery("from Contact");
 		return query.getResultList();
 	}
 
-	public Client findClientById(int id) {
+	public Contact findContactById(int id) {
 		// TODO Auto-generated method stub
-		return em.find(Client.class, id);
+		return em.find(Contact.class, id);
 	}
 
-	public Client findClientByName(String nom) {
-		TypedQuery<Client> query = em.createQuery("FROM Client WHERE nom = :nom", Client.class);
+	public Contact findContactByName(String nom) {
+		TypedQuery<Contact> query = em.createQuery("FROM Contact WHERE nom = :nom", Contact.class);
 		query.setParameter("nom", nom);
 		try {
 			return query.getSingleResult();
