@@ -90,4 +90,115 @@ public class AdresseDao {
         return em.find(Adresse.class, id);
     }
 
-}
+
+    public void changeCodePostal(int adresse_id,int codePostal){
+        String hql = "update Adresse set codePostal= :codePostal where adresse_id = :adresse_id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("adresse_id",adresse_id);
+            query.setParameter("codePostal",codePostal);
+            query.executeUpdate();
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+
+    public void changeNumeroRue(int adresse_id,int numeroRue){
+        String hql = "update Adresse set numeroRue= :numeroRue where adresse_id = :adresse_id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("adresse_id",adresse_id);
+            query.setParameter("numeroRue",numeroRue);
+            query.executeUpdate();
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+
+    public void changeRue(int adresse_id,String rue){
+        String hql = "update Adresse set rue= :rue where adresse_id = :adresse_id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("adresse_id",adresse_id);
+            query.setParameter("rue",rue);
+            query.executeUpdate();
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+
+    public void changePays(int adresse_id,String pays){
+        String hql = "update Adresse set pays= :pays where adresse_id = :adresse_id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("adresse_id",adresse_id);
+            query.setParameter("pays",pays);
+            query.executeUpdate();
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+
+    public void changeQuartier(int adresse_id,String quartier){
+        String hql = "update Adresse set quartier= :quartier where adresse_id = :adresse_id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("adresse_id",adresse_id);
+            query.setParameter("quartier",quartier);
+            query.executeUpdate();
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+
+    public void changeVille(int adresse_id,String ville){
+        String hql = "update Adresse set ville= :ville where adresse_id = :adresse_id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("adresse_id",adresse_id);
+            query.setParameter("ville",ville);
+            query.executeUpdate();
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+    }
+
+
+

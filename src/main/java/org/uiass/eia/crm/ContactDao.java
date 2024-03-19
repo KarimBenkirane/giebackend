@@ -141,5 +141,153 @@ public class ContactDao {
 		}
 	}
 
+	public void changeTelephone(int id,String telephone){
+		String hql = "update Contact set telephone= :telephone where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("telephone",telephone);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void changeFax(int id,String fax){
+		String hql = "update Contact set fax= :fax where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("fax",fax);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void changeNom(int id,String nom){
+		String hql = "update Contact set nom= :nom where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("nom",nom);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void changePrenom(int id,String prenom){
+		String hql = "update Contact set prenom= :prenom where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("prenom",prenom);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void changeRaisonSociale(int id,String raisonSociale){
+		String hql = "update Contact set raisonSociale= :raisonSociale where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("raisonSociale",raisonSociale);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+
+	public void changeFormeJuridique(int id,String formeJuridique){
+		String hql = "update Contact set formeJuridique= :formeJuridique where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("formeJuridique",formeJuridique);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void changeEmail(int id,String email){
+		String hql = "update Contact set email= :email where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("email",email);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void changeAdresseId(int id,int adresse_id){
+		String hql = "update Contact set adresse_id= :adresse_id where id = :id";
+		try {
+			tr.begin();
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.setParameter("adresse_id",adresse_id);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+
+
+
 
 }

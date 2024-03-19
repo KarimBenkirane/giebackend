@@ -15,11 +15,7 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        ContactDao contactDao = ContactDao.getContactDao();
-        List<Entreprise> entreprises = contactDao.findEntrepriseByRaisonSociale("Company 3");
-        for(Entreprise ent : entreprises){
-            System.out.println(ent.getEmail());
-        }
+
     }
 }
 
