@@ -58,7 +58,9 @@ public class AdresseDao {
         }
     }
 
-
+    public Adresse getAdresseById(int id){
+        return em.find(Adresse.class, id);
+    }
 
     public void deleteAdresse(int id) {
         String hql = "delete from Adresse where adresse_id =:id";

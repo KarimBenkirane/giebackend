@@ -15,8 +15,9 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        ContactDao contactDao = ContactDao.getContactDao();
-        contactDao.deleteContactById(9);
+        AdresseDao adresseDao = AdresseDao.getAdresseDao();
+        Adresse adresse = adresseDao.getAdresseById(14);
+        System.out.println(adresse.getRue());
     }
 
 }
