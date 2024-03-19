@@ -14,6 +14,8 @@ public class Adresse {
     private int numeroRue;
     @Column(name="quartier")
     private String quartier;
+    @Column(name="codePostal")
+    private int codePostal;
     @Column(name="ville")
     private String ville;
     @Column(name="pays")
@@ -22,16 +24,13 @@ public class Adresse {
     public Adresse() {
     }
 
-    public Adresse(String rue, int numeroRue, String quartier, String ville, String pays) {
+    public Adresse(String rue, int numeroRue, String quartier, int codePostal, String ville, String pays) {
         this.rue = rue;
         this.numeroRue = numeroRue;
         this.quartier = quartier;
+        this.codePostal = codePostal;
         this.ville = ville;
         this.pays = pays;
-    }
-
-    public String getRue() {
-        return rue;
     }
 
     public int getId() {
@@ -40,6 +39,10 @@ public class Adresse {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getRue() {
+        return rue;
     }
 
     public void setRue(String rue) {
@@ -60,6 +63,14 @@ public class Adresse {
 
     public void setQuartier(String quartier) {
         this.quartier = quartier;
+    }
+
+    public int getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(int codePostal) {
+        this.codePostal = codePostal;
     }
 
     public String getVille() {

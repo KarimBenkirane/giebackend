@@ -13,20 +13,41 @@ import javax.persistence.TypedQuery;
 public class AdresseDao {
     private EntityManager em;
     private EntityTransaction tr;
+    private static AdresseDao adresseDao;
+
+    public static AdresseDao getAdresseDao(){
+        if(adresseDao == null)
+            adresseDao = new AdresseDao();
+        return adresseDao;
+    }
 
 
-    public AdresseDao() {
+    private AdresseDao() {
 
         this.em= HibernateUtility.getEntityManger();
         tr=em.getTransaction();
     }
 
 
-    public void addAdresse(Adresse Adresse) {
+    public void addAdresse(Adresse adresse) {
         // TODO Auto-generated method stub
         try {
             tr.begin();
-            em.persist(Adresse);
+            em.persist(adresse);
+            tr.commit();
+
+        }
+        catch(Exception e) {
+            tr.rollback();
+            System.out.println(e);
+
+        }
+    }
+    public void addAdresseByAttribues(String rue, int numeroRue, String quartier, int codePostal, String ville, String pays) {
+        // TODO Auto-generated method stub
+        try {
+            tr.begin();
+            em.persist(new Adresse(rue,numeroRue,quartier,codePostal,ville,pays));
             tr.commit();
 
         }
@@ -37,22 +58,23 @@ public class AdresseDao {
         }
     }
 
-    public void deleteAdresse(Adresse Adresse) {
-        // TODO Auto-generated method stub
+
+
+    public void deleteAdresse(int id) {
+        String hql = "delete from Adresse where adresse_id =:id";
         try {
             tr.begin();
-            Adresse entity = em.find(Adresse.class,Adresse);
-            if (entity != null) { // vérifier que l'objet existe
-                em.remove(entity);
-            }
+            Query query = em.createQuery(hql);
+            query.setParameter("id",id);
+            query.executeUpdate();
             tr.commit();
 
         }
         catch(Exception e) {
             tr.rollback();
             System.out.println(e);
-        }
 
+        }
     }
 
     public List<Adresse> getAllAdresses() {

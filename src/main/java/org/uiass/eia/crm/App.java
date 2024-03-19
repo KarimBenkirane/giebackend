@@ -15,11 +15,8 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        AdresseDao adresseDao = new AdresseDao();
-        Adresse a1 = new Adresse("L'hivernage",7,"Gueliz","Marrakech","Maroc");
-        adresseDao.addAdresse(a1);
-        Particulier p1 = new Particulier("0612345678", "test@email.com", "0512345678",a1, "Benkirane", "Karim");
-        ParticulierDao particulierDao = new ParticulierDao();
-        particulierDao.addParticulier(p1);
+        ContactDao contactDao = ContactDao.getContactDao();
+
     }
+
 }
