@@ -2,13 +2,10 @@ package org.uiass.eia.crm;
 
 import org.uiass.eia.helper.HibernateUtility;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 public class ContactDao {
 	private EntityManager em;
@@ -94,25 +91,41 @@ public class ContactDao {
 		return em.find(Contact.class, id);
 	}
 
-	public Contact findEntrepriseByRaisonSociale(String raisonSociale) {
-		TypedQuery<Contact> query = em.createQuery("from Contact where contact_type='Entreprise' and raisonSociale = :raisonSociale", Contact.class);
+	public List<Entreprise> findEntrepriseByRaisonSociale(String raisonSociale) {
+		TypedQuery<Contact> query = em.createQuery("select c from Contact c where c.raisonSociale= :raisonSociale", Contact.class);
 		query.setParameter("raisonSociale", raisonSociale);
+		List<Entreprise> entreprises = new ArrayList<>();
 		try {
-			return query.getSingleResult();
+			List<Contact> contacts = query.getResultList();
+			for(Contact contact : contacts){
+				if(contact instanceof Entreprise){
+					entreprises.add((Entreprise) contact);
+				}
+			}
 		} catch (NonUniqueResultException e) {
 			return null;
 		}
+		return entreprises;
 	}
 
-	public Contact findParticulierByNom(String nom) {
-		TypedQuery<Contact> query = em.createQuery("from Contact where contact_type='Particulier' and nom = :nom", Contact.class);
+	public List<Particulier> findParticuliersByNom(String nom) {
+		TypedQuery<Contact> query = em.createQuery(
+				"SELECT c FROM Contact c WHERE c.nom = :nom", Contact.class);
 		query.setParameter("nom", nom);
+		List<Particulier> particuliers = new ArrayList<>();
 		try {
-			return query.getSingleResult();
-		} catch (NonUniqueResultException e) {
-			return null;
+			List<Contact> results = query.getResultList();
+			for (Contact result : results) {
+				if (result instanceof Particulier) {
+					particuliers.add((Particulier) result);
+				}
+			}
+		} catch (NoResultException e) {
+			// Handle the case where no result is found
 		}
+		return particuliers;
 	}
+
 
 	public void deleteContactById(int id) {
 		try {

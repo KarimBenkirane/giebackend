@@ -15,9 +15,12 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        AdresseDao adresseDao = AdresseDao.getAdresseDao();
-        Adresse adresse = adresseDao.getAdresseById(14);
-        System.out.println(adresse.getRue());
+        ContactDao contactDao = ContactDao.getContactDao();
+        List<Entreprise> entreprises = contactDao.findEntrepriseByRaisonSociale("Company 3");
+        for(Entreprise ent : entreprises){
+            System.out.println(ent.getEmail());
+        }
     }
-
 }
+
+
