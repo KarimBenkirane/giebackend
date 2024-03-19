@@ -16,7 +16,7 @@ public class App {
 
     public static void main( String[] args ) {
         ContactDao contactDao = ContactDao.getContactDao();
-
+        contactDao.deleteContactById(9);
     }
 
 }

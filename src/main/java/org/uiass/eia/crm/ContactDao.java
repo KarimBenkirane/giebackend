@@ -89,6 +89,11 @@ public class ContactDao {
 		return em.find(Particulier.class, id);
 	}
 
+	public Contact findContactById(int id) {
+		// TODO Auto-generated method stub
+		return em.find(Contact.class, id);
+	}
+
 	public Contact findEntrepriseByRaisonSociale(String raisonSociale) {
 		TypedQuery<Contact> query = em.createQuery("from Contact where contact_type='Entreprise' and raisonSociale = :raisonSociale", Contact.class);
 		query.setParameter("raisonSociale", raisonSociale);
@@ -109,6 +114,19 @@ public class ContactDao {
 		}
 	}
 
+	public void deleteContactById(int id) {
+		try {
+			tr.begin();
+			Contact contact = em.find(Contact.class, id);
+			if (contact != null) {
+				em.remove(contact);
+				tr.commit();
+			} else {
+			}
+		} catch (Exception e) {
+			tr.rollback();
+		}
+	}
 
 
 }
