@@ -13,15 +13,7 @@ public class ContactDao {
 	private static ContactDao contactDao;
 
 
-	//Singleton pattern
-	public static ContactDao getContactDao(){
-		if(contactDao == null)
-			contactDao = new ContactDao();
-		return contactDao;
-	}
-
-
-	private ContactDao() {
+	public ContactDao() {
 		this.em= HibernateUtility.getEntityManger();
 		tr=em.getTransaction();
 	}

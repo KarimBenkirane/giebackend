@@ -15,14 +15,7 @@ public class AdresseDao {
     private EntityTransaction tr;
     private static AdresseDao adresseDao;
 
-    public static AdresseDao getAdresseDao(){
-        if(adresseDao == null)
-            adresseDao = new AdresseDao();
-        return adresseDao;
-    }
-
-
-    private AdresseDao() {
+    public AdresseDao() {
 
         this.em= HibernateUtility.getEntityManger();
         tr=em.getTransaction();
