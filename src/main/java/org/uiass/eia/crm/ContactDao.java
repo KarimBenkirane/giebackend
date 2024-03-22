@@ -2,18 +2,24 @@ package org.uiass.eia.crm;
 
 import org.uiass.eia.helper.HibernateUtility;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.persistence.*;
 
 public class ContactDao {
 	private EntityManager em;
 	private EntityTransaction tr;
 	private static ContactDao contactDao;
 
+	//Singleton pattern
+	public static ContactDao getInstance(){
+		if(contactDao == null)
+			contactDao = new ContactDao();
+		return contactDao;
+	}
 
-	public ContactDao() {
+
+	private ContactDao() {
 		this.em= HibernateUtility.getEntityManger();
 		tr=em.getTransaction();
 	}
@@ -86,6 +92,23 @@ public class ContactDao {
 	public List<Entreprise> findEntrepriseByRaisonSociale(String raisonSociale) {
 		TypedQuery<Contact> query = em.createQuery("select c from Contact c where c.raisonSociale= :raisonSociale", Contact.class);
 		query.setParameter("raisonSociale", raisonSociale);
+		List<Entreprise> entreprises = new ArrayList<>();
+		try {
+			List<Contact> contacts = query.getResultList();
+			for(Contact contact : contacts){
+				if(contact instanceof Entreprise){
+					entreprises.add((Entreprise) contact);
+				}
+			}
+		} catch (NonUniqueResultException e) {
+			return null;
+		}
+		return entreprises;
+	}
+
+	public List<Entreprise> findEntrepriseByFormeJuridique(String formeJuridique) {
+		TypedQuery<Contact> query = em.createQuery("select c from Contact c where c.formeJuridique= :formeJuridique", Contact.class);
+		query.setParameter("formeJuridique", formeJuridique);
 		List<Entreprise> entreprises = new ArrayList<>();
 		try {
 			List<Contact> contacts = query.getResultList();

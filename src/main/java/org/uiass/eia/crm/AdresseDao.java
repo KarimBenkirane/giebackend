@@ -2,20 +2,24 @@ package org.uiass.eia.crm;
 
 import org.uiass.eia.helper.HibernateUtility;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import java.util.List;
 
 public class AdresseDao {
     private EntityManager em;
     private EntityTransaction tr;
     private static AdresseDao adresseDao;
 
-    public AdresseDao() {
+    //Singleton pattern
+    public static AdresseDao getInstance(){
+        if(adresseDao == null)
+            adresseDao = new AdresseDao();
+        return adresseDao;
+    }
+
+    private AdresseDao() {
 
         this.em= HibernateUtility.getEntityManger();
         tr=em.getTransaction();
