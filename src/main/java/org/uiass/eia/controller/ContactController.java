@@ -149,6 +149,9 @@ public class ContactController {
             //  localhost:4567/entreprises va retourner toutes les entités Entreprise
             if(id == null && raisonSociale == null && formeJuridique == null){
                 List<Entreprise> allEntreprises = contactController.contactDao.getAllEntreprises();
+                if(allEntreprises.isEmpty()){
+                    return null;
+                }
                 return allEntreprises;
             }
             else{
