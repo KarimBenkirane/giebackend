@@ -5,10 +5,9 @@ import org.uiass.eia.crm.ContactDao;
 import org.uiass.eia.crm.Entreprise;
 import org.uiass.eia.crm.Particulier;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static spark.Spark.get;
+import static spark.Spark.*;
 
 public class ContactController {
     private ContactDao contactDao = ContactDao.getInstance();
