@@ -1,6 +1,7 @@
 package org.uiass.eia.crm;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="Adresse")
@@ -88,5 +89,15 @@ public class Adresse {
     public void setPays(String pays) {
         this.pays = pays;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Adresse adresse = (Adresse) o;
+        return numeroRue == adresse.numeroRue && codePostal == adresse.codePostal && Objects.equals(rue, adresse.rue) && Objects.equals(quartier, adresse.quartier) && Objects.equals(ville, adresse.ville) && Objects.equals(pays, adresse.pays);
+    }
+
 }
 

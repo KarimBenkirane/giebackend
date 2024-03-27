@@ -58,11 +58,42 @@ public class ContactDao {
 		}
 	}
 
+	public void addEntreprise(Entreprise entreprise) {
+		// TODO Auto-generated method stub
+		try {
+			tr.begin();
+			em.persist(entreprise);
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+
 	public void addParticulier(String telephone, String email, String fax, Adresse adresse, String nom, String prenom) {
 		// TODO Auto-generated method stub
 		try {
 			tr.begin();
 			em.persist(new Particulier(telephone,email,fax,adresse,nom,prenom));
+			tr.commit();
+
+		}
+		catch(Exception e) {
+			tr.rollback();
+			System.out.println(e);
+
+		}
+	}
+
+	public void addParticulier(Particulier particulier) {
+		// TODO Auto-generated method stub
+		try {
+			tr.begin();
+			em.persist(particulier);
 			tr.commit();
 
 		}
@@ -87,6 +118,13 @@ public class ContactDao {
 	public Contact findContactById(int id) {
 		// TODO Auto-generated method stub
 		return em.find(Contact.class, id);
+	}
+
+	public int findAdresseIdByContactId(int contactId) {
+		Query query = em.createQuery("SELECT c.adresse.id FROM Contact c WHERE c.id = :contactId");
+		query.setParameter("contactId", contactId);
+		Integer adresseId = (Integer) query.getSingleResult();
+		return adresseId != null ? adresseId : -1; // Return -1 if no address found
 	}
 
 	public List<Entreprise> findEntrepriseByRaisonSociale(String raisonSociale) {
