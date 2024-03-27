@@ -26,16 +26,72 @@ public class ContactController {
 
 
         //Contacts
-        get("/contacts", (req,res)-> {
-            String id = req.queryParams("id");
+        //Exemple d'utilisation : http://localhost:4567/api/contacts/all → retourne tous les contacts
+        get("/api/contacts/all", (req,res)-> {
 
             res.type("application/json");
 
-            if(id != null){
-                return contactController.contactDao.findContactById(Integer.parseInt(id));
-            }
-            //Aucun queryParam -> Afficher tous les contacts
             return contactController.contactDao.getAllContacts();
+
+        },gson::toJson);
+
+
+
+        //Exemple d'utilisation : http://localhost:4567/api/contacts/get/8 → retourne le contact avec l'id 8
+        get("/api/contacts/get/:id", (req,res)-> {
+            String stId = req.params("id");
+            int id = Integer.parseInt(stId);
+
+            res.type("application/json");
+
+            return contactController.contactDao.findContactById(id);
+
+        },gson::toJson);
+
+
+
+        //Exemple d'utilisation : http://localhost:4567/api/contacts/delete/8 → supprime le contact avec l'id 8
+        // !!!! Envoyer une requête DELETE dans Postman (ne pas mettre l'adresse directement dans le navigateur) !!!!
+        delete("/api/contacts/delete/:id",(req,res) -> {
+            String stId = req.params("id");
+            int id = Integer.parseInt(stId);
+
+            res.type("application/json");
+            contactController.contactDao.deleteContactById(id);
+
+
+            return "Contact supprimé avec succès";
+
+
+        },gson::toJson);
+
+
+
+        //Exemple d'utilisation : http://localhost:4567/api/contacts/change?id=8&telephone=123&fax=212 → change le téléphone
+        //et le fax du contact ayant l'id 8 respectivement par 123 et 212.
+        // !!!! Envoyer une requête PUT dans Postman (ne pas mettre l'adresse directement dans le navigateur) !!!!
+        put("/api/contacts/change", (req,res)-> {
+            String stId = req.queryParams("id");
+            String fax = req.queryParams("fax");
+            String telephone = req.queryParams("telephone");
+
+            int id = Integer.parseInt(stId);
+            res.type("application/json");
+
+            //Changer le téléphone et le fax en même temps
+            if(telephone != null && fax!=null){
+                contactController.contactDao.changeTelephone(id,telephone);
+                contactController.contactDao.changeFax(id,fax);
+            }
+            //Changer le téléphone seulement
+            if(telephone != null && fax==null)
+                contactController.contactDao.changeTelephone(id,telephone);
+            //Changer le fax seulement
+            if(fax != null && telephone==null)
+                contactController.contactDao.changeFax(id,fax);
+
+
+            return "Changements effectués avec succès !";
 
         },gson::toJson);
 
@@ -43,120 +99,38 @@ public class ContactController {
 
 
         // Particuliers
-        get("/particuliers", (req, res) -> {
-            String id = req.queryParams("id");
-            String nom = req.queryParams("nom");
+        //Exemple d'utilisation : http://localhost:4567/api/particuliers/all → retourne tous les particuliers
+        get("/api/particuliers/all", (req, res) -> {
 
             res.type("application/json");
 
-            if(id != null && nom !=null){
-                Particulier particulier = contactController.contactDao.findParticulierById(Integer.parseInt(id));
-                if(particulier != null && particulier.getNom().equals(nom)){
-                    return particulier;
-                }
-                return null;
-            }
-            if (id != null) {
-                return contactController.contactDao.findParticulierById(Integer.parseInt(id));
-            }
-            if (nom != null) {
-                List<Particulier> particuliers = contactController.contactDao.findParticuliersByNom(nom);
-                if(particuliers.isEmpty()){
-                    return null;
-                }
-                return particuliers;
-            }
-            //Aucun queryParam n'est donné -> Afficher tous les particuliers
-            else {
-                return contactController.contactDao.getAllParticuliers();
-            }
+            return contactController.contactDao.getAllParticuliers();
 
         }, gson::toJson);
 
 
 
 
-        //Entreprises
-        //Trouver les entités Entreprise par leur différents attributs
-        //Les queryParams peuvent être utilisés ensemble -> localhost:4567?id=8&fj=SARL va retourner
-        //les entités ayant l'ID 8 ET la forme juridique SARL
-        //sinon retourne null
-        get("/entreprises", (req, res) -> {
-            String id = req.queryParams("id");
-            String raisonSociale = req.queryParams("rs");
-            String formeJuridique = req.queryParams("fj");
+        //Exemple d'utilisation : http://localhost:4567/api/particuliers/get/Mohamed → retourne le particulier ayant le nom Mohamed
+        get("/api/particuliers/get/:nom", (req,res)-> {
+            String nom = req.params("nom");
 
             res.type("application/json");
 
-            if(id != null && raisonSociale != null && formeJuridique != null){
-                Entreprise entreprise = contactController.contactDao.findEntrepriseById(Integer.parseInt(id));
-                if(entreprise != null && entreprise.getRaisonSociale().equals(raisonSociale) && entreprise.getFormeJuridique().equals(formeJuridique)){
-                    return entreprise;
-                }
-                return null;
-            }
+            return contactController.contactDao.findParticuliersByNom(nom);
 
-            if(id != null && formeJuridique != null){
-                Entreprise entreprise = contactController.contactDao.findEntrepriseById(Integer.parseInt(id));
-                if(entreprise != null && entreprise.getFormeJuridique().equals(formeJuridique)){
-                    return entreprise;
-                }
-                return null;
-            }
+        },gson::toJson);
 
-            if(id != null && raisonSociale != null){
-                Entreprise entreprise = contactController.contactDao.findEntrepriseById(Integer.parseInt(id));
-                if(entreprise != null && entreprise.getRaisonSociale().equals(raisonSociale)){
-                    return entreprise;
-                }
-                return null;
-            }
 
-            if(formeJuridique != null && raisonSociale != null){
-                List<Entreprise> filteredEntreprises = new ArrayList<>();
-                List<Entreprise> entreprisesByFormeJuridique = contactController.contactDao.findEntrepriseByFormeJuridique(formeJuridique);
-                for(Entreprise entreprise : entreprisesByFormeJuridique){
-                    if(entreprise != null && entreprise.getRaisonSociale().equals(raisonSociale)){
-                        filteredEntreprises.add(entreprise);
-                    }
-                }
-                if(filteredEntreprises.isEmpty())
-                    return null;
-                return filteredEntreprises;
-            }
 
-            if(id != null){
-                return contactController.contactDao.findContactById(Integer.parseInt(id));
-            }
 
-            if(raisonSociale != null){
-                List<Entreprise> entreprises = contactController.contactDao.findEntrepriseByRaisonSociale(raisonSociale);
-                if(entreprises.isEmpty()){
-                    return null;
-                }
-                return entreprises;
-            }
+        //Entreprises
+        //Exemple d'utilisation : http://localhost:4567/api/entreprises/all → retourne toutes les entreprises
+        get("/api/entreprises/all", (req, res) -> {
 
-            if(formeJuridique != null){
-                List<Entreprise> entreprises = contactController.contactDao.findEntrepriseByFormeJuridique(formeJuridique);
-                if(entreprises.isEmpty()){
-                    return null;
-                }
-                return entreprises;
-            }
+            res.type("application/json");
 
-            //Dans le cas où aucun queryParam n'est donné, on aura toutes les entités en retour ->
-            //  localhost:4567/entreprises va retourner toutes les entités Entreprise
-            if(id == null && raisonSociale == null && formeJuridique == null){
-                List<Entreprise> allEntreprises = contactController.contactDao.getAllEntreprises();
-                if(allEntreprises.isEmpty()){
-                    return null;
-                }
-                return allEntreprises;
-            }
-            else{
-                return null;
-            }
+            return contactController.contactDao.getAllEntreprises();
 
         }, gson::toJson);
 
