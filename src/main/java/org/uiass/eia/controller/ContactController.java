@@ -1,9 +1,7 @@
 package org.uiass.eia.controller;
 
 import com.google.gson.Gson;
-import org.uiass.eia.crm.ContactDao;
-import org.uiass.eia.crm.Entreprise;
-import org.uiass.eia.crm.Particulier;
+import org.uiass.eia.crm.*;
 
 import java.util.*;
 
@@ -11,6 +9,7 @@ import static spark.Spark.*;
 
 public class ContactController {
     private ContactDao contactDao = ContactDao.getInstance();
+    private AdresseDao adresseDao = AdresseDao.getInstance();
 
     public ContactController(){
 
@@ -60,7 +59,7 @@ public class ContactController {
             contactController.contactDao.deleteContactById(id);
 
 
-            return "Contact supprimé avec succès";
+            return "Contact supprimé avec succès!";
 
 
         },gson::toJson);
@@ -91,7 +90,7 @@ public class ContactController {
                 contactController.contactDao.changeFax(id,fax);
 
 
-            return "Changements effectués avec succès !";
+            return "Changements effectués avec succès!";
 
         },gson::toJson);
 
@@ -118,6 +117,37 @@ public class ContactController {
             res.type("application/json");
 
             return contactController.contactDao.findParticuliersByNom(nom);
+
+        },gson::toJson);
+
+
+
+
+        //Exemple d'utilisation : http://localhost:4567/api/particuliers/add?nom=Mohamed&prenom=Ahmed&email=mohamed@email.com&fax=123&telephone=123&codePostal=20000&numeroRue=12&rue=ExempleRue&pays=Maroc&quartier=ExempleQuartier&ville=Rabat
+        post("/api/particuliers/add", (req,res)-> {
+            String nom = req.queryParams("nom");
+            String prenom = req.queryParams("prenom");
+            String email = req.queryParams("email");
+            String fax = req.queryParams("fax");
+            String telephone = req.queryParams("telephone");
+
+            String stCodePostal = req.queryParams("codePostal");
+            String stNumeroRue = req.queryParams("numeroRue");
+            String rue = req.queryParams("rue");
+            String pays = req.queryParams("pays");
+            String quartier = req.queryParams("quartier");
+            String ville = req.queryParams("ville");
+
+            int codePostal = Integer.parseInt(stCodePostal);
+            int numeroRue = Integer.parseInt(stNumeroRue);
+
+            Adresse adresse = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
+            contactController.adresseDao.addAdresse(adresse);
+            contactController.contactDao.addParticulier(telephone,email,fax,adresse,nom,prenom);
+
+            res.type("application/json");
+
+            return "Particulier ajouté avec succès!";
 
         },gson::toJson);
 
