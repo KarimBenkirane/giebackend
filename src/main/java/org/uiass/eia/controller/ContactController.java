@@ -51,18 +51,19 @@ public class ContactController {
 
         //Exemple d'utilisation : http://localhost:4567/api/contacts/delete/8 → supprime le contact avec l'id 8
         // !!!! Envoyer une requête DELETE dans Postman (ne pas mettre l'adresse directement dans le navigateur) !!!!
-        delete("/api/contacts/delete/:id",(req,res) -> {
+        delete("/api/contacts/delete/:id", (req, res) -> {
             String stId = req.params("id");
             int id = Integer.parseInt(stId);
 
             res.type("application/json");
+            Contact contact = contactController.contactDao.findParticulierById(id);
+            if(contact == null){
+                throw new RuntimeException("Contact introuvable");
+            }
             contactController.contactDao.deleteContactById(id);
+            return "Suppression effectuée avec succès!";
+        }, gson::toJson);
 
-
-            return "Contact supprimé avec succès!";
-
-
-        },gson::toJson);
 
 
 
