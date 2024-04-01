@@ -13,7 +13,7 @@ public class App {
 
     public static void main( String[] args ) {
         ContactDao contactDao = ContactDao.getInstance();
-        System.out.println(contactDao.findAdresseIdByContactId(12));
+        contactDao.deleteContactById(145);
     }
 }
 

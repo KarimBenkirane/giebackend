@@ -180,17 +180,20 @@ public class ContactDao {
 	}
 
 
-	public void deleteContactById(int id) {
+	public void deleteContactById(int id){
+		String hql = "delete from Contact where id = :id";
 		try {
 			tr.begin();
-			Contact contact = em.find(Contact.class, id);
-			if (contact != null) {
-				em.remove(contact);
-				tr.commit();
-			} else {
-			}
-		} catch (Exception e) {
+			Query query = em.createQuery(hql);
+			query.setParameter("id",id);
+			query.executeUpdate();
+			tr.commit();
+
+		}
+		catch(Exception e) {
 			tr.rollback();
+			System.out.println(e);
+
 		}
 	}
 

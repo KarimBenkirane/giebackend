@@ -58,7 +58,7 @@ public class ContactController {
             int id = Integer.parseInt(stId);
 
             res.type("application/json");
-            Contact contact = contactController.contactDao.findParticulierById(id);
+            Contact contact = contactController.contactDao.findContactById(id);
             if(contact == null){
                 throw new RuntimeException("Contact introuvable.");
             }
