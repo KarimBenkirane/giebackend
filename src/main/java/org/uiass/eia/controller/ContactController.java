@@ -423,6 +423,92 @@ public class ContactController {
 
 
 
+        post("/api/entreprises/add", (req,res)-> {
+
+            res.type("application/json");
+
+            JsonObject particulier = new JsonParser().parse(req.body()).getAsJsonObject();
+
+            //Infos particulier
+            String raisonSociale = null;
+            String formeJuridique = null;
+            String telephone = null;
+            String email = null;
+            String fax = null;
+
+            //Infos adresse
+            JsonObject adresse = particulier.get("adresse").getAsJsonObject();
+
+
+            String rue = null;
+            int numeroRue = -1;
+            int codePostal = -1;
+            String quartier = null;
+            String ville = null;
+            String pays = null;
+
+
+            //Json Particulier
+            JsonElement jsonEmail = particulier.get("email");
+            JsonElement jsonFax = particulier.get("fax");
+            JsonElement jsonTelephone = particulier.get("telephone");
+            JsonElement jsonRaisonSociale = particulier.get("raisonSociale");
+            JsonElement jsonFormeJuridique = particulier.get("formeJuridique");
+
+            //Json Adresse
+            JsonElement jsonRue = adresse.get("rue");
+            JsonElement jsonNumeroRue = adresse.get("numeroRue");
+            JsonElement jsonCodePostal = adresse.get("codePostal");
+            JsonElement jsonQuartier = adresse.get("quartier");
+            JsonElement jsonVille = adresse.get("ville");
+            JsonElement jsonPays = adresse.get("pays");
+
+
+
+            if(!(jsonEmail == null)) {
+                email = jsonEmail.getAsString();
+            }
+            if(!(jsonFax == null)) {
+                fax = jsonFax.getAsString();
+            }
+            if(!(jsonTelephone == null)) {
+                telephone = jsonTelephone.getAsString();
+            }
+            if(!(jsonRaisonSociale == null)) {
+                raisonSociale = jsonRaisonSociale.getAsString();
+            }
+            if(!(jsonFormeJuridique == null)) {
+                formeJuridique = jsonFormeJuridique.getAsString();
+            }
+
+
+            if(!(jsonRue == null)) {
+                rue = jsonRue.getAsString();
+            }
+            if(!(jsonNumeroRue == null)) {
+                numeroRue = jsonNumeroRue.getAsInt();
+            }
+            if(!(jsonCodePostal == null)) {
+                codePostal = jsonCodePostal.getAsInt();
+            }
+            if(!(jsonQuartier == null)) {
+                quartier = jsonQuartier.getAsString();
+            }
+            if(!(jsonVille == null)) {
+                ville = jsonVille.getAsString();
+            }
+            if(!(jsonPays == null)) {
+                pays = jsonPays.getAsString();
+            }
+
+
+            Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
+            contactController.adresseDao.addAdresse(adresseObjet);
+            contactController.contactDao.addEntreprise(new Entreprise(telephone,email,fax,adresseObjet,raisonSociale,formeJuridique));
+
+            return "Entreprise ajoutée avec succès!";
+
+        },gson::toJson);
         //Adresses
 
         //Exemple d'utilisation : http://localhost:4567/api/adresses/delete/8 → supprime l'adresse avec l'id 8
