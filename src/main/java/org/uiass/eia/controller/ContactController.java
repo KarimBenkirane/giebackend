@@ -62,7 +62,10 @@ public class ContactController {
             if(contact == null){
                 throw new RuntimeException("Contact introuvable.");
             }
+            //Récupérer l'ID de l'adresse afin de la supprimer une fois que le contact a été lui aussi supprimé
+            int adresse_id = contactController.contactDao.findAdresseIdByContactId(id);
             contactController.contactDao.deleteContactById(id);
+            contactController.adresseDao.deleteAdresse(adresse_id);
             return "Suppression effectuée avec succès!";
         }, gson::toJson);
 

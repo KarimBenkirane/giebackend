@@ -12,8 +12,7 @@ public class App {
     }
 
     public static void main( String[] args ) {
-        ContactDao contactDao = ContactDao.getInstance();
-        contactDao.deleteContactById(145);
+
     }
 }
 
