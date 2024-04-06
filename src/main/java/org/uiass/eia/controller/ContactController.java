@@ -22,23 +22,19 @@ public class ContactController {
         System.out.println("Serveur démarré sur l'adresse http://localhost:4567");
 
 
-
-
         //Contacts
         //Exemple d'utilisation : http://localhost:4567/api/contacts/all → retourne tous les contacts
-        get("/api/contacts/all", (req,res)-> {
+        get("/api/contacts/all", (req, res) -> {
 
             res.type("application/json");
 
             return contactController.contactDao.getAllContacts();
 
-        },gson::toJson);
-
-
+        }, gson::toJson);
 
 
         //Exemple d'utilisation : http://localhost:4567/api/contacts/get/8 → retourne le contact avec l'id 8
-        get("/api/contacts/get/:id", (req,res)-> {
+        get("/api/contacts/get/:id", (req, res) -> {
             String stId = req.params("id");
             int id = Integer.parseInt(stId);
 
@@ -46,9 +42,7 @@ public class ContactController {
 
             return contactController.contactDao.findContactById(id);
 
-        },gson::toJson);
-
-
+        }, gson::toJson);
 
 
         //Exemple d'utilisation : http://localhost:4567/api/contacts/delete/8 → supprime le contact avec l'id 8
@@ -59,7 +53,7 @@ public class ContactController {
 
             res.type("application/json");
             Contact contact = contactController.contactDao.findContactById(id);
-            if(contact == null){
+            if (contact == null) {
                 throw new RuntimeException("Contact introuvable.");
             }
             //Récupérer l'ID de l'adresse afin de la supprimer une fois que le contact a été lui aussi supprimé
@@ -68,8 +62,6 @@ public class ContactController {
             contactController.adresseDao.deleteAdresse(adresse_id);
             return "Suppression effectuée avec succès!";
         }, gson::toJson);
-
-
 
 
         // Particuliers
@@ -83,22 +75,18 @@ public class ContactController {
         }, gson::toJson);
 
 
-
-
         //Exemple d'utilisation : http://localhost:4567/api/particuliers/get/Mohamed → retourne les particuliers ayant le nom Mohamed
-        get("/api/particuliers/get/:nom", (req,res)-> {
+        get("/api/particuliers/get/:nom", (req, res) -> {
             String nom = req.params("nom");
 
             res.type("application/json");
 
             return contactController.contactDao.findParticuliersByNom(nom);
 
-        },gson::toJson);
+        }, gson::toJson);
 
 
-
-
-        post("/api/particuliers/add", (req,res)-> {
+        post("/api/particuliers/add", (req, res) -> {
 
             res.type("application/json");
 
@@ -139,56 +127,53 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
-
-            if(!(jsonEmail == null)) {
+            if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
             }
-            if(!(jsonFax == null)) {
+            if (!(jsonFax == null)) {
                 fax = jsonFax.getAsString();
             }
-            if(!(jsonTelephone == null)) {
+            if (!(jsonTelephone == null)) {
                 telephone = jsonTelephone.getAsString();
             }
-            if(!(jsonNom == null)) {
+            if (!(jsonNom == null)) {
                 nom = jsonNom.getAsString();
             }
-            if(!(jsonPrenom == null)) {
+            if (!(jsonPrenom == null)) {
                 prenom = jsonPrenom.getAsString();
             }
 
 
-            if(!(jsonRue == null)) {
+            if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
             }
-            if(!(jsonNumeroRue == null)) {
+            if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
             }
-            if(!(jsonCodePostal == null)) {
+            if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
             }
-            if(!(jsonQuartier == null)) {
+            if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
             }
-            if(!(jsonVille == null)) {
+            if (!(jsonVille == null)) {
                 ville = jsonVille.getAsString();
             }
-            if(!(jsonPays == null)) {
+            if (!(jsonPays == null)) {
                 pays = jsonPays.getAsString();
             }
 
 
-            Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
+            Adresse adresseObjet = new Adresse(rue, numeroRue, quartier, codePostal, ville, pays);
             contactController.adresseDao.addAdresse(adresseObjet);
-            contactController.contactDao.addParticulier(new Particulier(telephone,email,fax,adresseObjet,nom,prenom));
+            contactController.contactDao.addParticulier(new Particulier(telephone, email, fax, adresseObjet, nom, prenom));
 
             return "Particulier ajouté avec succès!";
 
-        },gson::toJson);
+        }, gson::toJson);
 
 
-
-
-        put("/api/particuliers/change", (req,res)-> {
+        put("/api/particuliers/change", (req, res) -> {
 
             JsonObject particulier = new JsonParser().parse(req.body()).getAsJsonObject();
 
@@ -229,63 +214,59 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
-
-            if(!(jsonEmail == null)) {
+            if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
-                contactController.contactDao.changeEmail(id,email);
+                contactController.contactDao.changeEmail(id, email);
             }
-            if(!(jsonFax == null)) {
+            if (!(jsonFax == null)) {
                 fax = jsonFax.getAsString();
                 contactController.contactDao.changeFax(id, fax);
             }
-            if(!(jsonTelephone == null)) {
+            if (!(jsonTelephone == null)) {
                 telephone = jsonTelephone.getAsString();
                 contactController.contactDao.changeTelephone(id, telephone);
             }
-            if(!(jsonNom == null)) {
+            if (!(jsonNom == null)) {
                 nom = jsonNom.getAsString();
                 contactController.contactDao.changeNom(id, nom);
             }
-            if(!(jsonPrenom == null)) {
+            if (!(jsonPrenom == null)) {
                 prenom = jsonPrenom.getAsString();
                 contactController.contactDao.changePrenom(id, prenom);
             }
 
 
-            if(!(jsonRue == null)) {
+            if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
             }
-            if(!(jsonNumeroRue == null)) {
+            if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
-                if(numeroRue != -1)
+                if (numeroRue != -1)
                     contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
             }
-            if(!(jsonCodePostal == null)) {
+            if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
-                if(codePostal != -1)
+                if (codePostal != -1)
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
             }
-            if(!(jsonQuartier == null)) {
+            if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
             }
-            if(!(jsonVille == null)) {
+            if (!(jsonVille == null)) {
                 ville = jsonVille.getAsString();
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
-            if(!(jsonPays == null)) {
+            if (!(jsonPays == null)) {
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
 
 
-
             return "Changements effectués avec succès!";
 
-        },gson::toJson);
-
-
+        }, gson::toJson);
 
 
         //Entreprises
@@ -299,34 +280,28 @@ public class ContactController {
         }, gson::toJson);
 
 
-
-
         //Exemple d'utilisation : http://localhost:4567/api/entreprises/get/raisonsociale/CompanyName → retourne les entreprises ayant pour raison sociale CompanyName
-        get("/api/entreprises/get/raisonsociale/:raisonSociale", (req,res)-> {
+        get("/api/entreprises/get/raisonsociale/:raisonSociale", (req, res) -> {
             String raisonSociale = req.params("raisonSociale");
 
             res.type("application/json");
 
             return contactController.contactDao.findEntrepriseByRaisonSociale(raisonSociale);
 
-        },gson::toJson);
+        }, gson::toJson);
 
 
-
-
-        get("/api/entreprises/get/formejuridique/:formeJuridique", (req,res)-> {
+        get("/api/entreprises/get/formejuridique/:formeJuridique", (req, res) -> {
             String formeJuridique = req.params("formeJuridique");
 
             res.type("application/json");
 
             return contactController.contactDao.findEntrepriseByFormeJuridique(formeJuridique);
 
-        },gson::toJson);
+        }, gson::toJson);
 
 
-
-
-        put("/api/entreprises/change", (req,res)-> {
+        put("/api/entreprises/change", (req, res) -> {
 
             JsonObject entreprise = new JsonParser().parse(req.body()).getAsJsonObject();
 
@@ -367,66 +342,62 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
-
-            if(!(jsonEmail == null)) {
+            if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
-                contactController.contactDao.changeEmail(id,email);
+                contactController.contactDao.changeEmail(id, email);
             }
-            if(!(jsonFax == null)) {
+            if (!(jsonFax == null)) {
                 fax = jsonFax.getAsString();
                 contactController.contactDao.changeFax(id, fax);
             }
-            if(!(jsonTelephone == null)) {
+            if (!(jsonTelephone == null)) {
                 telephone = jsonTelephone.getAsString();
                 contactController.contactDao.changeTelephone(id, telephone);
             }
-            if(!(jsonRaisonSociale == null)) {
+            if (!(jsonRaisonSociale == null)) {
                 raisonSociale = jsonRaisonSociale.getAsString();
                 contactController.contactDao.changeRaisonSociale(id, raisonSociale);
             }
-            if(!(jsonFormeJuridique == null)) {
+            if (!(jsonFormeJuridique == null)) {
                 formeJuridique = jsonFormeJuridique.getAsString();
                 contactController.contactDao.changeFormeJuridique(id, formeJuridique);
             }
 
 
-            if(!(jsonRue == null)) {
+            if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
             }
-            if(!(jsonNumeroRue == null)) {
+            if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
-                if(numeroRue != -1)
+                if (numeroRue != -1)
                     contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
             }
-            if(!(jsonCodePostal == null)) {
+            if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
-                if(codePostal != -1)
+                if (codePostal != -1)
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
             }
-            if(!(jsonQuartier == null)) {
+            if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
             }
-            if(!(jsonVille == null)) {
+            if (!(jsonVille == null)) {
                 ville = jsonVille.getAsString();
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
-            if(!(jsonPays == null)) {
+            if (!(jsonPays == null)) {
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
 
 
-
             return "Changements effectués avec succès!";
 
-        },gson::toJson);
+        }, gson::toJson);
 
 
-
-
-        post("/api/entreprises/add", (req,res)-> {
+        post("/api/entreprises/add", (req, res) -> {
 
             res.type("application/json");
 
@@ -467,51 +438,50 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
-
-            if(!(jsonEmail == null)) {
+            if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
             }
-            if(!(jsonFax == null)) {
+            if (!(jsonFax == null)) {
                 fax = jsonFax.getAsString();
             }
-            if(!(jsonTelephone == null)) {
+            if (!(jsonTelephone == null)) {
                 telephone = jsonTelephone.getAsString();
             }
-            if(!(jsonRaisonSociale == null)) {
+            if (!(jsonRaisonSociale == null)) {
                 raisonSociale = jsonRaisonSociale.getAsString();
             }
-            if(!(jsonFormeJuridique == null)) {
+            if (!(jsonFormeJuridique == null)) {
                 formeJuridique = jsonFormeJuridique.getAsString();
             }
 
 
-            if(!(jsonRue == null)) {
+            if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
             }
-            if(!(jsonNumeroRue == null)) {
+            if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
             }
-            if(!(jsonCodePostal == null)) {
+            if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
             }
-            if(!(jsonQuartier == null)) {
+            if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
             }
-            if(!(jsonVille == null)) {
+            if (!(jsonVille == null)) {
                 ville = jsonVille.getAsString();
             }
-            if(!(jsonPays == null)) {
+            if (!(jsonPays == null)) {
                 pays = jsonPays.getAsString();
             }
 
 
-            Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
+            Adresse adresseObjet = new Adresse(rue, numeroRue, quartier, codePostal, ville, pays);
             contactController.adresseDao.addAdresse(adresseObjet);
-            contactController.contactDao.addEntreprise(new Entreprise(telephone,email,fax,adresseObjet,raisonSociale,formeJuridique));
+            contactController.contactDao.addEntreprise(new Entreprise(telephone, email, fax, adresseObjet, raisonSociale, formeJuridique));
 
             return "Entreprise ajoutée avec succès!";
 
-        },gson::toJson);
+        }, gson::toJson);
         //Adresses
 
         //Exemple d'utilisation : http://localhost:4567/api/adresses/delete/8 → supprime l'adresse avec l'id 8
@@ -522,14 +492,12 @@ public class ContactController {
 
             res.type("application/json");
             Adresse adresse = contactController.adresseDao.findAdresseById(id);
-            if(adresse == null){
+            if (adresse == null) {
                 throw new RuntimeException("Adresse introuvable.");
             }
             contactController.adresseDao.deleteAdresse(id);
             return "Suppression effectuée avec succès!";
         }, gson::toJson);
-
-
 
 
         //Exemple d'utilisation : http://localhost:4567/api/adresses/all → retourne toutes les adresses
@@ -542,9 +510,7 @@ public class ContactController {
         }, gson::toJson);
 
 
-
-
-        put("/api/adresses/change", (req,res)-> {
+        put("/api/adresses/change", (req, res) -> {
 
             JsonObject adresse = new JsonParser().parse(req.body()).getAsJsonObject();
 
@@ -567,39 +533,60 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
-
-            if(!(jsonRue == null)) {
+            if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
             }
-            if(!(jsonNumeroRue == null)) {
+            if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
-                if(numeroRue != -1)
+                if (numeroRue != -1)
                     contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
             }
-            if(!(jsonCodePostal == null)) {
+            if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
-                if(codePostal != -1)
+                if (codePostal != -1)
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
             }
-            if(!(jsonQuartier == null)) {
+            if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
             }
-            if(!(jsonVille == null)) {
+            if (!(jsonVille == null)) {
                 ville = jsonVille.getAsString();
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
-            if(!(jsonPays == null)) {
+            if (!(jsonPays == null)) {
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
 
 
-
             return "Changements effectués avec succès!";
 
-        },gson::toJson);
+        }, gson::toJson);
+
+
+
+        post("/send-email", (req, res) -> {
+            res.type("application/json");
+
+            JsonObject emailData = new Gson().fromJson(req.body(), JsonObject.class);
+            String recipient = emailData.get("recipient").getAsString();
+            String subject = emailData.get("subject").getAsString();
+            String body = emailData.get("body").getAsString();
+
+            try {
+                // Create an instance of GMailer and send email
+                GMailer gMailer = new GMailer();
+                gMailer.sendMail(subject, body, recipient);
+                return "Email sent successfully!";
+            } catch (Exception e) {
+                e.printStackTrace();
+                res.status(500);
+                return "Error sending email: " + e.getMessage();
+            }
+        });
+
 
 
     }
