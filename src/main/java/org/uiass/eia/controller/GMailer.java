@@ -1,14 +1,5 @@
 package org.uiass.eia.controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Paths;
-import java.util.Properties;
-import java.util.Set;
-
-
-
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -27,14 +18,20 @@ import org.apache.commons.codec.binary.Base64;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Paths;
+import java.util.Properties;
+import java.util.Set;
+
+import static com.google.api.services.gmail.GmailScopes.GMAIL_SEND;
 import static javax.mail.Message.RecipientType.TO;
+
 public class GMailer {
 
     private static final String TEST_EMAIL = "k2b2.gie.gisiba1@gmail.com";
-    // le mots de passe de ce compte est :  k2b2giegisiba
     private final Gmail service;
-
-    private static final Set<String> GMAIL_SEND = Set.of("https://www.googleapis.com/auth/gmail.send");
 
     public GMailer() throws Exception {
         NetHttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
@@ -46,10 +43,10 @@ public class GMailer {
 
     private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailer.class.getResourceAsStream("/")));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailer.class.getResourceAsStream("/<your_client_secret>.json")));
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                httpTransport, jsonFactory, clientSecrets, GMAIL_SEND)
+                httpTransport, jsonFactory, clientSecrets, Set.of(GMAIL_SEND))
                 .setDataStoreFactory(new FileDataStoreFactory(Paths.get("tokens").toFile()))
                 .setAccessType("offline")
                 .build();
@@ -87,14 +84,4 @@ public class GMailer {
             }
         }
     }
-
-    /*// Sample usage
-    public static void main(String[] args) {
-        try {
-            GMailer gMailer = new GMailer();
-            gMailer.sendMail("Test Subject", "Test Message","khalilaraoui1@gmail.com");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
 }
