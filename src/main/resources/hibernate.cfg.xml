@@ -21,5 +21,8 @@
 
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+
     </session-factory>
 </hibernate-configuration>

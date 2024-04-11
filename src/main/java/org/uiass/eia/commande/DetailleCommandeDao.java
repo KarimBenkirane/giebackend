@@ -1,0 +1,79 @@
+package org.uiass.eia.commande;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import java.util.List;
+
+public class DetailleCommandeDao {
+    private EntityManager em;
+    private EntityTransaction tr;
+    private static DetailleCommandeDao detailleCommandeDao;
+
+    // Singleton pattern
+    public static DetailleCommandeDao getInstance() {
+        if (detailleCommandeDao == null)
+            detailleCommandeDao = new DetailleCommandeDao();
+        return detailleCommandeDao;
+    }
+    public List<DetailleCommande> getAllDetailleCommandes() {
+        Query query = em.createQuery("from DetailleCommande");
+        return query.getResultList();
+    }
+
+    public void addDetailleCommande(int quantiteCommander, double remise) {
+        try {
+            tr.begin();
+            em.persist(new DetailleCommande(quantiteCommander, remise));
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void addDetailleCommande(DetailleCommande detailleCommande) {
+        try {
+            tr.begin();
+            em.persist(detailleCommande);
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public DetailleCommande findDetailleCommandeById(int id) {
+        return em.find(DetailleCommande.class, id);
+    }
+
+    public void deleteDetailleCommandeById(int id) {
+        String hql = "delete from DetailleCommande where id = :id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("id", id);
+            query.executeUpdate();
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void updateDetailleCommandeQuantiteAndRemise(int id, int quantiteCommander, double remise) {
+        String hql = "update DetailleCommande set quantiteCommander = :quantiteCommander, remise = :remise where id = :id";
+        try {
+            tr.begin();
+            Query query = em.createQuery(hql);
+            query.setParameter("id", id);
+            query.setParameter("quantiteCommander", quantiteCommander);
+            query.setParameter("remise", remise);
+            query.executeUpdate();
+            tr.commit();
+        } catch (Exception e) {
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+}

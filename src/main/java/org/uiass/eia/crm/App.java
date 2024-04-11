@@ -8,10 +8,10 @@ public class App {
     private EntityTransaction tr;
 
     public App() {
-
     }
 
     public static void main( String[] args ) {
+        
 
     }
 }

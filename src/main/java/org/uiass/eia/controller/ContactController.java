@@ -11,9 +11,7 @@ public class ContactController {
     private ContactDao contactDao = ContactDao.getInstance();
     private AdresseDao adresseDao = AdresseDao.getInstance();
 
-    public ContactController(){
-
-    }
+    public ContactController(){}
 
     public static void main(String[] args) {
         ContactController contactController = new ContactController();
@@ -577,8 +575,8 @@ public class ContactController {
 
             try {
                 // Create an instance of GMailer and send email
-                GMailer gMailer = new GMailer();
-                gMailer.sendMail(subject, body, recipient);
+               // GMailer gMailer = new GMailer();
+                //gMailer.sendMail(subject, body, recipient);
                 return "Email sent successfully!";
             } catch (Exception e) {
                 e.printStackTrace();
