@@ -36,6 +36,48 @@ public class ContactController {
 
 
 
+        get("/api/contacts/get/email/:email", (req,res)-> {
+            String email = req.params(":email");
+            res.type("application/json");
+
+            return contactController.contactDao.getContactsByEmail(email);
+
+        },gson::toJson);
+
+
+
+
+        get("/api/particuliers/get/prenom/:prenom", (req,res)-> {
+            String prenom = req.params(":prenom");
+            res.type("application/json");
+
+            return contactController.contactDao.findParticuliersByPrenom(prenom);
+
+        },gson::toJson);
+
+
+
+
+        get("/api/particuliers/get/email/:email", (req,res)-> {
+            String prenom = req.params(":email");
+            res.type("application/json");
+
+            return contactController.contactDao.getParticuliersByEmail(prenom);
+
+        }, gson::toJson);
+
+
+
+
+        get("/api/entreprises/get/email/:email", (req,res)-> {
+            String prenom = req.params(":email");
+            res.type("application/json");
+
+            return contactController.contactDao.getEntreprisesByEmail(prenom);
+
+        }, gson::toJson);
+
+
 
         //Exemple d'utilisation : http://localhost:4567/api/contacts/get/8 → retourne le contact avec l'id 8
         get("/api/contacts/get/:id", (req,res)-> {
@@ -85,8 +127,8 @@ public class ContactController {
 
 
 
-        //Exemple d'utilisation : http://localhost:4567/api/particuliers/get/Mohamed → retourne les particuliers ayant le nom Mohamed
-        get("/api/particuliers/get/:nom", (req,res)-> {
+        //Exemple d'utilisation : http://localhost:4567/api/particuliers/get/nom/Mohamed → retourne les particuliers ayant le nom Mohamed
+        get("/api/particuliers/get/nom/:nom", (req,res)-> {
             String nom = req.params("nom");
 
             res.type("application/json");

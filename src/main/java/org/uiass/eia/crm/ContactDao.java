@@ -12,34 +12,34 @@ public class ContactDao {
 	private static ContactDao contactDao;
 
 	//Singleton pattern
-	public static ContactDao getInstance(){
-		if(contactDao == null)
+	public static ContactDao getInstance() {
+		if (contactDao == null)
 			contactDao = new ContactDao();
 		return contactDao;
 	}
 
 
 	private ContactDao() {
-		this.em= HibernateUtility.getEntityManger();
-		tr=em.getTransaction();
+		this.em = HibernateUtility.getEntityManger();
+		tr = em.getTransaction();
 	}
 
 
 	public List<Contact> getAllContacts() {
 		// TODO Auto-generated method stub
-		Query query= em.createQuery("from Contact");
+		Query query = em.createQuery("from Contact");
 		return query.getResultList();
 	}
 
 	public List<Entreprise> getAllEntreprises() {
 		// TODO Auto-generated method stub
-		Query query= em.createQuery(" from Contact where contact_type='Entreprise' ");
+		Query query = em.createQuery(" from Contact where contact_type='Entreprise' ");
 		return query.getResultList();
 	}
 
 	public List<Particulier> getAllParticuliers() {
 		// TODO Auto-generated method stub
-		Query query= em.createQuery(" from Contact where contact_type='Particulier' ");
+		Query query = em.createQuery(" from Contact where contact_type='Particulier' ");
 		return query.getResultList();
 	}
 
@@ -47,11 +47,10 @@ public class ContactDao {
 		// TODO Auto-generated method stub
 		try {
 			tr.begin();
-			em.persist(new Entreprise(telephone,email,fax,adresse,raisonSociale,formeJuridique));
+			em.persist(new Entreprise(telephone, email, fax, adresse, raisonSociale, formeJuridique));
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
@@ -65,8 +64,7 @@ public class ContactDao {
 			em.persist(entreprise);
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
@@ -78,11 +76,10 @@ public class ContactDao {
 		// TODO Auto-generated method stub
 		try {
 			tr.begin();
-			em.persist(new Particulier(telephone,email,fax,adresse,nom,prenom));
+			em.persist(new Particulier(telephone, email, fax, adresse, nom, prenom));
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
@@ -96,8 +93,7 @@ public class ContactDao {
 			em.persist(particulier);
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
@@ -133,8 +129,8 @@ public class ContactDao {
 		List<Entreprise> entreprises = new ArrayList<>();
 		try {
 			List<Contact> contacts = query.getResultList();
-			for(Contact contact : contacts){
-				if(contact instanceof Entreprise){
+			for (Contact contact : contacts) {
+				if (contact instanceof Entreprise) {
 					entreprises.add((Entreprise) contact);
 				}
 			}
@@ -150,8 +146,8 @@ public class ContactDao {
 		List<Entreprise> entreprises = new ArrayList<>();
 		try {
 			List<Contact> contacts = query.getResultList();
-			for(Contact contact : contacts){
-				if(contact instanceof Entreprise){
+			for (Contact contact : contacts) {
+				if (contact instanceof Entreprise) {
 					entreprises.add((Entreprise) contact);
 				}
 			}
@@ -180,107 +176,101 @@ public class ContactDao {
 	}
 
 
-	public void deleteContactById(int id){
+	public void deleteContactById(int id) {
 		String hql = "delete from Contact where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
+			query.setParameter("id", id);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changeTelephone(int id,String telephone){
+	public void changeTelephone(int id, String telephone) {
 		String hql = "update Contact set telephone= :telephone where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("telephone",telephone);
+			query.setParameter("id", id);
+			query.setParameter("telephone", telephone);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changeFax(int id,String fax){
+	public void changeFax(int id, String fax) {
 		String hql = "update Contact set fax= :fax where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("fax",fax);
+			query.setParameter("id", id);
+			query.setParameter("fax", fax);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changeNom(int id,String nom){
+	public void changeNom(int id, String nom) {
 		String hql = "update Contact set nom= :nom where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("nom",nom);
+			query.setParameter("id", id);
+			query.setParameter("nom", nom);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changePrenom(int id,String prenom){
+	public void changePrenom(int id, String prenom) {
 		String hql = "update Contact set prenom= :prenom where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("prenom",prenom);
+			query.setParameter("id", id);
+			query.setParameter("prenom", prenom);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changeRaisonSociale(int id,String raisonSociale){
+	public void changeRaisonSociale(int id, String raisonSociale) {
 		String hql = "update Contact set raisonSociale= :raisonSociale where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("raisonSociale",raisonSociale);
+			query.setParameter("id", id);
+			query.setParameter("raisonSociale", raisonSociale);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
@@ -288,54 +278,51 @@ public class ContactDao {
 	}
 
 
-	public void changeFormeJuridique(int id,String formeJuridique){
+	public void changeFormeJuridique(int id, String formeJuridique) {
 		String hql = "update Contact set formeJuridique= :formeJuridique where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("formeJuridique",formeJuridique);
+			query.setParameter("id", id);
+			query.setParameter("formeJuridique", formeJuridique);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changeEmail(int id,String email){
+	public void changeEmail(int id, String email) {
 		String hql = "update Contact set email= :email where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("email",email);
+			query.setParameter("id", id);
+			query.setParameter("email", email);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
 		}
 	}
 
-	public void changeAdresseId(int id,int adresse_id){
+	public void changeAdresseId(int id, int adresse_id) {
 		String hql = "update Contact set adresse_id= :adresse_id where id = :id";
 		try {
 			tr.begin();
 			Query query = em.createQuery(hql);
-			query.setParameter("id",id);
-			query.setParameter("adresse_id",adresse_id);
+			query.setParameter("id", id);
+			query.setParameter("adresse_id", adresse_id);
 			query.executeUpdate();
 			tr.commit();
 
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
 
@@ -343,7 +330,66 @@ public class ContactDao {
 	}
 
 
+	public List<Contact> getContactsByEmail(String email) {
+		List<Contact> contacts = new ArrayList<>();
+		try {
+			Query query = em.createQuery("FROM Contact WHERE email = :email");
+			query.setParameter("email", email);
+			contacts = query.getResultList();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return contacts;
+	}
 
 
+
+
+	public List<Particulier> getParticuliersByEmail(String email) {
+		List<Particulier> particuliers = new ArrayList<>();
+		try {
+			Query query = em.createQuery("FROM Contact WHERE contact_type='Particulier' AND email = :email");
+			query.setParameter("email", email);
+			particuliers = query.getResultList();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return particuliers;
+	}
+
+
+
+
+	public List<Entreprise> getEntreprisesByEmail(String email) {
+		List<Entreprise> entreprises = new ArrayList<>();
+		try {
+			Query query = em.createQuery("FROM Contact WHERE contact_type='Entreprise' AND email = :email");
+			query.setParameter("email", email);
+			entreprises = query.getResultList();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return entreprises;
+	}
+
+	public List<Particulier> findParticuliersByPrenom(String prenom) {
+		TypedQuery<Contact> query = em.createQuery("select c from Contact c where c.prenom= :prenom", Contact.class);
+		query.setParameter("prenom", prenom);
+		List<Particulier> particuliers = new ArrayList<>();
+		try {
+			List<Contact> contacts = query.getResultList();
+			for (Contact contact : contacts) {
+				if (contact instanceof Particulier) {
+					particuliers.add((Particulier) contact);
+				}
+			}
+		} catch (NonUniqueResultException e) {
+			return null;
+		}
+		return particuliers;
+	}
 
 }
