@@ -1,37 +1,44 @@
 package org.uiass.eia.commande;
 
-import org.uiass.eia.crm.Adresse;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity(name="Commande")
+@Entity
 @Table(name="Commande")
 public class Commande {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "numBonCommande")
     private int numBonCommande;
+
     @Column(name = "dateCommande")
     private LocalDate dateCommande;
-    @Column(name ="dateReglement")
+
+    @Column(name = "dateReglement")
     private LocalDate dateReglement;
+
     @Column(name = "totalCommande")
     private double totalCommande;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "etatCommande")
     private EtatCmd etatCommande;
 
-    @OneToOne
-    @JoinColumn(name = "detailCommande_id")
+    @OneToOne(mappedBy = "commande")
     protected DetailleCommande detailleCommande;
+    @ManyToOne
+    @JoinColumn(name = "detailCommande_id")
+    private DetailleCommande detaillecommande;
 
-    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande,DetailleCommande detailleCommande) {
+    public Commande() {
+    }
+
+    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, DetailleCommande detailleCommande) {
         this.dateCommande = dateCommande;
         this.dateReglement = dateReglement;
         this.totalCommande = totalCommande;
         this.etatCommande = etatCommande;
-        this.detailleCommande=detailleCommande;
+        this.detailleCommande = detailleCommande;
     }
 
     // Getters and Setters
@@ -79,7 +86,7 @@ public class Commande {
     @Override
     public String toString() {
         return "Commande{" +
-                "numBonCommande='" + numBonCommande + '\'' +
+                "numBonCommande=" + numBonCommande +
                 ", dateCommande=" + dateCommande +
                 ", dateReglement=" + dateReglement +
                 ", totalCommande=" + totalCommande +

@@ -1,11 +1,10 @@
 package org.uiass.eia.commande;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name="Produit")
+@Entity
 @Table(name="Produit")
 public class Produit {
     @Id
@@ -24,28 +23,28 @@ public class Produit {
 
     @Column(name="quantiteStock")
     private int quantiteStock;
+
     @OneToOne
-    @JoinColumn(name = "Marque")
+    @JoinColumn(name = "marque_id")
     private Marque marque;
-    @JoinColumn(name = "Categorie")
+
+    @ManyToOne
+    @JoinColumn(name = "categorie_id")
     private CategorieProduit categorieProduit;
 
-    /*@OneToMany(mappedBy = "produit")
+    @OneToMany(mappedBy = "produit")
     private List<DetailleCommande> detailleCommandes = new ArrayList<>();
 
-*/
-    public Produit(String nomProd, String refProd, String libelle, int quantiteStock,Marque marque,CategorieProduit categorieProduit) {
-        this.idProd = idProd;
+    public Produit() {
+    }
+
+    public Produit(String nomProd, String refProd, String libelle, int quantiteStock, Marque marque, CategorieProduit categorieProduit) {
         this.nomProd = nomProd;
         this.refProd = refProd;
         this.libelle = libelle;
         this.quantiteStock = quantiteStock;
-        this.marque= marque;
-        this.categorieProduit=categorieProduit;
-    }
-
-    public Produit() {
-
+        this.marque = marque;
+        this.categorieProduit = categorieProduit;
     }
 
     // Getters and Setters
@@ -93,7 +92,7 @@ public class Produit {
     @Override
     public String toString() {
         return "Produit{" +
-                "idProd='" + idProd + '\'' +
+                "idProd=" + idProd +
                 ", nomProd='" + nomProd + '\'' +
                 ", refProd='" + refProd + '\'' +
                 ", libelle='" + libelle + '\'' +

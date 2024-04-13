@@ -1,10 +1,10 @@
 package org.uiass.eia.commande;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
-@Entity(name="DetailleCommande")
+@Entity
 @Table(name="DetailleCommande")
-public class DetailleCommande{
+public class DetailleCommande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int detailCommande_id;
@@ -15,22 +15,20 @@ public class DetailleCommande{
     @Column(name="remise")
     private double remise;
 
-/*    @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "commande_id")
     private Commande commande;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
-    private Produit produit;*/
+    private Produit produit;
+
+    public DetailleCommande() {
+    }
 
     public DetailleCommande(int quantiteCommander, double remise) {
         this.quantiteCommander = quantiteCommander;
         this.remise = remise;
-
-    }
-
-    public DetailleCommande() {
-
     }
 
     // Getters and Setters

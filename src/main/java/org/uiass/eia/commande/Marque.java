@@ -1,25 +1,24 @@
+
 package org.uiass.eia.commande;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
-@Entity(name="Marque")
+@Entity
 @Table(name="Marque")
 public class Marque {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_marque")
+    @Column(name = "id_marque")
     private int idMarque;
 
-    @Column(name="nom_marque")
+    @Column(name = "nom_marque")
     private String nomMarque;
 
-    public Marque(String nomMarque) {
-        this.idMarque = idMarque;
-        this.nomMarque = nomMarque;
+    public Marque() {
     }
 
-    public Marque() {
-
+    public Marque(String nomMarque) {
+        this.nomMarque = nomMarque;
     }
 
     // Getters and Setters
@@ -43,9 +42,8 @@ public class Marque {
     @Override
     public String toString() {
         return "Marque{" +
-                "idMarque='" + idMarque + '\'' +
+                "idMarque=" + idMarque +
                 ", nomMarque='" + nomMarque + '\'' +
                 '}';
     }
 }
-

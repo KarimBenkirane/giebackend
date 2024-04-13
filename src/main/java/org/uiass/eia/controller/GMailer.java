@@ -43,7 +43,7 @@ public class GMailer {
 
     private static Credential getCredentials(final NetHttpTransport httpTransport, GsonFactory jsonFactory)
             throws IOException {
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailer.class.getResourceAsStream("/..json")));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, new InputStreamReader(GMailer.class.getResourceAsStream("/client_secret_487658157203-d68jv3il2ishifg0oem0km26aaj4ug33.apps.googleusercontent.com.json")));
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 httpTransport, jsonFactory, clientSecrets, Set.of(GMAIL_SEND))
@@ -55,12 +55,12 @@ public class GMailer {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    public void sendMail(String subject, String message,String TEST_EMAIL1) throws Exception {
+    public void sendMail(String toEmail,String subject, String message) throws Exception {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         MimeMessage email = new MimeMessage(session);
         email.setFrom(new InternetAddress(TEST_EMAIL));
-        email.addRecipient(TO, new InternetAddress(TEST_EMAIL1));
+        email.addRecipient(TO, new InternetAddress(toEmail));
         email.setSubject(subject);
         email.setText(message);
 
@@ -83,6 +83,17 @@ public class GMailer {
                 throw e;
             }
         }
+    }
+
+    public static void main(String[] args) throws Exception {
+        new GMailer().sendMail("khalilaraoui1@gmail.com","A new message", """
+                Dear reader,
+                                
+                Hello world.
+                                
+                Best regards,
+                myself
+                """);
     }
 
 }

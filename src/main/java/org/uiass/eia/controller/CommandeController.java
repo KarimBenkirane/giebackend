@@ -145,72 +145,61 @@ public class CommandeController {
             return commandeController.categorieProduitDao.findCategorieProduitByName(name);
         }, gson::toJson);
 
-        post("/api/particuliers/add", (req, res) -> {
 
+        post("/api/commande/add", (req, res) -> {
             res.type("application/json");
 
             JsonObject commande = new JsonParser().parse(req.body()).getAsJsonObject();
 
-            //Infos commande
-            LocalDate dateC = null;
-            LocalDate dateR = null;
-            double total = -1;
-            EtatCmd etatCmd = null;
+            // Récupérer les champs de la commande
+            LocalDate dateCommande = LocalDate.now();
+            LocalDate dateReglement = null;
+            double totalCommande = -1;
+            EtatCmd etatCommande = null;
 
-            JsonObject detailComande = commande.get("")
+            JsonObject detailCommande = commande.get("detailCommande").getAsJsonObject();
 
-            //Json Particulier
-            JsonElement jsondateR = commande.get("dateR");
-            JsonElement jsondateC = commande.get("dateC");
-            JsonElement jsontotal = commande.get("total");
-            JsonElement jsonetatCmd = commande.get("etatCmd");
+            // Créer une instance de DetailleCommande
+            int quantiteCommande = -1;
+            double remise = -1;
 
+            JsonElement jsonDateCommande = commande.get("dateCommande");
+            JsonElement jsonDateReglement = commande.get("dateReglement");
+            JsonElement jsonTotalCommande = commande.get("totalCommande");
+            JsonElement jsonEtatCommande = commande.get("etatCommande");
 
-
-
-            if (!(jsondateR == null)) {
-                dateR = jsondateR.getAsDate();
+            // Récupérer les valeurs du JSON
+            if (jsonDateReglement != null) {
+                dateReglement = LocalDate.parse(jsonDateReglement.getAsString());
             }
-            if (!(jsondateC == null)) {
-                dateC = jsondateC.getAsdate();
+            if (jsonDateCommande != null) {
+                dateCommande = LocalDate.parse(jsonDateCommande.getAsString());
             }
-            if (!(jsonTelephone == null)) {
-                telephone = jsonTelephone.getAsString();
+            if (jsonTotalCommande != null) {
+                totalCommande = jsonTotalCommande.getAsDouble();
             }
-            if (!(jsonNom == null)) {
-                nom = jsonNom.getAsString();
-            }
-            if (!(jsonPrenom == null)) {
-                prenom = jsonPrenom.getAsString();
+            if (jsonEtatCommande != null) {
+                etatCommande = EtatCmd.valueOf(jsonEtatCommande.getAsString());
             }
 
+            if (detailCommande != null) {
+                JsonElement jsonQuantiteCommande = detailCommande.get("quantiteCommande");
+                JsonElement jsonRemise = detailCommande.get("remise");
 
-            if (!(jsonRue == null)) {
-                rue = jsonRue.getAsString();
-            }
-            if (!(jsonNumeroRue == null)) {
-                numeroRue = jsonNumeroRue.getAsInt();
-            }
-            if (!(jsonCodePostal == null)) {
-                codePostal = jsonCodePostal.getAsInt();
-            }
-            if (!(jsonQuartier == null)) {
-                quartier = jsonQuartier.getAsString();
-            }
-            if (!(jsonVille == null)) {
-                ville = jsonVille.getAsString();
-            }
-            if (!(jsonPays == null)) {
-                pays = jsonPays.getAsString();
+                if (jsonQuantiteCommande != null) {
+                    quantiteCommande = jsonQuantiteCommande.getAsInt();
+                }
+                if (jsonRemise != null) {
+                    remise = jsonRemise.getAsDouble();
+                }
             }
 
+            // Créer une instance de DetailleCommande et de Commande
+            DetailleCommande detailCommandeObject = new DetailleCommande(quantiteCommande, remise);
+            commandeController.detailleCommandeDao.addDetailleCommande(detailCommandeObject);
+            commandeController.commandeDAO.addCommande(new Commande(dateCommande, dateReglement, totalCommande, etatCommande, detailCommandeObject));
 
-            Adresse adresseObjet = new Adresse(rue, numeroRue, quartier, codePostal, ville, pays);
-            contactController.adresseDao.addAdresse(adresseObjet);
-            contactController.contactDao.addParticulier(new Particulier(telephone, email, fax, adresseObjet, nom, prenom));
-
-            return "Particulier ajouté avec succès!";
-
+            return "Commande créée avec succès!";
         }, gson::toJson);
 
 
@@ -218,6 +207,6 @@ public class CommandeController {
 
 
 
-    }
 
+    }
 }
