@@ -6,7 +6,7 @@ import javax.persistence.Persistence;
 
 public class HibernateUtility {
 
-	private static EntityManager entityManager;
+	private static javax.persistence.EntityManager entityManager;
 	public static EntityManager getEntityManger() {
 		if (entityManager == null) {
 			try {

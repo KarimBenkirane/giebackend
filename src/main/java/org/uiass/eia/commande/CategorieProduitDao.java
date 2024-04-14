@@ -1,8 +1,8 @@
 package org.uiass.eia.commande;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import javax.persistence.*;
+import org.uiass.eia.helper.HibernateUtility;
+
 import java.util.List;
 
 public class CategorieProduitDao {
@@ -15,6 +15,10 @@ public class CategorieProduitDao {
         if (categorieProduitDao == null)
             categorieProduitDao = new CategorieProduitDao();
         return categorieProduitDao;
+    }
+    private CategorieProduitDao() {
+        this.em= HibernateUtility.getEntityManger();
+        tr=em.getTransaction();
     }
 
     public List<CategorieProduit> getAllCategoriesProduit() {

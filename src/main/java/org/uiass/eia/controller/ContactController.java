@@ -1,6 +1,7 @@
 package org.uiass.eia.controller;
 
 import com.google.gson.*;
+import org.uiass.eia.commande.CommandeDAO;
 import org.uiass.eia.crm.*;
 
 import java.util.*;
@@ -10,7 +11,6 @@ import static spark.Spark.*;
 public class ContactController {
     private ContactDao contactDao = ContactDao.getInstance();
     private AdresseDao adresseDao = AdresseDao.getInstance();
-
     public ContactController(){}
 
     public static void main(String[] args) {
@@ -29,7 +29,6 @@ public class ContactController {
             return contactController.contactDao.getAllContacts();
 
         }, gson::toJson);
-
 
         //Exemple d'utilisation : http://localhost:4567/api/contacts/get/8 → retourne le contact avec l'id 8
         get("/api/contacts/get/:id", (req, res) -> {

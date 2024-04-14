@@ -2,10 +2,8 @@ package org.uiass.eia.commande;
 
 import org.uiass.eia.helper.HibernateUtility;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+
 import java.util.List;
 
 public class ProduitDao {

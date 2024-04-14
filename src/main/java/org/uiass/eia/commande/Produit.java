@@ -2,6 +2,7 @@ package org.uiass.eia.commande;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -32,8 +33,8 @@ public class Produit {
     @JoinColumn(name = "categorie_id")
     private CategorieProduit categorieProduit;
 
-    @OneToMany(mappedBy = "produit")
-    private List<DetailleCommande> detailleCommandes = new ArrayList<>();
+    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
+    private Collection<DetailleCommande> detaillecommandes;
 
     public Produit() {
     }

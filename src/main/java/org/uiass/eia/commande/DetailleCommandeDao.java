@@ -1,8 +1,8 @@
 package org.uiass.eia.commande;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import org.uiass.eia.helper.HibernateUtility;
+
+import javax.persistence.*;
 import java.util.List;
 
 public class DetailleCommandeDao {
@@ -16,6 +16,11 @@ public class DetailleCommandeDao {
             detailleCommandeDao = new DetailleCommandeDao();
         return detailleCommandeDao;
     }
+    public DetailleCommandeDao(){
+        this.em= HibernateUtility.getEntityManger();
+        tr=em.getTransaction();
+    }
+
     public List<DetailleCommande> getAllDetailleCommandes() {
         Query query = em.createQuery("from DetailleCommande");
         return query.getResultList();

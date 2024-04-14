@@ -1,12 +1,15 @@
 package org.uiass.eia.commande;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import org.uiass.eia.helper.HibernateUtility;
+
+import javax.persistence.*;
+
+
 import java.util.List;
 
 public class MarqueDao {
     private EntityManager em;
+
     private EntityTransaction tr;
     private static MarqueDao marqueDao;
 
@@ -16,7 +19,10 @@ public class MarqueDao {
             marqueDao = new MarqueDao();
         return marqueDao;
     }
-
+    private MarqueDao() {
+        this.em= HibernateUtility.getEntityManger();
+        tr=em.getTransaction();
+    }
     public List<Marque> getAllMarques() {
         Query query = em.createQuery("from Marque");
         return query.getResultList();

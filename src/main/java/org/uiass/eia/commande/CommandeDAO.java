@@ -1,7 +1,6 @@
 package org.uiass.eia.commande;
 
-import com.google.gson.JsonElement;
-import jdk.dynalink.linker.LinkerServices;
+
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.EntityManager;
@@ -9,6 +8,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 public class CommandeDAO {
@@ -27,10 +27,10 @@ public class CommandeDAO {
         tr=em.getTransaction();
     }
     public List<Commande> getAllCommande(){
-        Query query= em.createQuery("from commande");
+        Query query= em.createQuery("from Commande");
         return query.getResultList();
     }
-    public void addCommande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande,DetailleCommande dtcm){
+    public void addCommande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, Collection<DetailleCommande> dtcm){
         try{
             tr.begin();
             em.persist(new Commande( dateCommande,  dateReglement,  totalCommande,  etatCommande,dtcm));

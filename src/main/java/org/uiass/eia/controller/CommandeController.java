@@ -5,11 +5,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.uiass.eia.commande.*;
-import org.uiass.eia.crm.Adresse;
-import org.uiass.eia.crm.Particulier;
 
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 import static spark.Spark.*;
 
@@ -197,7 +196,7 @@ public class CommandeController {
             // Créer une instance de DetailleCommande et de Commande
             DetailleCommande detailCommandeObject = new DetailleCommande(quantiteCommande, remise);
             commandeController.detailleCommandeDao.addDetailleCommande(detailCommandeObject);
-            commandeController.commandeDAO.addCommande(new Commande(dateCommande, dateReglement, totalCommande, etatCommande, detailCommandeObject));
+            commandeController.commandeDAO.addCommande(new Commande(dateCommande, dateReglement, totalCommande, etatCommande, (Collection<DetailleCommande>) detailCommandeObject));
 
             return "Commande créée avec succès!";
         }, gson::toJson);

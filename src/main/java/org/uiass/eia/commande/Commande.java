@@ -2,6 +2,7 @@ package org.uiass.eia.commande;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity
 @Table(name="Commande")
@@ -24,21 +25,18 @@ public class Commande {
     @Column(name = "etatCommande")
     private EtatCmd etatCommande;
 
-    @OneToOne(mappedBy = "commande")
-    protected DetailleCommande detailleCommande;
-    @ManyToOne
-    @JoinColumn(name = "detailCommande_id")
-    private DetailleCommande detaillecommande;
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    private Collection<DetailleCommande> detaillecommandes;
 
     public Commande() {
     }
 
-    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, DetailleCommande detailleCommande) {
+    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, Collection<DetailleCommande> detailleCommande) {
         this.dateCommande = dateCommande;
         this.dateReglement = dateReglement;
         this.totalCommande = totalCommande;
         this.etatCommande = etatCommande;
-        this.detailleCommande = detailleCommande;
+        this.detaillecommandes = detailleCommande;
     }
 
     // Getters and Setters
