@@ -644,5 +644,18 @@ public class ContactController {
         },gson::toJson);
 
 
+        post("/api/email/send", (req,res)-> {
+            JsonObject email = new JsonParser().parse(req.body()).getAsJsonObject();
+
+            String recipient = email.get("recipient").getAsString();
+            String content = email.get("content").getAsString();
+            String subject = email.get("subject").getAsString();
+
+            MailSender.sendMail(subject,content,recipient);
+
+            return "Email envoyé avec succès !";
+
+        },gson::toJson);
+
     }
 }
