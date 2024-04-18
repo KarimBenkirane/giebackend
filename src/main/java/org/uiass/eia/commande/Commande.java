@@ -1,5 +1,7 @@
 package org.uiass.eia.commande;
 
+import org.uiass.eia.crm.Contact;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -24,6 +26,10 @@ public class Commande {
     @Enumerated(EnumType.STRING)
     @Column(name = "etatCommande")
     private EtatCmd etatCommande;
+    @Column(name="contact_id") // Modify this line
+    @ManyToOne
+    private Contact contact;
+
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
     private Collection<DetailleCommande> detaillecommandes;
@@ -90,5 +96,9 @@ public class Commande {
                 ", totalCommande=" + totalCommande +
                 ", etatCommande=" + etatCommande +
                 '}';
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 }

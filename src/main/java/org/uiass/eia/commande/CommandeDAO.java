@@ -22,6 +22,7 @@ public class CommandeDAO {
         }
         return commandeDAO;
     }
+
     private CommandeDAO() {
         this.em= HibernateUtility.getEntityManger();
         tr=em.getTransaction();

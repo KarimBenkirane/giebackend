@@ -47,6 +47,13 @@ public class DetailleCommande {
     public void setRemise(double remise) {
         this.remise = remise;
     }
+    public void setCommande(Commande commande) {
+        this.commande = commande;
+    }
+
+    public void setProduit(Produit produit) {
+        this.produit = produit;
+    }
 
     // toString method
     @Override
