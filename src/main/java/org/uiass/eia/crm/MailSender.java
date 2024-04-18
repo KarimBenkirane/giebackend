@@ -15,11 +15,13 @@ public class MailSender {
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.connectiontimeout", "60000");
+        props.put("mail.smtp.timeout", "60000");
 
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("k2b2.gie.gisiba1@gmail.com", "A Ajouter");
+                return new PasswordAuthentication("k2b2.gie.gisiba1@gmail.com", "tpqq ldyt meod cahw");
             }
         });
 
