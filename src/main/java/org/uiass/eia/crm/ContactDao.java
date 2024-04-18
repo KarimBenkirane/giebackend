@@ -195,11 +195,19 @@ public class ContactDao {
 	public void changeTelephone(int id, String telephone) {
 		String hql = "update Contact set telephone= :telephone where id = :id";
 		try {
+
+			Contact contact = this.findParticulierById(id);
+
+			if (contact == null) {
+				throw new EntityNotFoundException("Contact not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("telephone", telephone);
 			query.executeUpdate();
+			em.refresh(contact);
 			tr.commit();
 
 		} catch (Exception e) {
@@ -212,11 +220,19 @@ public class ContactDao {
 	public void changeFax(int id, String fax) {
 		String hql = "update Contact set fax= :fax where id = :id";
 		try {
+
+			Contact contact = this.findContactById(id);
+
+			if (contact == null) {
+				throw new EntityNotFoundException("Contact not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("fax", fax);
 			query.executeUpdate();
+			em.refresh(contact);
 			tr.commit();
 
 		} catch (Exception e) {
@@ -229,11 +245,19 @@ public class ContactDao {
 	public void changeNom(int id, String nom) {
 		String hql = "update Contact set nom= :nom where id = :id";
 		try {
+
+			Particulier particulier = this.findParticulierById(id);
+
+			if (particulier == null) {
+				throw new EntityNotFoundException("Contact not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("nom", nom);
 			query.executeUpdate();
+			em.refresh(particulier);
 			tr.commit();
 
 		} catch (Exception e) {
@@ -246,11 +270,19 @@ public class ContactDao {
 	public void changePrenom(int id, String prenom) {
 		String hql = "update Contact set prenom= :prenom where id = :id";
 		try {
+
+			Particulier particulier = this.findParticulierById(id);
+
+			if (particulier == null) {
+				throw new EntityNotFoundException("Contact not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("prenom", prenom);
 			query.executeUpdate();
+			em.refresh(particulier);
 			tr.commit();
 
 		} catch (Exception e) {
@@ -263,29 +295,45 @@ public class ContactDao {
 	public void changeRaisonSociale(int id, String raisonSociale) {
 		String hql = "update Contact set raisonSociale= :raisonSociale where id = :id";
 		try {
+			Entreprise entreprise = this.findEntrepriseById(id);
+
+			// Check if entreprise is null
+			if (entreprise == null) {
+				throw new EntityNotFoundException("Entreprise not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("raisonSociale", raisonSociale);
 			query.executeUpdate();
+			em.refresh(entreprise);
 			tr.commit();
 
 		} catch (Exception e) {
 			tr.rollback();
-			System.out.println(e);
-
+			// Handle other exceptions
+			e.printStackTrace(); // or log the exception
 		}
 	}
+
 
 
 	public void changeFormeJuridique(int id, String formeJuridique) {
 		String hql = "update Contact set formeJuridique= :formeJuridique where id = :id";
 		try {
+			Entreprise entreprise = this.findEntrepriseById(id);
+
+			if (entreprise == null) {
+				throw new EntityNotFoundException("Entreprise not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("formeJuridique", formeJuridique);
 			query.executeUpdate();
+			em.refresh(entreprise);
 			tr.commit();
 
 		} catch (Exception e) {
@@ -298,11 +346,18 @@ public class ContactDao {
 	public void changeEmail(int id, String email) {
 		String hql = "update Contact set email= :email where id = :id";
 		try {
+			Contact contact = this.findContactById(id);
+
+			if (contact == null) {
+				throw new EntityNotFoundException("Contact not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("email", email);
 			query.executeUpdate();
+			em.refresh(contact);
 			tr.commit();
 
 		} catch (Exception e) {
@@ -315,11 +370,19 @@ public class ContactDao {
 	public void changeAdresseId(int id, int adresse_id) {
 		String hql = "update Contact set adresse_id= :adresse_id where id = :id";
 		try {
+
+			Contact contact = this.findContactById(id);
+
+			if (contact == null) {
+				throw new EntityNotFoundException("Contact not found with id: " + id);
+			}
+
 			tr.begin();
 			Query query = em.createQuery(hql);
 			query.setParameter("id", id);
 			query.setParameter("adresse_id", adresse_id);
 			query.executeUpdate();
+			em.refresh(contact);
 			tr.commit();
 
 		} catch (Exception e) {
