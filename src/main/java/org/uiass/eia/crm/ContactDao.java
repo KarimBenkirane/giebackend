@@ -193,10 +193,10 @@ public class ContactDao {
 	}
 
 	public void changeTelephone(int id, String telephone) {
-		String hql = "update Contact set telephone= :telephone where id = :id";
+		String hql = "update Contact set telephone = :telephone where id = :id";
 		try {
 
-			Contact contact = this.findParticulierById(id);
+			Contact contact = this.findContactById(id);
 
 			if (contact == null) {
 				throw new EntityNotFoundException("Contact not found with id: " + id);
