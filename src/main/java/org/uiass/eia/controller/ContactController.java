@@ -182,41 +182,41 @@ public class ContactController {
 
 
 
-            if(!(jsonEmail == null)) {
+            if(jsonEmail != null) {
                 email = jsonEmail.getAsString();
             }
-            if(!(jsonFax == null)) {
+            if(jsonFax != null) {
                 fax = jsonFax.getAsString();
             }
-            if(!(jsonTelephone == null)) {
+            if(jsonTelephone != null) {
                 telephone = jsonTelephone.getAsString();
             }
-            if(!(jsonNom == null)) {
+            if(jsonNom != null) {
                 nom = jsonNom.getAsString();
             }
-            if(!(jsonPrenom == null)) {
+            if(jsonPrenom != null) {
                 prenom = jsonPrenom.getAsString();
             }
 
-
-            if(!(jsonRue == null)) {
+            if(jsonRue != null) {
                 rue = jsonRue.getAsString();
             }
-            if(!(jsonNumeroRue == null)) {
+            if(jsonNumeroRue != null) {
                 numeroRue = jsonNumeroRue.getAsInt();
             }
-            if(!(jsonCodePostal == null)) {
+            if(jsonCodePostal != null) {
                 codePostal = jsonCodePostal.getAsInt();
             }
-            if(!(jsonQuartier == null)) {
+            if(jsonQuartier != null) {
                 quartier = jsonQuartier.getAsString();
             }
-            if(!(jsonVille == null)) {
+            if(jsonVille != null) {
                 ville = jsonVille.getAsString();
             }
-            if(!(jsonPays == null)) {
+            if(jsonPays != null) {
                 pays = jsonPays.getAsString();
             }
+
 
 
             Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
@@ -272,55 +272,55 @@ public class ContactController {
 
 
 
-            if(!(jsonEmail == null)) {
+            if(jsonEmail != null) {
                 email = jsonEmail.getAsString();
-                contactController.contactDao.changeEmail(id,email);
+                contactController.contactDao.changeEmail(id, email);
             }
-            if(!(jsonFax == null)) {
+            if(jsonFax != null) {
                 fax = jsonFax.getAsString();
                 contactController.contactDao.changeFax(id, fax);
             }
-            if(!(jsonTelephone == null)) {
+            if(jsonTelephone != null) {
                 telephone = jsonTelephone.getAsString();
                 contactController.contactDao.changeTelephone(id, telephone);
             }
-            if(!(jsonNom == null)) {
+            if(jsonNom != null) {
                 nom = jsonNom.getAsString();
                 contactController.contactDao.changeNom(id, nom);
             }
-            if(!(jsonPrenom == null)) {
+            if(jsonPrenom != null) {
                 prenom = jsonPrenom.getAsString();
                 contactController.contactDao.changePrenom(id, prenom);
             }
 
-
-            if(!(jsonRue == null)) {
+            if(jsonRue != null) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
             }
-            if(!(jsonNumeroRue == null)) {
+            if(jsonNumeroRue != null) {
                 numeroRue = jsonNumeroRue.getAsInt();
-                if(numeroRue != -1)
+                if(numeroRue != -1) {
                     contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+                }
             }
-            if(!(jsonCodePostal == null)) {
+            if(jsonCodePostal != null) {
                 codePostal = jsonCodePostal.getAsInt();
-                if(codePostal != -1)
+                if(codePostal != -1) {
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
+                }
             }
-            if(!(jsonQuartier == null)) {
+            if(jsonQuartier != null) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
             }
-            if(!(jsonVille == null)) {
+            if(jsonVille != null) {
                 ville = jsonVille.getAsString();
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
-            if(!(jsonPays == null)) {
+            if(jsonPays != null) {
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
-
 
 
             return "Changements effectués avec succès!";
@@ -410,54 +410,56 @@ public class ContactController {
 
 
 
-            if(!(jsonEmail == null)) {
+            if(jsonEmail != null) {
                 email = jsonEmail.getAsString();
-                contactController.contactDao.changeEmail(id,email);
+                contactController.contactDao.changeEmail(id, email);
             }
-            if(!(jsonFax == null)) {
+            if(jsonFax != null) {
                 fax = jsonFax.getAsString();
                 contactController.contactDao.changeFax(id, fax);
             }
-            if(!(jsonTelephone == null)) {
+            if(jsonTelephone != null) {
                 telephone = jsonTelephone.getAsString();
                 contactController.contactDao.changeTelephone(id, telephone);
             }
-            if(!(jsonRaisonSociale == null)) {
+            if(jsonRaisonSociale != null) {
                 raisonSociale = jsonRaisonSociale.getAsString();
                 contactController.contactDao.changeRaisonSociale(id, raisonSociale);
             }
-            if(!(jsonFormeJuridique == null)) {
+            if(jsonFormeJuridique != null) {
                 formeJuridique = jsonFormeJuridique.getAsString();
                 contactController.contactDao.changeFormeJuridique(id, formeJuridique);
             }
 
-
-            if(!(jsonRue == null)) {
+            if(jsonRue != null) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
             }
-            if(!(jsonNumeroRue == null)) {
+            if(jsonNumeroRue != null) {
                 numeroRue = jsonNumeroRue.getAsInt();
-                if(numeroRue != -1)
+                if(numeroRue != -1) {
                     contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+                }
             }
-            if(!(jsonCodePostal == null)) {
+            if(jsonCodePostal != null) {
                 codePostal = jsonCodePostal.getAsInt();
-                if(codePostal != -1)
+                if(codePostal != -1) {
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
+                }
             }
-            if(!(jsonQuartier == null)) {
+            if(jsonQuartier != null) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
             }
-            if(!(jsonVille == null)) {
+            if(jsonVille != null) {
                 ville = jsonVille.getAsString();
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
-            if(!(jsonPays == null)) {
+            if(jsonPays != null) {
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
+
 
 
 
@@ -510,41 +512,41 @@ public class ContactController {
 
 
 
-            if(!(jsonEmail == null)) {
+            if(jsonEmail != null) {
                 email = jsonEmail.getAsString();
             }
-            if(!(jsonFax == null)) {
+            if(jsonFax != null) {
                 fax = jsonFax.getAsString();
             }
-            if(!(jsonTelephone == null)) {
+            if(jsonTelephone != null) {
                 telephone = jsonTelephone.getAsString();
             }
-            if(!(jsonRaisonSociale == null)) {
+            if(jsonRaisonSociale != null) {
                 raisonSociale = jsonRaisonSociale.getAsString();
             }
-            if(!(jsonFormeJuridique == null)) {
+            if(jsonFormeJuridique != null) {
                 formeJuridique = jsonFormeJuridique.getAsString();
             }
 
-
-            if(!(jsonRue == null)) {
+            if(jsonRue != null) {
                 rue = jsonRue.getAsString();
             }
-            if(!(jsonNumeroRue == null)) {
+            if(jsonNumeroRue != null) {
                 numeroRue = jsonNumeroRue.getAsInt();
             }
-            if(!(jsonCodePostal == null)) {
+            if(jsonCodePostal != null) {
                 codePostal = jsonCodePostal.getAsInt();
             }
-            if(!(jsonQuartier == null)) {
+            if(jsonQuartier != null) {
                 quartier = jsonQuartier.getAsString();
             }
-            if(!(jsonVille == null)) {
+            if(jsonVille != null) {
                 ville = jsonVille.getAsString();
             }
-            if(!(jsonPays == null)) {
+            if(jsonPays != null) {
                 pays = jsonPays.getAsString();
             }
+
 
 
             Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
@@ -610,32 +612,35 @@ public class ContactController {
 
 
 
-            if(!(jsonRue == null)) {
+            if(jsonRue != null) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
             }
-            if(!(jsonNumeroRue == null)) {
+            if(jsonNumeroRue != null) {
                 numeroRue = jsonNumeroRue.getAsInt();
-                if(numeroRue != -1)
+                if(numeroRue != -1) {
                     contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+                }
             }
-            if(!(jsonCodePostal == null)) {
+            if(jsonCodePostal != null) {
                 codePostal = jsonCodePostal.getAsInt();
-                if(codePostal != -1)
+                if(codePostal != -1) {
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
+                }
             }
-            if(!(jsonQuartier == null)) {
+            if(jsonQuartier != null) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
             }
-            if(!(jsonVille == null)) {
+            if(jsonVille != null) {
                 ville = jsonVille.getAsString();
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
-            if(!(jsonPays == null)) {
+            if(jsonPays != null) {
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
+
 
 
 
