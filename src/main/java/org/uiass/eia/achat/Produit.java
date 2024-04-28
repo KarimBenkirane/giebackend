@@ -33,6 +33,14 @@ public class Produit {
         this.categorieProduit = categorieProduit;
     }
 
+    public Produit(String marque, String modele, double prix, String description, CategorieProduit categorieProduit) {
+        this.marque = marque;
+        this.modele = modele;
+        this.prix = prix;
+        this.description = description;
+        this.categorieProduit = categorieProduit;
+    }
+
     public Produit() {
     }
 
