@@ -48,7 +48,7 @@ public class ProduitDao {
         return query.getResultList();
     }
 
-    public Produit getProduitByID(int id){
+    public Produit getProduitByID(long id){
         Produit produit =  em.find(Produit.class,id);
         if(produit == null)
             throw new EntityNotFoundException("Produit not found with this ID");
@@ -71,7 +71,7 @@ public class ProduitDao {
         }
     }
 
-    public void deleteProduitByID(int id){
+    public void deleteProduitByID(long id){
         Produit produit = this.getProduitByID(id);
         this.deleteProduit(produit);
     }
@@ -90,7 +90,7 @@ public class ProduitDao {
         }
     }
 
-    public void changeMarqueProduit(int id, String marque) {
+    public void changeMarqueProduit(long id, String marque) {
         try{
             tr.begin();
             Produit produit = this.getProduitByID(id);
@@ -105,7 +105,7 @@ public class ProduitDao {
         }
     }
 
-    public void changePrixProduit(int id, double prix) {
+    public void changePrixProduit(long id, double prix) {
         try{
             tr.begin();
             Produit produit = this.getProduitByID(id);
@@ -120,7 +120,7 @@ public class ProduitDao {
         }
     }
 
-    public void changeModeleProduit(int id, String modele) {
+    public void changeModeleProduit(long id, String modele) {
         try{
             tr.begin();
             Produit produit = this.getProduitByID(id);
@@ -135,7 +135,7 @@ public class ProduitDao {
         }
     }
 
-    public void changeQteStockProduit(int id, int qte) {
+    public void changeQteStockProduit(long id, int qte) {
         try{
             tr.begin();
             Produit produit = this.getProduitByID(id);
@@ -150,7 +150,7 @@ public class ProduitDao {
         }
     }
 
-    public void changeDescriptionProduit(int id, String description) {
+    public void changeDescriptionProduit(long id, String description) {
         try{
             tr.begin();
             Produit produit = this.getProduitByID(id);
@@ -166,7 +166,7 @@ public class ProduitDao {
         }
     }
 
-    public void changeCategorieProduit(int id, String categorie) {
+    public void changeCategorieProduit(long id, String categorie) {
         try{
             tr.begin();
             Produit produit = this.getProduitByID(id);

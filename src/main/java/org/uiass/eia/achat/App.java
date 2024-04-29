@@ -7,8 +7,7 @@ public class App {
         ProduitDao produitDao = ProduitDao.getInstance();
         AchatDao achatDao = AchatDao.getInstance();
 
-
-        System.out.println(produitDao.getProduitByID(190));
+        
 
     }
 
