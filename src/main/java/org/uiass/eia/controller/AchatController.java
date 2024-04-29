@@ -4,19 +4,19 @@ import org.uiass.eia.achat.ProduitDao;
 import static spark.Spark.*;
 import com.google.gson.*;
 
-public class ProduitController {
+public class AchatController {
 
     private ProduitDao produitDao = ProduitDao.getInstance();
 
 
-    public ProduitController() {
+    public AchatController() {
 
     }
 
     public static void main(String[] args) {
 
         Gson gson = new Gson();
-        ProduitController produitController = new ProduitController();
+        AchatController achatController = new AchatController();
 
         System.out.println("Serveur démarré sur l'adresse http://localhost:4567");
 
@@ -26,7 +26,7 @@ public class ProduitController {
 
             res.type("application/json");
 
-            return produitController.produitDao.getAllProduits();
+            return achatController.produitDao.getAllProduits();
 
         },gson::toJson);
 

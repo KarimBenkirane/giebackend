@@ -9,7 +9,7 @@ public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private int id;
     @Column(name="marque")
     private String marque;
     @Column(name="modele")
@@ -23,6 +23,7 @@ public class Produit {
     @Enumerated(EnumType.STRING)
     @Column(name="categorie")
     private CategorieProduit categorieProduit;
+
 
     public Produit(String marque, String modele, int qteStock, double prix, String description, CategorieProduit categorieProduit) {
         this.marque = marque;
@@ -44,11 +45,11 @@ public class Produit {
     public Produit() {
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -99,4 +100,18 @@ public class Produit {
     public void setCategorieProduit(CategorieProduit categorieProduit) {
         this.categorieProduit = categorieProduit;
     }
+
+    @Override
+    public String toString() {
+        return "Produit{" +
+                "id=" + id +
+                ", marque='" + marque + '\'' +
+                ", modele='" + modele + '\'' +
+                ", qteStock=" + qteStock +
+                ", prix=" + prix +
+                ", description='" + description + '\'' +
+                ", categorieProduit=" + categorieProduit +
+                '}';
+    }
+
 }

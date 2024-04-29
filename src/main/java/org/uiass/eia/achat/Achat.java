@@ -25,4 +25,72 @@ public class Achat {
 
     private double prix;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="statut_achat")
+    private StatutAchat statutAchat;
+
+    public Achat(Contact fournisseur, List<DetailAchat> detailsAchat, LocalDate dateAchat, double prix, StatutAchat statutAchat) {
+        this.fournisseur = fournisseur;
+        this.detailsAchat = detailsAchat;
+        this.dateAchat = dateAchat;
+        this.prix = prix;
+        this.statutAchat = statutAchat;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Contact getFournisseur() {
+        return fournisseur;
+    }
+
+    public void setFournisseur(Contact fournisseur) {
+        this.fournisseur = fournisseur;
+    }
+
+    public List<DetailAchat> getDetailsAchat() {
+        return detailsAchat;
+    }
+
+    public void setDetailsAchat(List<DetailAchat> detailsAchat) {
+        this.detailsAchat = detailsAchat;
+    }
+
+    public LocalDate getDateAchat() {
+        return dateAchat;
+    }
+
+    public void setDateAchat(LocalDate dateAchat) {
+        this.dateAchat = dateAchat;
+    }
+
+    public double getPrix() {
+        return prix;
+    }
+
+    public void setPrix(double prix) {
+        this.prix = prix;
+    }
+
+    public StatutAchat getStatutAchat() {
+        return statutAchat;
+    }
+
+    public void setStatutAchat(StatutAchat statutAchat) {
+        this.statutAchat = statutAchat;
+    }
+
+    public double getPrixTotalAchat(){
+        double montant = 0.0;
+        for(DetailAchat detailAchat : this.detailsAchat){
+            montant += detailAchat.getPrixAchat();
+        }
+        return montant;
+    }
+
 }

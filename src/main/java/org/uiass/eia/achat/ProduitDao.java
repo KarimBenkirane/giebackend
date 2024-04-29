@@ -2,10 +2,7 @@ package org.uiass.eia.achat;
 
 import org.uiass.eia.helper.HibernateUtility;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.List;
 
 public class ProduitDao {
@@ -52,12 +49,14 @@ public class ProduitDao {
     }
 
     public Produit getProduitByID(int id){
-        return em.find(Produit.class,id);
+        Produit produit =  em.find(Produit.class,id);
+        if(produit == null)
+            throw new EntityNotFoundException("Produit not found with this ID");
+        return produit;
     }
 
 
     public void deleteProduit(Produit prod) {
-        // TODO Auto-generated method stub
         try {
             tr.begin();
             Produit entity = em.find(Produit.class, prod.getId());
@@ -79,12 +78,10 @@ public class ProduitDao {
 
 
     public void addProduit(Produit produit) {
-        // TODO Auto-generated method stub
         try {
             tr.begin();
             em.persist(produit);
             tr.commit();
-
         }
         catch(Exception e) {
             tr.rollback();
@@ -92,6 +89,98 @@ public class ProduitDao {
 
         }
     }
+
+    public void changeMarqueProduit(int id, String marque) {
+        try{
+            tr.begin();
+            Produit produit = this.getProduitByID(id);
+            if(produit.getMarque() == null || !produit.getMarque().equals(marque)){
+                produit.setMarque(marque);
+            }
+            em.flush();
+            tr.commit();
+        }catch(Exception e){
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void changePrixProduit(int id, double prix) {
+        try{
+            tr.begin();
+            Produit produit = this.getProduitByID(id);
+            if(!(produit.getPrix() == prix)){
+                produit.setPrix(prix);
+            }
+            em.flush();
+            tr.commit();
+        }catch(Exception e){
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void changeModeleProduit(int id, String modele) {
+        try{
+            tr.begin();
+            Produit produit = this.getProduitByID(id);
+            if(produit.getModele() == null || !produit.getModele().equals(modele)){
+                produit.setModele(modele);
+            }
+            em.flush();
+            tr.commit();
+        }catch(Exception e){
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void changeQteStockProduit(int id, int qte) {
+        try{
+            tr.begin();
+            Produit produit = this.getProduitByID(id);
+            if(!(produit.getQteStock() == qte)){
+                produit.setQteStock(qte);
+            }
+            em.flush();
+            tr.commit();
+        }catch(Exception e){
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void changeDescriptionProduit(int id, String description) {
+        try{
+            tr.begin();
+            Produit produit = this.getProduitByID(id);
+            if(produit.getDescription() == null || !produit.getDescription().equals(description)){
+                produit.setDescription(description);
+
+            }
+            em.flush();
+            tr.commit();
+        }catch(Exception e){
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
+    public void changeCategorieProduit(int id, String categorie) {
+        try{
+            tr.begin();
+            Produit produit = this.getProduitByID(id);
+            if(produit.getCategorieProduit() == null || !produit.getCategorieProduit().equals(CategorieProduit.valueOf(categorie.toUpperCase()))){
+                produit.setCategorieProduit(CategorieProduit.valueOf(categorie.toUpperCase()));
+            }
+            em.flush();
+            tr.commit();
+        }catch(Exception e){
+            tr.rollback();
+            System.out.println(e);
+        }
+    }
+
 
 
 }
