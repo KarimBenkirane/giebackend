@@ -10,9 +10,9 @@
 
         <!-- Set Username -->
         <property name = "hibernate.connection.username">root</property>
-
+h
         <!-- Set Password -->
-        <property name = "hibernate.connection.password">khalil</property>
+        <property name = "hibernate.connection.password">root</property>
 
         <!-- Set Driver Name -->
         <property name = "hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
