@@ -9,6 +9,7 @@ import org.uiass.eia.commande.*;
 
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 import static spark.Spark.*;
 
@@ -196,7 +197,7 @@ public class CommandeController {
             // Créer une instance de DetailleCommande et de Commande
             DetailleCommande detailCommandeObject = new DetailleCommande(quantiteCommande, remise);
             commandeController.detailleCommandeDao.addDetailleCommande(detailCommandeObject);
-            commandeController.commandeDAO.addCommande(new Commande(dateCommande, dateReglement, totalCommande, etatCommande, (Collection<DetailleCommande>) detailCommandeObject));
+            commandeController.commandeDAO.addCommande(new Commande(dateCommande, dateReglement, totalCommande, etatCommande, (List<DetailleCommande>) detailCommandeObject));
 
             return "Commande créée avec succès!";
         }, gson::toJson);

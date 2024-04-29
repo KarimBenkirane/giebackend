@@ -2,6 +2,7 @@ package org.uiass.eia.commande;
 
 import org.uiass.eia.crm.Adresse;
 import org.uiass.eia.crm.Contact;
+import org.uiass.eia.crm.Particulier;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,6 +25,8 @@ public class App {
         transaction.begin();
 
         try {
+            Adresse ad = new Adresse("123 Rue du Client", 123, "Quartier", 12345, "Ville", "Pays");
+
             Marque marque1 = new Marque("Marque A");
             Marque marque2 = new Marque("Marque B");
 
@@ -44,8 +47,8 @@ public class App {
             detaille2.setProduit(produit2);
 
             // Ajout du client à la commande
-           // Contact client = new Contact("123456789", "client@example.com", "123456789", new Adresse("123 Rue du Client", 123, "Quartier", 12345, "Ville", "Pays"));
-            //commande.setContact(client);
+            Contact client = new Particulier("123456789", "client@example.com", "123456789", ad,"araoui","khalil");
+            commande.setContact(client);
 
             em.persist(marque1);
             em.persist(marque2);
@@ -53,7 +56,7 @@ public class App {
             em.persist(categorie2);
             em.persist(produit1);
             em.persist(produit2);
-          //  em.persist(client);
+            em.persist(client);
             em.persist(commande);
             em.persist(detaille1);
             em.persist(detaille2);

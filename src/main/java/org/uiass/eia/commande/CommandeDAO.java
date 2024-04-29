@@ -31,7 +31,7 @@ public class CommandeDAO {
         Query query= em.createQuery("from Commande");
         return query.getResultList();
     }
-    public void addCommande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, Collection<DetailleCommande> dtcm){
+    public void addCommande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> dtcm){
         try{
             tr.begin();
             em.persist(new Commande( dateCommande,  dateReglement,  totalCommande,  etatCommande,dtcm));

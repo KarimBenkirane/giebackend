@@ -18,7 +18,7 @@ public abstract class Contact implements Serializable {
     protected String email;
     @Column(name="fax")
     protected String fax;
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "adresse_id")
     protected Adresse adresse;
 

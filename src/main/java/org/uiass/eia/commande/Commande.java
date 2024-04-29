@@ -4,7 +4,7 @@ import org.uiass.eia.crm.Contact;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name="Commande")
@@ -26,23 +26,23 @@ public class Commande {
     @Enumerated(EnumType.STRING)
     @Column(name = "etatCommande")
     private EtatCmd etatCommande;
-    @Column(name="contact_id") // Modify this line
-    @ManyToOne
+
+    @OneToOne
+    @JoinColumn(name="contact_id")
     private Contact contact;
 
-
-    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
-    private Collection<DetailleCommande> detaillecommandes;
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetailleCommande> detailsCommandes;
 
     public Commande() {
     }
 
-    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, Collection<DetailleCommande> detailleCommande) {
+    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
         this.dateCommande = dateCommande;
         this.dateReglement = dateReglement;
         this.totalCommande = totalCommande;
         this.etatCommande = etatCommande;
-        this.detaillecommandes = detailleCommande;
+        this.detailsCommandes = detailleCommande;
     }
 
     // Getters and Setters

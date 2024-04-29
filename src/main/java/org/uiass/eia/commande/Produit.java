@@ -1,40 +1,36 @@
 package org.uiass.eia.commande;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+
 
 @Entity
 @Table(name="Produit")
 public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idProd")
+    @Column(name = "idProd")
     private int idProd;
 
-    @Column(name="nomProd")
+    @Column(name = "nomProd")
     private String nomProd;
 
-    @Column(name="ref_prod")
+    @Column(name = "ref_prod")
     private String refProd;
 
-    @Column(name="libelle")
+    @Column(name = "libelle")
     private String libelle;
 
-    @Column(name="quantiteStock")
+    @Column(name = "quantiteStock")
     private int quantiteStock;
 
     @OneToOne
     @JoinColumn(name = "marque_id")
     private Marque marque;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "categorie_id")
     private CategorieProduit categorieProduit;
 
-    @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL)
-    private Collection<DetailleCommande> detaillecommandes;
 
     public Produit() {
     }
