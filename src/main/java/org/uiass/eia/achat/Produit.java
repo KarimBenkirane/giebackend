@@ -9,7 +9,7 @@ public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private long id;
     @Column(name="marque")
     private String marque;
     @Column(name="modele")
@@ -45,11 +45,11 @@ public class Produit {
     public Produit() {
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
