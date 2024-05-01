@@ -10,7 +10,6 @@
 
         <!-- Set Username -->
         <property name = "hibernate.connection.username">root</property>
-
         <!-- Set Password -->
         <property name = "hibernate.connection.password">root</property>
 
@@ -22,5 +21,4 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
     </session-factory>
-    
 </hibernate-configuration>
