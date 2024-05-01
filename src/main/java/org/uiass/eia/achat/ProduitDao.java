@@ -33,6 +33,11 @@ public class ProduitDao {
         return query.getResultList();
     }
 
+    public List<Produit> getAllUnavailableProduits() {
+        TypedQuery<Produit> query = em.createQuery("from Produit p where p.qteStock = 0", Produit.class);
+        return query.getResultList();
+    }
+
 
     public List<Produit> getProduitsByMarque(String marque) {
         TypedQuery<Produit> query = em.createQuery("from Produit p where p.marque = :marque", Produit.class);
@@ -56,7 +61,7 @@ public class ProduitDao {
     }
 
 
-    public void deleteProduit(Produit prod) {
+    public boolean deleteProduit(Produit prod) {
         try {
             tr.begin();
             Produit entity = em.find(Produit.class, prod.getId());
@@ -64,16 +69,18 @@ public class ProduitDao {
                 em.remove(entity);
             }
             tr.commit();
+            return true;
 
         } catch (Exception e) {
             tr.rollback();
             System.out.println(e);
+            return false;
         }
     }
 
-    public void deleteProduitByID(long id){
+    public boolean deleteProduitByID(long id){
         Produit produit = this.getProduitByID(id);
-        this.deleteProduit(produit);
+        return this.deleteProduit(produit);
     }
 
 
