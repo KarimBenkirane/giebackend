@@ -26,10 +26,10 @@ public class DetailleCommandeDao {
         return query.getResultList();
     }
 
-    public void addDetailleCommande(int quantiteCommander, double remise) {
+    public void addDetailleCommande(Commande c,Produit p,int quantiteCommander, double remise,double prix) {
         try {
             tr.begin();
-            em.persist(new DetailleCommande(quantiteCommander, remise));
+            em.persist(new DetailleCommande(c,p,quantiteCommander, remise,prix));
             tr.commit();
         } catch (Exception e) {
             tr.rollback();

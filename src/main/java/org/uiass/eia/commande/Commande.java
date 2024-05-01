@@ -3,7 +3,8 @@ package org.uiass.eia.commande;
 import org.uiass.eia.crm.Contact;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Date;
+
 import java.util.List;
 
 @Entity
@@ -15,10 +16,10 @@ public class Commande {
     private int numBonCommande;
 
     @Column(name = "dateCommande")
-    private LocalDate dateCommande;
+    private Date dateCommande;
 
     @Column(name = "dateReglement")
-    private LocalDate dateReglement;
+    private Date dateReglement;
 
     @Column(name = "totalCommande")
     private double totalCommande;
@@ -31,13 +32,14 @@ public class Commande {
     @JoinColumn(name="contact_id")
     private Contact contact;
 
-    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetailleCommande> detailsCommandes;
 
     public Commande() {
     }
 
-    public Commande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
+    public Commande(Contact contact,Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
+        this.contact=contact;
         this.dateCommande = dateCommande;
         this.dateReglement = dateReglement;
         this.totalCommande = totalCommande;
@@ -54,19 +56,19 @@ public class Commande {
         this.numBonCommande = numBonCommande;
     }
 
-    public LocalDate getDateCommande() {
+    public Date getDateCommande() {
         return dateCommande;
     }
 
-    public void setDateCommande(LocalDate dateCommande) {
+    public void setDateCommande(Date dateCommande) {
         this.dateCommande = dateCommande;
     }
 
-    public LocalDate getDateReglement() {
+    public Date getDateReglement() {
         return dateReglement;
     }
 
-    public void setDateReglement(LocalDate dateReglement) {
+    public void setDateReglement(Date dateReglement) {
         this.dateReglement = dateReglement;
     }
 
@@ -85,6 +87,9 @@ public class Commande {
     public void setEtatCommande(EtatCmd etatCommande) {
         this.etatCommande = etatCommande;
     }
+    public void setDateCommandeFormatted(String dateCommandeFormatted) {
+        dateCommandeFormatted = String.valueOf(this.dateCommande);
+    }
 
     // toString method
     @Override
@@ -97,8 +102,22 @@ public class Commande {
                 ", etatCommande=" + etatCommande +
                 '}';
     }
+    public double getPrixTotalCommande(){
+        double montant = 0.0;
+        for(DetailleCommande detailCommande : this.detailsCommandes){
+            montant += detailCommande.getPrixCommannde();
+        }
+        return montant;
+    }
+    public void setDetailsCommandes(List<DetailleCommande> detailsCommandes) {
+        this.detailsCommandes = detailsCommandes;
+    }
+
+
 
     public void setContact(Contact contact) {
         this.contact = contact;
     }
+
+
 }

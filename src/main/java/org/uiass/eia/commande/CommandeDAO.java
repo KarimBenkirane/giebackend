@@ -1,13 +1,17 @@
 package org.uiass.eia.commande;
 
 
+import org.uiass.eia.crm.Contact;
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,20 +31,25 @@ public class CommandeDAO {
         this.em= HibernateUtility.getEntityManger();
         tr=em.getTransaction();
     }
-    public List<Commande> getAllCommande(){
-        Query query= em.createQuery("from Commande");
-        return query.getResultList();
+    public List<Commande> getAllCommande() {
+        Query query = em.createQuery("from Commande");
+        List<Commande> commandes = query.getResultList();
+        return commandes;
     }
-    public void addCommande(LocalDate dateCommande, LocalDate dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> dtcm){
-        try{
+
+
+    public void addCommande(Contact contact, Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
+        try {
             tr.begin();
-            em.persist(new Commande( dateCommande,  dateReglement,  totalCommande,  etatCommande,dtcm));
+            Commande commande = new Commande(contact, dateCommande, dateReglement, totalCommande, etatCommande, detailleCommande);
+            em.persist(commande);
             tr.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             tr.rollback();
             System.out.println(e);
         }
     }
+
     public void addCommande(Commande commande) {
         try {
             tr.begin();

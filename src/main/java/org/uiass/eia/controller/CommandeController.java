@@ -33,12 +33,13 @@ public class CommandeController {
 
         get("/api/commande/all", (request, response) -> {
             response.type("application/json");
-            try {
+             try {
                 return commandeController.commandeDAO.getAllCommande();
-            } catch (Exception e) {
-                response.status(500);
-                return "Error retrieving commandes: " + e.getMessage();
-            }
+             }catch (Exception e){
+                 response.status(500);
+                 return "Error retrieving produits: commande not found " + e.getMessage();
+             }
+
         }, gson::toJson);
 
         get("/api/produit/all", (request, response) -> {
@@ -83,7 +84,7 @@ public class CommandeController {
 
 
 
-        //Exemple d'utilisation : http://localhost:4567/api/commande/get/1 → retourne le contact avec l'id 1
+        /*//Exemple d'utilisation : http://localhost:4567/api/commande/get/1 → retourne le contact avec l'id 1
 
         get("api/commande/get/id/:id", (request, response) -> {
             String Id = request.params("id");
@@ -207,6 +208,7 @@ public class CommandeController {
 
 
 
+*/
 
     }
 }

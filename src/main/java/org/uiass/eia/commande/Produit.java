@@ -22,6 +22,8 @@ public class Produit {
 
     @Column(name = "quantiteStock")
     private int quantiteStock;
+    @Column(name="prix")
+    private double prix;
 
     @OneToOne
     @JoinColumn(name = "marque_id")
@@ -95,5 +97,9 @@ public class Produit {
                 ", libelle='" + libelle + '\'' +
                 ", quantiteStock=" + quantiteStock +
                 '}';
+    }
+
+    public double getPrix() {
+        return this.prix;
     }
 }

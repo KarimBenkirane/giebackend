@@ -17,18 +17,29 @@ public class DetailleCommande {
 
     @ManyToOne
     @JoinColumn(name = "commande_id")
-    private Commande commande;
+    private Commande commandeObjet;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
-    private Produit produit;
+    private Produit produitObjet;
+
+    private double prixCommannde;
+
+
 
     public DetailleCommande() {
     }
 
-    public DetailleCommande(int quantiteCommander, double remise) {
+    public double getPrixCommannde() {
+        return prixCommannde;
+    }
+
+    public DetailleCommande(Commande commandeObjet,Produit produitObjet,int quantiteCommander, double remise, double prixCommannde) {
+        this.commandeObjet=commandeObjet;
+        this.produitObjet=produitObjet;
         this.quantiteCommander = quantiteCommander;
         this.remise = remise;
+        this.prixCommannde=prixCommannde;
     }
 
     // Getters and Setters
@@ -48,12 +59,18 @@ public class DetailleCommande {
         this.remise = remise;
     }
     public void setCommande(Commande commande) {
-        this.commande = commande;
+        this.commandeObjet = commande;
     }
 
     public void setProduit(Produit produit) {
-        this.produit = produit;
+        this.produitObjet = produit;
     }
+
+    public double calculerPrix() {
+        return quantiteCommander * (1 - remise) * prixCommannde;
+    }
+
+
 
     // toString method
     @Override
