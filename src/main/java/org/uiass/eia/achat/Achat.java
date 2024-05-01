@@ -3,7 +3,7 @@ package org.uiass.eia.achat;
 import org.uiass.eia.crm.Contact;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
 
 @Entity(name="Achat")
@@ -12,16 +12,16 @@ public class Achat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @OneToOne
     @JoinColumn(name="fournisseur_id")
     private Contact fournisseur;
 
-    @OneToMany(mappedBy = "achatObjet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "achatObjet", cascade = CascadeType.ALL)
     private List<DetailAchat> detailsAchat;
 
-    private LocalDate dateAchat;
+    private Date dateAchat;
 
     private double prix;
 
@@ -29,7 +29,12 @@ public class Achat {
     @Column(name="statut_achat")
     private StatutAchat statutAchat;
 
-    public Achat(Contact fournisseur, List<DetailAchat> detailsAchat, LocalDate dateAchat, double prix, StatutAchat statutAchat) {
+
+    public Achat(){
+
+    }
+
+    public Achat(Contact fournisseur, List<DetailAchat> detailsAchat, Date dateAchat, double prix, StatutAchat statutAchat) {
         this.fournisseur = fournisseur;
         this.detailsAchat = detailsAchat;
         this.dateAchat = dateAchat;
@@ -37,11 +42,18 @@ public class Achat {
         this.statutAchat = statutAchat;
     }
 
-    public Long getId() {
+    public Achat(Contact fournisseur, List<DetailAchat> detailsAchat, Date dateAchat, StatutAchat statutAchat) {
+        this.fournisseur = fournisseur;
+        this.detailsAchat = detailsAchat;
+        this.dateAchat = dateAchat;
+        this.statutAchat = statutAchat;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -61,11 +73,11 @@ public class Achat {
         this.detailsAchat = detailsAchat;
     }
 
-    public LocalDate getDateAchat() {
+    public Date getDateAchat() {
         return dateAchat;
     }
 
-    public void setDateAchat(LocalDate dateAchat) {
+    public void setDateAchat(Date dateAchat) {
         this.dateAchat = dateAchat;
     }
 
@@ -91,6 +103,19 @@ public class Achat {
             montant += detailAchat.getPrixAchat();
         }
         return montant;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Achat{" +
+                "id=" + id +
+                ", fournisseur=" + fournisseur +
+                ", detailsAchat=" + detailsAchat +
+                ", dateAchat=" + dateAchat +
+                ", prix=" + prix +
+                ", statutAchat=" + statutAchat +
+                '}';
     }
 
 }
