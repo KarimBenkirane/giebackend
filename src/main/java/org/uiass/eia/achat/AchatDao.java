@@ -119,7 +119,7 @@ public class AchatDao {
         return achat;
     }
 
-    public void deleteAchat(Achat achat){
+    public boolean deleteAchat(Achat achat){
         try{
             tr.begin();
             Achat entity = em.find(Achat.class,achat.getId());
@@ -128,15 +128,17 @@ public class AchatDao {
             }
             em.flush();
             tr.commit();
+            return true;
         }catch (Exception e) {
             tr.rollback();
             System.out.println(e);
+            return false;
         }
     }
 
-    public void deleteAchatByID(long id){
+    public boolean deleteAchatByID(long id){
         Achat achat = this.getAchatByID(id);
-        this.deleteAchat(achat);
+        return this.deleteAchat(achat);
     }
 
     public void changeFournisseurAchat(long achat_id, Contact fournisseur){

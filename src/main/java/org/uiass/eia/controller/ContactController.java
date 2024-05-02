@@ -15,6 +15,7 @@ public class ContactController {
 
     }
 
+
     public static void main(String[] args) {
         ContactController contactController = new ContactController();
         Gson gson = new Gson();

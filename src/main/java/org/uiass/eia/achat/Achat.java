@@ -18,7 +18,7 @@ public class Achat {
     @JoinColumn(name="fournisseur_id")
     private Contact fournisseur;
 
-    @OneToMany(mappedBy = "achatObjet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "achatObjet", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<DetailAchat> detailsAchat;
 
     private Date dateAchat;

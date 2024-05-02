@@ -19,6 +19,8 @@ public class App {
         AchatDao achatDao = AchatDao.getInstance();
         ContactDao contactDao = ContactDao.getInstance();
 
+
+
     }
 
 }
