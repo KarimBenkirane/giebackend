@@ -32,7 +32,7 @@ public class Commande {
     @JoinColumn(name="contact_id")
     private Contact contact;
 
-    @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetailleCommande> detailsCommandes;
 
     public Commande() {
@@ -87,8 +87,9 @@ public class Commande {
     public void setEtatCommande(EtatCmd etatCommande) {
         this.etatCommande = etatCommande;
     }
-    public void setDateCommandeFormatted(String dateCommandeFormatted) {
-        dateCommandeFormatted = String.valueOf(this.dateCommande);
+
+    public Contact getContact() {
+        return contact;
     }
 
     // toString method
@@ -112,9 +113,6 @@ public class Commande {
     public void setDetailsCommandes(List<DetailleCommande> detailsCommandes) {
         this.detailsCommandes = detailsCommandes;
     }
-
-
-
     public void setContact(Contact contact) {
         this.contact = contact;
     }

@@ -1,14 +1,10 @@
 package org.uiass.eia.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.uiass.eia.commande.*;
 
 
-import java.time.LocalDate;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import static spark.Spark.*;
@@ -32,15 +28,26 @@ public class CommandeController {
 
 
         get("/api/commande/all", (request, response) -> {
-            response.type("application/json");
-             try {
-                return commandeController.commandeDAO.getAllCommande();
-             }catch (Exception e){
-                 response.status(500);
-                 return "Error retrieving produits: commande not found " + e.getMessage();
-             }
+                    response.type("application/json");
+                    try {
+                        List<Commande> commandes = commandeController.commandeDAO.getAllCommande();
+                        List<String> commandesSansDetails = new ArrayList<>();
+                        for (Commande commande : commandes) {
+                            Commande commandeSimple = new Commande();
+                            commandeSimple.setNumBonCommande(commande.getNumBonCommande());
+                            commandeSimple.setDateCommande(commande.getDateCommande());
+                            commandeSimple.setEtatCommande(commande.getEtatCommande());
+                            commandeSimple.setDateReglement(commande.getDateReglement());
+                            commandeSimple.setContact(commande.getContact());
 
-        }, gson::toJson);
+                            commandesSansDetails.add(gson.toJson(commandeSimple));
+                        }
+                        return commandesSansDetails;
+                    } catch (Exception e) {
+                        response.status(500);
+                        return "Error retrieving produits: commande not found " + e.getMessage();
+                    }
+        });
 
         get("/api/produit/all", (request, response) -> {
             response.type("application/json");
@@ -55,12 +62,23 @@ public class CommandeController {
         get("/api/detailcommande/all", (request, response) -> {
             response.type("application/json");
             try {
-                return commandeController.detailleCommandeDao.getAllDetailleCommandes();
+                List<DetailleCommande> DetailCommandes =commandeController.detailleCommandeDao.getAllDetailleCommandes();
+                List<String> DetailCommandesSansCommande=new ArrayList<>();
+                for(DetailleCommande dtc: DetailCommandes){
+                    DetailleCommande detailleCommandeSimple =new DetailleCommande();
+                    detailleCommandeSimple.setDetailCommande_id(dtc.getDetailCommande_id());
+                    detailleCommandeSimple.setQuantiteCommander(dtc.getQuantiteCommander());
+                    detailleCommandeSimple.setRemise(dtc.getRemise());
+                    detailleCommandeSimple.setProduit(dtc.getProduit());
+
+                    DetailCommandesSansCommande.add(gson.toJson(detailleCommandeSimple));
+                }
+                return DetailCommandesSansCommande;
             } catch (Exception e) {
                 response.status(500);
                 return "Error retrieving detail commandes: " + e.getMessage();
             }
-        }, gson::toJson);
+        });
 
         get("/api/marque/all", (request, response) -> {
             response.type("application/json");

@@ -67,10 +67,17 @@ public class DetailleCommande {
     }
 
     public double calculerPrix() {
+
         return quantiteCommander * (1 - remise) * prixCommannde;
     }
 
+    public int getDetailCommande_id() {
+        return detailCommande_id;
+    }
 
+    public void setDetailCommande_id(int detailCommande_id) {
+        this.detailCommande_id = detailCommande_id;
+    }
 
     // toString method
     @Override
@@ -79,5 +86,9 @@ public class DetailleCommande {
                 "quantiteCommander=" + quantiteCommander +
                 ", remise=" + remise +
                 '}';
+    }
+
+    public Produit getProduit() {
+        return this.produitObjet;
     }
 }
