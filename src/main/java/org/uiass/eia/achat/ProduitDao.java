@@ -188,6 +188,11 @@ public class ProduitDao {
         }
     }
 
+    public List getAllCategories(){
+        Query query = em.createNativeQuery("select distinct categorie from produit");
+        return query.getResultList();
+    }
+
 
 
 }

@@ -3,10 +3,7 @@ package org.uiass.eia.achat;
 import org.uiass.eia.crm.Contact;
 import org.uiass.eia.helper.HibernateUtility;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.List;
 
@@ -56,9 +53,9 @@ public class AchatDao {
         return achat.getDetailsAchat();
     }
 
-    public String getDateAchat(long achat_id){
+    public Date getDateAchat(long achat_id){
         Achat achat = this.getAchatByID(achat_id);
-        return achat.getDateAchat().toString();
+        return achat.getDateAchat();
     }
 
     public Contact getFournisseurAchat(long achat_id){
@@ -86,7 +83,7 @@ public class AchatDao {
     }
 
     public List<Achat> getAchatsBetweenDates(Date dateBefore, Date dateAfter){
-        TypedQuery<Achat> query = em.createQuery("SELECT a FROM Achat a WHERE a.dateAchat BETWEEN :dateBefore AND :dateAfter", Achat.class);
+        TypedQuery<Achat> query = em.createQuery("SELECT a FROM Achat a WHERE a.dateAchat BETWEEN :dateAfter AND :dateBefore", Achat.class);
         query.setParameter("dateBefore", dateBefore);
         query.setParameter("dateAfter", dateAfter);
         return query.getResultList();
@@ -139,6 +136,21 @@ public class AchatDao {
     public boolean deleteAchatByID(long id){
         Achat achat = this.getAchatByID(id);
         return this.deleteAchat(achat);
+    }
+
+    public List<Achat> getAchatsByFournisseur(Contact contact){
+        int fournisseur_id = contact.getId();
+        String hql = "from Achat where fournisseur_id = :fournisseur_id";
+        TypedQuery<Achat> query = em.createQuery(hql, Achat.class);
+        query.setParameter("fournisseur_id", fournisseur_id);
+        return query.getResultList();
+    }
+
+    public List<Achat> getAchatsByFournisseur(int fournisseur_id){
+        String hql = "from Achat where fournisseur_id = :fournisseur_id";
+        TypedQuery<Achat> query = em.createQuery(hql, Achat.class);
+        query.setParameter("fournisseur_id", fournisseur_id);
+        return query.getResultList();
     }
 
     public void changeFournisseurAchat(long achat_id, Contact fournisseur){
@@ -211,4 +223,13 @@ public class AchatDao {
         }
     }
 
+
+    public void deleteAllDetailAchats(long id) {
+        tr.begin();
+        Query query = em.createQuery("DELETE FROM DetailAchat d WHERE d.achatObjet.id = :achatId");
+        query.setParameter("achatId", id);
+        query.executeUpdate();
+        em.flush();
+        tr.commit();
+    }
 }

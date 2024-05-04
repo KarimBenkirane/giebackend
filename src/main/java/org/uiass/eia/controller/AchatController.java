@@ -1,11 +1,7 @@
 package org.uiass.eia.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import org.uiass.eia.achat.*;
-import org.uiass.eia.crm.Adresse;
 import org.uiass.eia.crm.AdresseDao;
 import org.uiass.eia.crm.Contact;
 import org.uiass.eia.crm.ContactDao;
@@ -33,14 +29,9 @@ public class AchatController {
 
         AchatController achatController = new AchatController();
 
-        long achat_id = detailAchatJson.has("achat_id") ?
-                detailAchatJson.get("achat_id").getAsLong():
-                -1;
-        Achat achat = achatController.achatDao.getAchatByID(achat_id);
-        long produit_id = detailAchatJson.has("produit_id") ?
-                detailAchatJson.get("produit_id").getAsLong():
-                -1;
-        Produit produit = achatController.produitDao.getProduitByID(produit_id);
+        Produit produit = detailAchatJson.has("produitObjet") ?
+                achatController.produitDao.getProduitByID(detailAchatJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
+                null;
 
         int qteAchetee = detailAchatJson.has("qteAchetee") ?
                 detailAchatJson.get("qteAchetee").getAsInt():
@@ -54,7 +45,7 @@ public class AchatController {
                 detailAchatJson.get("reduction").getAsDouble():
                 0.0;
 
-        return new DetailAchat(achat,produit,qteAchetee,prixAchat,reduction);
+        return new DetailAchat(produit,qteAchetee,prixAchat,reduction);
 
 
 
@@ -71,7 +62,7 @@ public class AchatController {
 
 
 
-        get("/api/produits/all", (req,res)-> {
+        get("/api/produits/get/all", (req,res)-> {
 
             res.type("application/json");
 
@@ -108,17 +99,17 @@ public class AchatController {
         },gson::toJson);
 
 
-        get("/api/produits/get/:id", (req,res)-> {
+        get("/api/produits/get/id/:id", (req,res)-> {
 
             res.type("application/json");
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
 
             return achatController.produitDao.getProduitByID(id);
 
         },gson::toJson);
 
 
-        get("/api/produits/prix", (req,res)-> {
+        get("/api/produits/get/byPrix", (req,res)-> {
 
             res.type("application/json");
 
@@ -132,7 +123,7 @@ public class AchatController {
 
 
         delete("/api/produits/delete/:id", (req, res) -> {
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
 
             res.type("application/json");
 
@@ -181,7 +172,7 @@ public class AchatController {
 
 
         put("/api/produits/update/:id", (req, res) -> {
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
             res.type("application/json");
 
             Produit produit = achatController.produitDao.getProduitByID(id);
@@ -220,72 +211,96 @@ public class AchatController {
         }, gson::toJson);
 
 
+        get("/api/produits/get/categories", (req,res)-> {
+
+            res.type("application/json");
+
+            return achatController.produitDao.getAllCategories();
+
+
+        },gson::toJson);
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        Gson gsonWithSerializer = new GsonBuilder()
+                .registerTypeAdapter(DetailAchat.class, (JsonSerializer<DetailAchat>) (detailAchat, typeOfSrc, context) -> {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("id", detailAchat.getId());
+                    jsonObject.add("produitObjet", context.serialize(detailAchat.getProduitObjet()));
+                    jsonObject.addProperty("qteAchetee", detailAchat.getQteAchetee());
+                    jsonObject.addProperty("prixAchat", detailAchat.getPrixAchat());
+                    jsonObject.addProperty("reduction", detailAchat.getReduction());
+                    return jsonObject;
+                })
+                .create();
 
-        get("/api/achats/all", (req,res)-> {
+
+
+        get("/api/achats/get/all", (req,res)-> {
 
             res.type("application/json");
 
             return achatController.achatDao.getAllAchats();
 
-        },gson::toJson);
+        },gsonWithSerializer::toJson);
 
 
-        get("/api/achats/cancelled", (req,res)-> {
+        get("/api/achats/get/cancelled", (req,res)-> {
 
             res.type("application/json");
 
             return achatController.achatDao.getAllAchatsAnnules();
 
-        },gson::toJson);
+        },gsonWithSerializer::toJson);
 
 
-        get("/api/achats/inprogress", (req,res)-> {
+        get("/api/achats/get/inprogress", (req,res)-> {
 
             res.type("application/json");
 
             return achatController.achatDao.getAllAchatsEnCours();
 
-        },gson::toJson);
+        },gsonWithSerializer::toJson);
 
 
-        get("/api/achats/done", (req,res)-> {
+        get("/api/achats/get/done", (req,res)-> {
 
             res.type("application/json");
 
             return achatController.achatDao.getAllAchatsEffectues();
 
-        },gson::toJson);
+        },gsonWithSerializer::toJson);
 
 
 
         get("/api/achats/get/detailsachats/:id", (req,res)-> {
 
             res.type("application/json");
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
 
 
             return achatController.achatDao.getDetailsAchats(id);
 
-        },gson::toJson);
+        },gsonWithSerializer::toJson);
 
 
-        get("/api/achats/get/date/:id", (req,res)-> {
+
+        get("/api/achats/get/byFournisseur/:fournisseur_id", (req,res)-> {
 
             res.type("application/json");
-            long id = Long.getLong(req.params("id"));
+            int fournisseur_id = Integer.parseInt(req.params("fournisseur_id"));
 
 
-            return achatController.achatDao.getDateAchat(id);
+            return achatController.achatDao.getAchatsByFournisseur(fournisseur_id);
 
-        },gson::toJson);
+        },gsonWithSerializer::toJson);
 
 
         get("/api/achats/get/fournisseur/:id", (req,res)-> {
 
             res.type("application/json");
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
 
             return achatController.achatDao.getFournisseurAchat(id);
 
@@ -295,11 +310,96 @@ public class AchatController {
         get("/api/achats/get/prix/:id", (req,res)-> {
 
             res.type("application/json");
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
 
             return achatController.achatDao.getPrixAchat(id);
 
         },gson::toJson);
+
+
+        get("/api/achats/get/betweenDates", (req,res)-> {
+
+            res.type("application/json");
+
+            Date dateBefore = req.queryParams("dateBefore") != null ?
+                    Date.valueOf(req.queryParams("dateBefore")) :
+                    null;
+
+            Date dateAfter = req.queryParams("dateAfter") != null ?
+                    Date.valueOf(req.queryParams("dateAfter")) :
+                    null;
+
+            if(dateBefore != null && dateAfter != null){
+                System.out.println(dateAfter);
+                System.out.println(dateBefore);
+                return achatController.achatDao.getAchatsBetweenDates(dateBefore,dateAfter);
+            }
+            else if(dateBefore != null){
+                System.out.println(dateBefore);
+                return achatController.achatDao.getAchatsBeforeDate(dateBefore);
+            }
+            else if(dateAfter != null){
+                System.out.println(dateAfter);
+                return achatController.achatDao.getAchatsAfterDate(dateAfter);
+            }
+
+            res.status(500);
+            return "Erreur lors de la saisie des dates";
+
+        },gsonWithSerializer::toJson);
+
+
+
+        get("/api/achats/get/byDate/:date", (req,res)-> {
+
+            res.type("application/json");
+            Date date = Date.valueOf(req.params("date"));
+
+
+            return achatController.achatDao.getAchatsByDate(date);
+
+        },gsonWithSerializer::toJson);
+
+
+        get("/api/achats/get/date/:id", (req,res)-> {
+
+            res.type("application/json");
+            long id = Long.parseLong(req.params("id"));
+
+
+            return achatController.achatDao.getDateAchat(id);
+
+        },gson::toJson);
+
+
+
+        get("/api/achats/get/id/:id", (req,res)-> {
+
+            res.type("application/json");
+
+            long id = Long.parseLong(req.params("id"));
+
+            return achatController.achatDao.getAchatByID(id);
+
+        },gsonWithSerializer::toJson);
+
+
+
+        delete("/api/achats/delete/:id", (req, res) -> {
+            long id = Long.parseLong(req.params("id"));
+
+            res.type("application/json");
+
+            boolean status = achatController.achatDao.deleteAchatByID(id);
+
+            if(status)
+                return "Suppression effectuée avec succès !";
+
+            res.status(500);
+            return "Erreur lors de la suppression";
+        }, gson::toJson);
+
+
 
 
         post("/api/achats/add", (req, res) -> {
@@ -329,13 +429,18 @@ public class AchatController {
                     achatJson.get("prix").getAsDouble() :
                     0.0;
 
-            StatutAchat statutAchat = achatJson.has("statut_achat") ?
-                    StatutAchat.valueOf(achatJson.get("statut_achat").getAsString()) :
+            StatutAchat statutAchat = achatJson.has("statutAchat") ?
+                    StatutAchat.valueOf(achatJson.get("statutAchat").getAsString()) :
                     null;
 
+            Achat achatCree = new Achat(contact,detailAchats,dateAchat,prix,statutAchat);
+            if(!detailAchats.isEmpty()){
+                for(DetailAchat detailAchat : detailAchats){
+                    detailAchat.setAchatObjet(achatCree);
+                }
+            }
 
-            achatController.achatDao.addAchat(new Achat(contact,detailAchats,dateAchat,prix,statutAchat));
-
+            achatController.achatDao.addAchat(achatCree);
             return "Achat ajouté avec succès !";
 
         }, gson::toJson);
@@ -343,72 +448,8 @@ public class AchatController {
 
 
 
-        get("/api/achats/dates", (req,res)-> {
-
-            res.type("application/json");
-            Date dateBefore = Date.valueOf(req.queryParams("dateBefore"));
-            Date dateAfter = Date.valueOf(req.queryParams("dateAfter"));
-
-            if(dateBefore != null && dateAfter != null){
-                return achatController.achatDao.getAchatsBetweenDates(dateBefore,dateAfter);
-            }
-            else if(dateBefore != null){
-                return achatController.achatDao.getAchatsBeforeDate(dateBefore);
-            }
-            else if(dateAfter != null){
-                return achatController.achatDao.getAchatsAfterDate(dateAfter);
-            }
-
-            res.status(500);
-            return "Erreur lors de la saisie des dates";
-
-        },gson::toJson);
-
-
-
-        get("/api/achats/get/date/:date", (req,res)-> {
-
-            res.type("application/json");
-            Date date = Date.valueOf(req.params("date"));
-
-
-            return achatController.achatDao.getAchatsByDate(date);
-
-        },gson::toJson);
-
-
-
-        get("/api/achats/get/:id", (req,res)-> {
-
-            res.type("application/json");
-
-            long id = Long.getLong(req.params("id"));
-
-            return achatController.achatDao.getAchatByID(id);
-
-        },gson::toJson);
-
-
-
-        delete("/api/achats/delete/:id", (req, res) -> {
-            long id = Long.getLong(req.params("id"));
-
-            res.type("application/json");
-
-            boolean status = achatController.achatDao.deleteAchatByID(id);
-
-            if(status)
-                return "Suppression effectuée avec succès !";
-
-            res.status(500);
-            return "Erreur lors de la suppression";
-        }, gson::toJson);
-
-
-
-
         put("/api/achats/update/:id", (req, res) -> {
-            long id = Long.getLong(req.params("id"));
+            long id = Long.parseLong(req.params("id"));
             res.type("application/json");
 
             Achat achat = achatController.achatDao.getAchatByID(id);
@@ -433,16 +474,18 @@ public class AchatController {
                 achatController.achatDao.changePrixAchat(id, achatJson.get("prix").getAsDouble());
             }
 
-            if (achatJson.has("statut_achat")) {
-                achatController.achatDao.changeStatutAchat(id, achatJson.get("statut_achat").getAsString());
+            if (achatJson.has("statutAchat")) {
+                achatController.achatDao.changeStatutAchat(id, achatJson.get("statutAchat").getAsString());
             }
 
             if(achatJson.has("detailsAchat")){
+                achatController.achatDao.deleteAllDetailAchats(achat.getId());
                 List<DetailAchat> detailAchats = new ArrayList<>();
                 JsonArray detailsAchatsJson = achatJson.get("detailsAchat").getAsJsonArray();
                 for(int i = 0 ; i < detailsAchatsJson.size() ; i++){
                     JsonObject detailAchatJson = detailsAchatsJson.get(i).getAsJsonObject();
                     DetailAchat detailAchat = parseDetailAchat(detailAchatJson);
+                    detailAchat.setAchatObjet(achat);
                     detailAchats.add(detailAchat);
                 }
                 achatController.achatDao.changeDetailsAchat(id, detailAchats);
@@ -450,8 +493,6 @@ public class AchatController {
 
             return "Changements effectués avec succès !";
         }, gson::toJson);
-
-
 
 
     }

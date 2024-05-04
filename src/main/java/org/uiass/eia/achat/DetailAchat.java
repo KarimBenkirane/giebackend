@@ -1,5 +1,7 @@
 package org.uiass.eia.achat;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 
 @Entity(name="DetailAchat")
@@ -24,6 +26,13 @@ public class DetailAchat {
 
     public DetailAchat(Achat achatObjet, Produit produitObjet, int qteAchetee, double prixAchat, double reduction) {
         this.achatObjet = achatObjet;
+        this.produitObjet = produitObjet;
+        this.qteAchetee = qteAchetee;
+        this.prixAchat = prixAchat;
+        this.reduction = reduction;
+    }
+
+    public DetailAchat(Produit produitObjet, int qteAchetee, double prixAchat, double reduction) {
         this.produitObjet = produitObjet;
         this.qteAchetee = qteAchetee;
         this.prixAchat = prixAchat;
