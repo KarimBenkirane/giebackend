@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class DetailleCommande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int detailCommande_id;
+    private long detailCommande_id;
 
     @Column(name="quantite_commander")
     private int quantiteCommander;
@@ -41,6 +41,10 @@ public class DetailleCommande {
         this.remise = remise;
         this.prixCommannde=prixCommannde;
     }
+    public DetailleCommande(int quantiteCommander,double remise){
+        this.quantiteCommander=quantiteCommander;
+        this.remise=remise;
+    }
 
     // Getters and Setters
     public int getQuantiteCommander() {
@@ -71,11 +75,11 @@ public class DetailleCommande {
         return quantiteCommander * (1 - remise) * prixCommannde;
     }
 
-    public int getDetailCommande_id() {
+    public long getDetailCommande_id() {
         return detailCommande_id;
     }
 
-    public void setDetailCommande_id(int detailCommande_id) {
+    public void setDetailCommande_id(long detailCommande_id) {
         this.detailCommande_id = detailCommande_id;
     }
 

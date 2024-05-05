@@ -5,6 +5,7 @@ import org.uiass.eia.crm.Contact;
 import javax.persistence.*;
 import java.sql.Date;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -13,7 +14,11 @@ public class Commande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "numBonCommande")
-    private int numBonCommande;
+    private long numBonCommande;
+
+    @OneToOne
+    @JoinColumn(name="contact_id")
+    private Contact contact;
 
     @Column(name = "dateCommande")
     private Date dateCommande;
@@ -27,10 +32,6 @@ public class Commande {
     @Enumerated(EnumType.STRING)
     @Column(name = "etatCommande")
     private EtatCmd etatCommande;
-
-    @OneToOne
-    @JoinColumn(name="contact_id")
-    private Contact contact;
 
     @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetailleCommande> detailsCommandes;
@@ -47,18 +48,25 @@ public class Commande {
         this.detailsCommandes = detailleCommande;
     }
 
-    // Getters and Setters
-    public int getNumBonCommande() {
-        return numBonCommande;
+    public Commande(Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailCommandeObject) {
+
+
     }
 
-    public void setNumBonCommande(int numBonCommande) {
+    // Getters and Setters
+    public long getNumBonCommande() {
+        return this.numBonCommande;
+    }
+
+    public void setNumBonCommande(long numBonCommande) {
         this.numBonCommande = numBonCommande;
     }
 
     public Date getDateCommande() {
         return dateCommande;
     }
+
+    public List<DetailleCommande> getDetailsCommandes() {return detailsCommandes;}
 
     public void setDateCommande(Date dateCommande) {
         this.dateCommande = dateCommande;
@@ -97,6 +105,7 @@ public class Commande {
     public String toString() {
         return "Commande{" +
                 "numBonCommande=" + numBonCommande +
+                ",Client="+contact+
                 ", dateCommande=" + dateCommande +
                 ", dateReglement=" + dateReglement +
                 ", totalCommande=" + totalCommande +
