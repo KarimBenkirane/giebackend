@@ -3,6 +3,7 @@ package org.uiass.eia.achat;
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProduitDao {
@@ -189,8 +190,92 @@ public class ProduitDao {
     }
 
     public List getAllCategories(){
-        Query query = em.createNativeQuery("select distinct categorie from produit");
+        List<String> categoriesProduits = new ArrayList<>();
+        CategorieProduit[] categories = CategorieProduit.values();
+        for(CategorieProduit cp : categories){
+            categoriesProduits.add(String.valueOf(cp));
+        }
+        return categoriesProduits;
+    }
+
+    public List getAllMarques(){
+        Query query = em.createNativeQuery("select distinct marque from produit");
         return query.getResultList();
+    }
+
+    public List<Produit> getProduitsByCriteria(String marque, String modele, Integer qteStock, Double prixMin, Double prixMax, String description, String disponibilite, List<String> categoriesList) {
+        try{
+            System.out.println("début de la méthode DAO -> "+categoriesList);
+            String jpql = "SELECT p FROM Produit p WHERE 1=1";
+            if (marque != null) {
+                jpql += " AND p.marque = :marque";
+            }
+            if (modele != null) {
+                jpql += " AND p.modele = :modele";
+            }
+            if ("disponible".equals(disponibilite)) {
+                jpql += " AND p.qteStock > 0";
+            } else if ("indisponible".equals(disponibilite)) {
+                jpql += " AND p.qteStock = 0";
+            }
+            if (qteStock != null) {
+                jpql += " AND p.qteStock > :qteStock";
+            }
+            if (prixMin != null) {
+                jpql += " AND p.prix >= :prixMin";
+            }
+            if (prixMax != null) {
+                jpql += " AND p.prix <= :prixMax";
+            }
+            if (description != null) {
+                jpql += " AND p.description LIKE :description";
+            }
+            List<CategorieProduit> categorieProduits = null; // Declare outside of the if block
+
+            if (categoriesList != null && !categoriesList.isEmpty()) {
+                categorieProduits = new ArrayList<>();
+                for (String category : categoriesList) {
+                    try {
+                        CategorieProduit categorieProduit = CategorieProduit.valueOf(category);
+                        categorieProduits.add(categorieProduit);
+                    } catch (IllegalArgumentException e) {
+                        // Handle invalid enum values
+                        System.out.println("Invalid category: " + category);
+                    }
+                }
+                jpql += " AND p.categorieProduit IN :categories";
+            }
+
+            TypedQuery<Produit> query = em.createQuery(jpql, Produit.class);
+            if (marque != null) {
+                query.setParameter("marque", marque);
+            }
+            if (modele != null) {
+                query.setParameter("modele", modele);
+            }
+            if (qteStock != null) {
+                query.setParameter("qteStock", qteStock);
+            }
+            if (prixMin != null) {
+                query.setParameter("prixMin", prixMin);
+            }
+            if (prixMax != null) {
+                query.setParameter("prixMax", prixMax);
+            }
+            if (description != null) {
+                query.setParameter("description", "%" + description + "%");
+            }
+            if (categorieProduits != null && !categorieProduits.isEmpty()) {
+                query.setParameter("categories", categorieProduits);
+            }
+
+            System.out.println("fin côté DAO ->"+categoriesList);
+
+            return query.getResultList();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
 

@@ -220,6 +220,67 @@ public class AchatController {
 
         },gson::toJson);
 
+        get("/api/produits/get/marques", (req,res)-> {
+
+            res.type("application/json");
+
+            return achatController.produitDao.getAllMarques();
+
+
+        },gson::toJson);
+
+
+        post("/api/produits/advSearch", (req, res) -> {
+            JsonObject infosJson = JsonParser.parseString(req.body()).getAsJsonObject();
+
+            String marque = infosJson.has("marque") ?
+                    infosJson.get("marque").getAsString() :
+                    null;
+
+            String modele = infosJson.has("modele") ?
+                    infosJson.get("modele").getAsString() :
+                    null;
+
+            Integer qteStock = infosJson.has("qtStock") ?
+                    infosJson.get("qtStock").getAsInt() :
+                    null;
+
+            Double prixMin = infosJson.has("prixMin") ?
+                    infosJson.get("prixMin").getAsDouble() :
+                    null;
+            Double prixMax = infosJson.has("prixMax") ?
+                    infosJson.get("prixMax").getAsDouble() :
+                    null;
+
+            String description = infosJson.has("description") ?
+                    infosJson.get("description").getAsString() :
+                    null;
+
+            String disponibilite = "tout";
+
+            if(infosJson.has("disponibilite")) {
+                disponibilite = infosJson.get("disponibilite").getAsString(); //tout,indisponible,disponible
+            }
+
+            JsonArray categoriesArray = infosJson.has("categorie") ?
+                    infosJson.get("categorie").getAsJsonArray() :
+                    null;
+
+            List<String> categoriesList = null;
+
+            if(categoriesArray != null || !categoriesArray.isEmpty()){
+                categoriesList = new ArrayList<>();
+                for(int i = 0; i < categoriesArray.size(); i++){
+                    categoriesList.add(categoriesArray.get(i).getAsString());
+                }
+            }
+
+            System.out.println("côté controller -> "+categoriesList);
+
+
+            return achatController.produitDao.getProduitsByCriteria(marque,modele,qteStock,prixMin,prixMax,description,disponibilite,categoriesList);
+
+        }, gson::toJson);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
