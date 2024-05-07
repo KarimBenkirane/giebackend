@@ -11,7 +11,6 @@ public class App {
         AchatDao achatDao = AchatDao.getInstance();
         ContactDao contactDao = ContactDao.getInstance();
 
-        System.out.println(gson.toJson(produitDao.getAllCategories()));
     }
 
 }
