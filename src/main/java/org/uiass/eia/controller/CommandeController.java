@@ -2,7 +2,13 @@ package org.uiass.eia.controller;
 
 import com.google.gson.*;
 import org.uiass.eia.commande.*;
+import org.uiass.eia.crm.Contact;
+import org.uiass.eia.crm.ContactDao;
 
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static spark.Spark.*;
 
@@ -14,8 +20,33 @@ public class CommandeController {
     private DetailleCommandeDao detailleCommandeDao =DetailleCommandeDao.getInstance();
     private MarqueDao marqueDao=MarqueDao.getInstance();
     private CategorieProduitDao categorieProduitDao=CategorieProduitDao.getInstance();
+    private ContactDao contactDao = ContactDao.getInstance();
 
     public CommandeController(){}
+    private static DetailleCommande parseDetailCommande(JsonObject detailCommandeJson) {
+
+        CommandeController commandeController = new CommandeController();
+
+        Produit produit = detailCommandeJson.has("produitObjet") ?
+                commandeController.produitDao.findProduitById(detailCommandeJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
+                null;
+
+        int qteAchetee = detailCommandeJson.has("qteAchetee") ?
+                detailCommandeJson.get("qteAchetee").getAsInt():
+                -1;
+
+        double prixAchat = detailCommandeJson.has("prixAchat") ?
+                detailCommandeJson.get("prixAchat").getAsDouble():
+                0.0;
+
+        double reduction =  detailCommandeJson.has("reduction") ?
+                detailCommandeJson.get("reduction").getAsDouble():
+                0.0;
+
+        return new DetailleCommande(produit,qteAchetee,prixAchat,reduction);
+
+
+    }
 
     public static void main(String[] args) {
         CommandeController commandeController =new CommandeController();
@@ -36,7 +67,7 @@ public class CommandeController {
                 })
                 .create();
 
-        get("/api/produit/all", (request, response) -> {
+        get("/api/produit/get/all", (request, response) -> {
             response.type("application/json");
             try {
                 return commandeController.produitDao.getAllProduits();
@@ -88,7 +119,9 @@ public class CommandeController {
 
             res.type("application/json");
             long id = Long.parseLong(req.params("id"));
-            return commandeController.commandeDAO.getDetailsCommande(id);
+             List<DetailleCommande> dcs = commandeController.commandeDAO.getDetailsCommande(id);
+             for(DetailleCommande d :dcs) {System.out.println(d);}
+             return dcs;
 
         },gsonWithSerializer::toJson);
 
@@ -129,11 +162,66 @@ public class CommandeController {
 
         },gsonWithSerializer::toJson);
 
+        post("/api/commandes/add", (req, res) -> {
+            JsonObject commandeJson = JsonParser.parseString(req.body()).getAsJsonObject();
+            Contact contact = null;
 
-       /* post("/api/commande/add", (req, res) -> {
+            if(commandeJson.has("client")){
+                JsonObject ClientJson = commandeJson.get("client").getAsJsonObject();
+                contact = commandeController.contactDao.findContactById(ClientJson.get("id").getAsInt());
+            }
+
+            List<DetailleCommande> detailCommandes = new ArrayList<>();
+            if(commandeJson.has("detailsCommandes")){
+                JsonArray detailsCommandesJson = commandeJson.get("detailsCommandes").getAsJsonArray();
+                for(int i = 0 ; i < detailsCommandesJson.size() ; i++){
+                    JsonObject detailCommandeJson = detailsCommandesJson.get(i).getAsJsonObject();
+                    DetailleCommande detailCommende = parseDetailCommande(detailCommandeJson);
+                    detailCommandes.add(detailCommende);
+                }
+            }
+
+
+            java.sql.Date dateCommande = commandeJson.has("dateCommande") ?
+                    java.sql.Date.valueOf(commandeJson.get("dateCommande").getAsString()) :
+                    new java.sql.Date(System.currentTimeMillis());
+            java.sql.Date dateReglement = commandeJson.has("dateReglement") ?
+                    java.sql.Date.valueOf(commandeJson.get("dateReglement").getAsString()) :
+                    new java.sql.Date(System.currentTimeMillis());
+
+            double prix = commandeJson.has("totalCommande") ?
+                    commandeJson.get("totalCommande").getAsDouble() :
+                    0.0;
+
+            EtatCmd statutCommande = commandeJson.has("etatCommande") ?
+                    EtatCmd.valueOf(commandeJson.get("etatCommande").getAsString()) :
+                    null;
+
+            Commande commandeCree = new Commande(contact,dateCommande,dateReglement,prix,statutCommande,detailCommandes);
+            if(!detailCommandes.isEmpty()){
+                for(DetailleCommande detailCommande: detailCommandes){
+                    detailCommande.setCommandeObjet(commandeCree);
+                }
+            }
+
+            commandeController.commandeDAO.addCommande(commandeCree);
+            return "commande ajouté avec succès !";
+
+        }, gson::toJson);
+
+
+        post("/api/commande/add", (req, res) -> {
             res.type("application/json");
 
             JsonObject commande = new JsonParser().parse(req.body()).getAsJsonObject();
+
+            JsonObject commandeJson = JsonParser.parseString(req.body()).getAsJsonObject();
+            Contact contact = null;
+
+            if(commandeJson.has("client")){
+                JsonObject ClientJson = commandeJson.get("client").getAsJsonObject();
+                contact = commandeController.contactDao.findContactById(ClientJson.get("id").getAsInt());
+            }
 
             // Récupérer les champs de la commande
             java.sql.Date dateCommande = new java.sql.Date(System.currentTimeMillis()); // Date actuelle
@@ -181,11 +269,30 @@ public class CommandeController {
             // Créer une instance de DetailleCommande et de Commande
             DetailleCommande detailCommandeObject = new DetailleCommande(quantiteCommande, remise);
             commandeController.detailleCommandeDao.addDetailleCommande(detailCommandeObject);
-            commandeController.commandeDAO.addCommande(new Commande(dateCommande, dateReglement, totalCommande, etatCommande, (List<DetailleCommande>) detailCommandeObject));
+            commandeController.commandeDAO.addCommande(new Commande(contact,dateCommande, dateReglement, totalCommande, etatCommande, (List<DetailleCommande>) detailCommandeObject));
 
             return "Commande créée avec succès!";
         }, gson::toJson);
-        */
+
+        put("/api/commande/update/:id/:etat", (req, res) -> {
+            long id = Long.parseLong(req.params("id"));
+            String str = String.copyValueOf(req.params("etat").toCharArray());
+            res.type("application/json");
+
+            Commande commande = commandeController.commandeDAO.getCommandeByID(id);
+            if (commande == null) {
+                res.status(404);
+                return "Commande non trouvé";
+            }
+
+            JsonObject commandeJson = JsonParser.parseString(req.body()).getAsJsonObject();
+
+            if (commandeJson.has("etatCommande")) {
+                commandeController.commandeDAO.changeStatutAchat(id,str);
+            }
+            return "Changements effectués avec succès !";
+        }, gson::toJson);
+
          /* get("/api/achats/get/detailsachats/:id", (req,res)-> {
 
             res.type("application/json");

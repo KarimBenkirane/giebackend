@@ -92,7 +92,7 @@ public class CommandeDAO {
     public Commande getCommandeByID(long id){
         Commande commande = em.find(Commande.class,id);
         if(commande == null){
-            throw new EntityNotFoundException("Achat not found with this ID");
+            throw new EntityNotFoundException("Commande not found with this ID");
         }
         return commande;
     }
@@ -174,16 +174,15 @@ public class CommandeDAO {
             System.out.println(e);
         }
     }
-    public void updateCommandeEtat(int id, EtatCmd etatCmd) {
-        String hql = "update Commande set etatCommande= :etatCmd where numBonCommande = :id";
-        try {
+    public void changeStatutAchat(long commande_id,String etat){
+        try{
             tr.begin();
-            Query query = em.createQuery(hql);
-            query.setParameter("id", id);
-            query.setParameter("etatCmd", etatCmd);
-            query.executeUpdate();
+            Commande commande = this.getCommandeByID(commande_id);
+            if(commande.getEtatCommande() == null || !commande.getEtatCommande().equals(etat))
+                commande.setEtatCommande(EtatCmd.valueOf(etat.toUpperCase()));
+            em.flush();
             tr.commit();
-        } catch (Exception e) {
+        }catch(Exception e){
             tr.rollback();
             System.out.println(e);
         }

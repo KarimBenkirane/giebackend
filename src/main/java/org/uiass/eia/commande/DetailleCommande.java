@@ -23,6 +23,8 @@ public class DetailleCommande {
     @JoinColumn(name = "produit_id")
     private Produit produitObjet;
 
+
+
     private double prixCommannde;
 
 
@@ -36,6 +38,12 @@ public class DetailleCommande {
 
     public DetailleCommande(Commande commandeObjet,Produit produitObjet,int quantiteCommander, double remise, double prixCommannde) {
         this.commandeObjet=commandeObjet;
+        this.produitObjet=produitObjet;
+        this.quantiteCommander = quantiteCommander;
+        this.remise = remise;
+        this.prixCommannde=prixCommannde;
+    }
+    public DetailleCommande( Produit produitObjet,int quantiteCommander, double remise, double prixCommannde) {
         this.produitObjet=produitObjet;
         this.quantiteCommander = quantiteCommander;
         this.remise = remise;
@@ -81,6 +89,13 @@ public class DetailleCommande {
 
     public void setDetailCommande_id(long detailCommande_id) {
         this.detailCommande_id = detailCommande_id;
+    }
+    public Commande getCommandeObjet() {
+        return commandeObjet;
+    }
+
+    public void setCommandeObjet(Commande commandeObjet) {
+        this.commandeObjet = commandeObjet;
     }
 
     // toString method

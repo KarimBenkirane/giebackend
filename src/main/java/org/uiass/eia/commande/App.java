@@ -9,7 +9,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -30,6 +32,7 @@ public class App {
 
             Produit produit1 = new Produit("Produit 1", "REF1", "Libelle 1", 10, marque1, categorie1);
             Produit produit2 = new Produit("Produit 2", "REF2", "Libelle 2", 20, marque2, categorie2);
+            Contact client = new Particulier("123456789", "client@example.com", "123456789", ad, "araoui", "khalil");
 
 
             // Créer une instance de Date représentant la date actuelle
@@ -39,8 +42,10 @@ public class App {
             long cinqJoursEnMillisecondes = 5 * 24 * 60 * 60 * 1000;
             Date dateReglement = new Date(System.currentTimeMillis() + cinqJoursEnMillisecondes);
 
+            double prix = 100.0;
+            List<DetailleCommande> detailCommandes = new ArrayList<>();
             // Créer une instance de Commande avec les objets Date
-            Commande commande = new Commande();
+            Commande commande = new Commande(client, dateActuelle, dateReglement, prix, EtatCmd.EN_COURS, detailCommandes);
             commande.setDateCommande(dateActuelle);
             commande.setDateReglement(dateReglement);
             commande.setTotalCommande(100.0);
@@ -62,8 +67,8 @@ public class App {
             detaille2.setCommande(commande);
             detaille2.setProduit(produit2);
 
+
             // Ajout du client à la commande
-            Contact client = new Particulier("123456789", "client@example.com", "123456789", ad,"araoui","khalil");
             commande.setContact(client);
 
             em.persist(marque1);
@@ -76,6 +81,7 @@ public class App {
             em.persist(commande);
             em.persist(detaille1);
             em.persist(detaille2);
+
 
             transaction.commit();
         } catch (Exception e) {

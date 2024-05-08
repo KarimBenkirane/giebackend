@@ -4,6 +4,6 @@ public enum EtatCmd {
     EN_ATTENTE,
     EN_COURS,
     TERMINE,
-    Annuler
+    ANNULER
 
 }

@@ -5,7 +5,7 @@ import org.uiass.eia.crm.Contact;
 import javax.persistence.*;
 import java.sql.Date;
 
-import java.time.LocalDate;
+
 import java.util.List;
 
 @Entity
@@ -18,7 +18,7 @@ public class Commande {
 
     @OneToOne
     @JoinColumn(name="contact_id")
-    private Contact contact;
+    private Contact client;
 
     @Column(name = "dateCommande")
     private Date dateCommande;
@@ -36,11 +36,11 @@ public class Commande {
     @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<DetailleCommande> detailsCommandes;
 
-    public Commande() {
-    }
+    public Commande(){}
+
 
     public Commande(Contact contact,Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
-        this.contact=contact;
+        this.client=contact;
         this.dateCommande = dateCommande;
         this.dateReglement = dateReglement;
         this.totalCommande = totalCommande;
@@ -48,10 +48,6 @@ public class Commande {
         this.detailsCommandes = detailleCommande;
     }
 
-    public Commande(Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailCommandeObject) {
-
-
-    }
 
     // Getters and Setters
     public long getNumBonCommande() {
@@ -97,7 +93,7 @@ public class Commande {
     }
 
     public Contact getContact() {
-        return contact;
+        return client;
     }
 
     // toString method
@@ -105,7 +101,7 @@ public class Commande {
     public String toString() {
         return "Commande{" +
                 "numBonCommande=" + numBonCommande +
-                ",Client="+contact+
+                ",Client="+client+
                 ", dateCommande=" + dateCommande +
                 ", dateReglement=" + dateReglement +
                 ", totalCommande=" + totalCommande +
@@ -123,7 +119,7 @@ public class Commande {
         this.detailsCommandes = detailsCommandes;
     }
     public void setContact(Contact contact) {
-        this.contact = contact;
+        this.client = contact;
     }
 
 

@@ -28,7 +28,7 @@ public class ProduitDao {
         return query.getResultList();
     }
 
-    public Produit findProduitById(int id) {
+    public Produit findProduitById(long id) {
         return em.find(Produit.class, id);
     }
     public Produit findProduitByRef(String ref) {
