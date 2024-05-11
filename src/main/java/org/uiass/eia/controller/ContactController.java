@@ -13,6 +13,7 @@ public class ContactController {
     private AdresseDao adresseDao = AdresseDao.getInstance();
     public ContactController(){}
 
+
     public static void main(String[] args) {
         ContactController contactController = new ContactController();
         Gson gson = new Gson();
@@ -28,7 +29,56 @@ public class ContactController {
 
             return contactController.contactDao.getAllContacts();
 
+<<<<<<< HEAD
         }, gson::toJson);
+=======
+        },gson::toJson);
+
+
+
+        get("/api/contacts/get/email/:email", (req,res)-> {
+            String email = req.params(":email");
+            res.type("application/json");
+
+            return contactController.contactDao.getContactsByEmail(email);
+
+        },gson::toJson);
+
+
+
+
+        get("/api/particuliers/get/prenom/:prenom", (req,res)-> {
+            String prenom = req.params(":prenom");
+            res.type("application/json");
+
+            return contactController.contactDao.findParticuliersByPrenom(prenom);
+
+        },gson::toJson);
+
+
+
+
+        get("/api/particuliers/get/email/:email", (req,res)-> {
+            String prenom = req.params(":email");
+            res.type("application/json");
+
+            return contactController.contactDao.getParticuliersByEmail(prenom);
+
+        }, gson::toJson);
+
+
+
+
+        get("/api/entreprises/get/email/:email", (req,res)-> {
+            String prenom = req.params(":email");
+            res.type("application/json");
+
+            return contactController.contactDao.getEntreprisesByEmail(prenom);
+
+        }, gson::toJson);
+
+
+>>>>>>> achat
 
         //Exemple d'utilisation : http://localhost:4567/api/contacts/get/8 → retourne le contact avec l'id 8
         get("/api/contacts/get/:id", (req, res) -> {
@@ -72,8 +122,15 @@ public class ContactController {
         }, gson::toJson);
 
 
+<<<<<<< HEAD
         //Exemple d'utilisation : http://localhost:4567/api/particuliers/get/Mohamed → retourne les particuliers ayant le nom Mohamed
         get("/api/particuliers/get/:nom", (req, res) -> {
+=======
+
+
+        //Exemple d'utilisation : http://localhost:4567/api/particuliers/get/nom/Mohamed → retourne les particuliers ayant le nom Mohamed
+        get("/api/particuliers/get/nom/:nom", (req,res)-> {
+>>>>>>> achat
             String nom = req.params("nom");
 
             res.type("application/json");
@@ -124,6 +181,7 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
+<<<<<<< HEAD
             if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
             }
@@ -157,11 +215,51 @@ public class ContactController {
                 ville = jsonVille.getAsString();
             }
             if (!(jsonPays == null)) {
+=======
+
+            if(jsonEmail != null) {
+                email = jsonEmail.getAsString();
+            }
+            if(jsonFax != null) {
+                fax = jsonFax.getAsString();
+            }
+            if(jsonTelephone != null) {
+                telephone = jsonTelephone.getAsString();
+            }
+            if(jsonNom != null) {
+                nom = jsonNom.getAsString();
+            }
+            if(jsonPrenom != null) {
+                prenom = jsonPrenom.getAsString();
+            }
+
+            if(jsonRue != null) {
+                rue = jsonRue.getAsString();
+            }
+            if(jsonNumeroRue != null) {
+                numeroRue = jsonNumeroRue.getAsInt();
+            }
+            if(jsonCodePostal != null) {
+                codePostal = jsonCodePostal.getAsInt();
+            }
+            if(jsonQuartier != null) {
+                quartier = jsonQuartier.getAsString();
+            }
+            if(jsonVille != null) {
+                ville = jsonVille.getAsString();
+            }
+            if(jsonPays != null) {
+>>>>>>> achat
                 pays = jsonPays.getAsString();
             }
 
 
+<<<<<<< HEAD
             Adresse adresseObjet = new Adresse(rue, numeroRue, quartier, codePostal, ville, pays);
+=======
+
+            Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
+>>>>>>> achat
             contactController.adresseDao.addAdresse(adresseObjet);
             contactController.contactDao.addParticulier(new Particulier(telephone, email, fax, adresseObjet, nom, prenom));
 
@@ -211,6 +309,7 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
+<<<<<<< HEAD
             if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
                 contactController.contactDao.changeEmail(id, email);
@@ -228,10 +327,31 @@ public class ContactController {
                 contactController.contactDao.changeNom(id, nom);
             }
             if (!(jsonPrenom == null)) {
+=======
+
+            if(jsonEmail != null) {
+                email = jsonEmail.getAsString();
+                contactController.contactDao.changeEmail(id, email);
+            }
+            if(jsonFax != null) {
+                fax = jsonFax.getAsString();
+                contactController.contactDao.changeFax(id, fax);
+            }
+            if(jsonTelephone != null) {
+                telephone = jsonTelephone.getAsString();
+                contactController.contactDao.changeTelephone(id, telephone);
+            }
+            if(jsonNom != null) {
+                nom = jsonNom.getAsString();
+                contactController.contactDao.changeNom(id, nom);
+            }
+            if(jsonPrenom != null) {
+>>>>>>> achat
                 prenom = jsonPrenom.getAsString();
                 contactController.contactDao.changePrenom(id, prenom);
             }
 
+<<<<<<< HEAD
 
             if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
@@ -240,13 +360,31 @@ public class ContactController {
             if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
                 if (numeroRue != -1)
-                    contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+=======
+            if(jsonRue != null) {
+                rue = jsonRue.getAsString();
+                contactController.adresseDao.changeRue(adresse_id, rue);
             }
+            if(jsonNumeroRue != null) {
+                numeroRue = jsonNumeroRue.getAsInt();
+                if(numeroRue != -1) {
+>>>>>>> achat
+                    contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+                }
+            }
+<<<<<<< HEAD
             if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
                 if (codePostal != -1)
+=======
+            if(jsonCodePostal != null) {
+                codePostal = jsonCodePostal.getAsInt();
+                if(codePostal != -1) {
+>>>>>>> achat
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
+                }
             }
+<<<<<<< HEAD
             if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
@@ -256,6 +394,17 @@ public class ContactController {
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
             if (!(jsonPays == null)) {
+=======
+            if(jsonQuartier != null) {
+                quartier = jsonQuartier.getAsString();
+                contactController.adresseDao.changeQuartier(adresse_id, quartier);
+            }
+            if(jsonVille != null) {
+                ville = jsonVille.getAsString();
+                contactController.adresseDao.changeVille(adresse_id, ville);
+            }
+            if(jsonPays != null) {
+>>>>>>> achat
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
@@ -339,6 +488,7 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
+<<<<<<< HEAD
             if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
                 contactController.contactDao.changeEmail(id, email);
@@ -356,10 +506,31 @@ public class ContactController {
                 contactController.contactDao.changeRaisonSociale(id, raisonSociale);
             }
             if (!(jsonFormeJuridique == null)) {
+=======
+
+            if(jsonEmail != null) {
+                email = jsonEmail.getAsString();
+                contactController.contactDao.changeEmail(id, email);
+            }
+            if(jsonFax != null) {
+                fax = jsonFax.getAsString();
+                contactController.contactDao.changeFax(id, fax);
+            }
+            if(jsonTelephone != null) {
+                telephone = jsonTelephone.getAsString();
+                contactController.contactDao.changeTelephone(id, telephone);
+            }
+            if(jsonRaisonSociale != null) {
+                raisonSociale = jsonRaisonSociale.getAsString();
+                contactController.contactDao.changeRaisonSociale(id, raisonSociale);
+            }
+            if(jsonFormeJuridique != null) {
+>>>>>>> achat
                 formeJuridique = jsonFormeJuridique.getAsString();
                 contactController.contactDao.changeFormeJuridique(id, formeJuridique);
             }
 
+<<<<<<< HEAD
 
             if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
@@ -368,13 +539,31 @@ public class ContactController {
             if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
                 if (numeroRue != -1)
-                    contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+=======
+            if(jsonRue != null) {
+                rue = jsonRue.getAsString();
+                contactController.adresseDao.changeRue(adresse_id, rue);
             }
+            if(jsonNumeroRue != null) {
+                numeroRue = jsonNumeroRue.getAsInt();
+                if(numeroRue != -1) {
+>>>>>>> achat
+                    contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+                }
+            }
+<<<<<<< HEAD
             if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
                 if (codePostal != -1)
+=======
+            if(jsonCodePostal != null) {
+                codePostal = jsonCodePostal.getAsInt();
+                if(codePostal != -1) {
+>>>>>>> achat
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
+                }
             }
+<<<<<<< HEAD
             if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
@@ -384,11 +573,27 @@ public class ContactController {
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
             if (!(jsonPays == null)) {
+=======
+            if(jsonQuartier != null) {
+                quartier = jsonQuartier.getAsString();
+                contactController.adresseDao.changeQuartier(adresse_id, quartier);
+            }
+            if(jsonVille != null) {
+                ville = jsonVille.getAsString();
+                contactController.adresseDao.changeVille(adresse_id, ville);
+            }
+            if(jsonPays != null) {
+>>>>>>> achat
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> achat
             return "Changements effectués avec succès!";
 
         }, gson::toJson);
@@ -435,6 +640,7 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
+<<<<<<< HEAD
             if (!(jsonEmail == null)) {
                 email = jsonEmail.getAsString();
             }
@@ -468,11 +674,51 @@ public class ContactController {
                 ville = jsonVille.getAsString();
             }
             if (!(jsonPays == null)) {
+=======
+
+            if(jsonEmail != null) {
+                email = jsonEmail.getAsString();
+            }
+            if(jsonFax != null) {
+                fax = jsonFax.getAsString();
+            }
+            if(jsonTelephone != null) {
+                telephone = jsonTelephone.getAsString();
+            }
+            if(jsonRaisonSociale != null) {
+                raisonSociale = jsonRaisonSociale.getAsString();
+            }
+            if(jsonFormeJuridique != null) {
+                formeJuridique = jsonFormeJuridique.getAsString();
+            }
+
+            if(jsonRue != null) {
+                rue = jsonRue.getAsString();
+            }
+            if(jsonNumeroRue != null) {
+                numeroRue = jsonNumeroRue.getAsInt();
+            }
+            if(jsonCodePostal != null) {
+                codePostal = jsonCodePostal.getAsInt();
+            }
+            if(jsonQuartier != null) {
+                quartier = jsonQuartier.getAsString();
+            }
+            if(jsonVille != null) {
+                ville = jsonVille.getAsString();
+            }
+            if(jsonPays != null) {
+>>>>>>> achat
                 pays = jsonPays.getAsString();
             }
 
 
+<<<<<<< HEAD
             Adresse adresseObjet = new Adresse(rue, numeroRue, quartier, codePostal, ville, pays);
+=======
+
+            Adresse adresseObjet = new Adresse(rue,numeroRue,quartier,codePostal,ville,pays);
+>>>>>>> achat
             contactController.adresseDao.addAdresse(adresseObjet);
             contactController.contactDao.addEntreprise(new Entreprise(telephone, email, fax, adresseObjet, raisonSociale, formeJuridique));
 
@@ -530,6 +776,7 @@ public class ContactController {
             JsonElement jsonPays = adresse.get("pays");
 
 
+<<<<<<< HEAD
             if (!(jsonRue == null)) {
                 rue = jsonRue.getAsString();
                 contactController.adresseDao.changeRue(adresse_id, rue);
@@ -537,13 +784,32 @@ public class ContactController {
             if (!(jsonNumeroRue == null)) {
                 numeroRue = jsonNumeroRue.getAsInt();
                 if (numeroRue != -1)
-                    contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+=======
+
+            if(jsonRue != null) {
+                rue = jsonRue.getAsString();
+                contactController.adresseDao.changeRue(adresse_id, rue);
             }
+            if(jsonNumeroRue != null) {
+                numeroRue = jsonNumeroRue.getAsInt();
+                if(numeroRue != -1) {
+>>>>>>> achat
+                    contactController.adresseDao.changeNumeroRue(adresse_id, numeroRue);
+                }
+            }
+<<<<<<< HEAD
             if (!(jsonCodePostal == null)) {
                 codePostal = jsonCodePostal.getAsInt();
                 if (codePostal != -1)
+=======
+            if(jsonCodePostal != null) {
+                codePostal = jsonCodePostal.getAsInt();
+                if(codePostal != -1) {
+>>>>>>> achat
                     contactController.adresseDao.changeCodePostal(adresse_id, codePostal);
+                }
             }
+<<<<<<< HEAD
             if (!(jsonQuartier == null)) {
                 quartier = jsonQuartier.getAsString();
                 contactController.adresseDao.changeQuartier(adresse_id, quartier);
@@ -553,11 +819,27 @@ public class ContactController {
                 contactController.adresseDao.changeVille(adresse_id, ville);
             }
             if (!(jsonPays == null)) {
+=======
+            if(jsonQuartier != null) {
+                quartier = jsonQuartier.getAsString();
+                contactController.adresseDao.changeQuartier(adresse_id, quartier);
+            }
+            if(jsonVille != null) {
+                ville = jsonVille.getAsString();
+                contactController.adresseDao.changeVille(adresse_id, ville);
+            }
+            if(jsonPays != null) {
+>>>>>>> achat
                 pays = jsonPays.getAsString();
                 contactController.adresseDao.changePays(adresse_id, pays);
             }
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> achat
             return "Changements effectués avec succès!";
 
         }, gson::toJson);
@@ -585,6 +867,19 @@ public class ContactController {
         });
 
 
+
+        post("/api/email/send", (req,res)-> {
+            JsonObject email = new JsonParser().parse(req.body()).getAsJsonObject();
+
+            String recipient = email.get("recipient").getAsString();
+            String content = email.get("content").getAsString();
+            String subject = email.get("subject").getAsString();
+
+            MailSender.sendMail(subject,content,recipient);
+
+            return "Email envoyé avec succès !";
+
+        },gson::toJson);
 
     }
 }

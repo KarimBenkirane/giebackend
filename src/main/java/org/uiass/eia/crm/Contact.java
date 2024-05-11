@@ -71,4 +71,6 @@ public abstract class Contact implements Serializable {
     public void setAdresse(Adresse adresse) {
         this.adresse = adresse;
     }
+
+
 }

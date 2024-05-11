@@ -3,6 +3,7 @@ package org.uiass.eia.crm;
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import java.util.List;
@@ -91,11 +92,16 @@ public class AdresseDao {
     public void changeCodePostal(int adresse_id,int codePostal){
         String hql = "update Adresse set codePostal= :codePostal where adresse_id = :adresse_id";
         try {
+            Adresse adresse = this.findAdresseById(adresse_id);
+            if(adresse == null){
+                throw new EntityNotFoundException();
+            }
             tr.begin();
             Query query = em.createQuery(hql);
             query.setParameter("adresse_id",adresse_id);
             query.setParameter("codePostal",codePostal);
             query.executeUpdate();
+            em.refresh(adresse);
             tr.commit();
 
         }
@@ -109,11 +115,16 @@ public class AdresseDao {
     public void changeNumeroRue(int adresse_id,int numeroRue){
         String hql = "update Adresse set numeroRue= :numeroRue where adresse_id = :adresse_id";
         try {
+            Adresse adresse = this.findAdresseById(adresse_id);
+            if(adresse == null){
+                throw new EntityNotFoundException();
+            }
             tr.begin();
             Query query = em.createQuery(hql);
             query.setParameter("adresse_id",adresse_id);
             query.setParameter("numeroRue",numeroRue);
             query.executeUpdate();
+            em.refresh(adresse);
             tr.commit();
 
         }
@@ -127,11 +138,16 @@ public class AdresseDao {
     public void changeRue(int adresse_id,String rue){
         String hql = "update Adresse set rue= :rue where adresse_id = :adresse_id";
         try {
+            Adresse adresse = this.findAdresseById(adresse_id);
+            if(adresse == null){
+                throw new EntityNotFoundException();
+            }
             tr.begin();
             Query query = em.createQuery(hql);
             query.setParameter("adresse_id",adresse_id);
             query.setParameter("rue",rue);
             query.executeUpdate();
+            em.refresh(adresse);
             tr.commit();
 
         }
@@ -145,11 +161,16 @@ public class AdresseDao {
     public void changePays(int adresse_id,String pays){
         String hql = "update Adresse set pays= :pays where adresse_id = :adresse_id";
         try {
+            Adresse adresse = this.findAdresseById(adresse_id);
+            if(adresse == null){
+                throw new EntityNotFoundException();
+            }
             tr.begin();
             Query query = em.createQuery(hql);
             query.setParameter("adresse_id",adresse_id);
             query.setParameter("pays",pays);
             query.executeUpdate();
+            em.refresh(adresse);
             tr.commit();
 
         }
@@ -163,11 +184,16 @@ public class AdresseDao {
     public void changeQuartier(int adresse_id,String quartier){
         String hql = "update Adresse set quartier= :quartier where adresse_id = :adresse_id";
         try {
+            Adresse adresse = this.findAdresseById(adresse_id);
+            if(adresse == null){
+                throw new EntityNotFoundException();
+            }
             tr.begin();
             Query query = em.createQuery(hql);
             query.setParameter("adresse_id",adresse_id);
             query.setParameter("quartier",quartier);
             query.executeUpdate();
+            em.refresh(adresse);
             tr.commit();
 
         }
@@ -181,11 +207,16 @@ public class AdresseDao {
     public void changeVille(int adresse_id,String ville){
         String hql = "update Adresse set ville= :ville where adresse_id = :adresse_id";
         try {
+            Adresse adresse = this.findAdresseById(adresse_id);
+            if(adresse == null){
+                throw new EntityNotFoundException();
+            }
             tr.begin();
             Query query = em.createQuery(hql);
             query.setParameter("adresse_id",adresse_id);
             query.setParameter("ville",ville);
             query.executeUpdate();
+            em.refresh(adresse);
             tr.commit();
 
         }
