@@ -514,7 +514,7 @@ public class TestController {
             Achat achat = testController.achatDao.getAchatByID(id);
             if (achat == null) {
                 res.status(404);
-                return "Produit non trouvé";
+                return "Achat non trouvé";
             }
 
             JsonObject achatJson = JsonParser.parseString(req.body()).getAsJsonObject();
@@ -525,9 +525,9 @@ public class TestController {
                 testController.achatDao.changeFournisseurAchat(id,contact);
             }
 
-            if (achatJson.has("dateAchat")) {
-                testController.achatDao.changeDateAchat(id,Date.valueOf(achatJson.get("dateAchat").getAsString()));
-            }
+//            if (achatJson.has("dateAchat")) {
+//                testController.achatDao.changeDateAchat(id,Date.valueOf(achatJson.get("dateAchat").getAsString()));
+//            }
 
             if (achatJson.has("prix")) {
                 testController.achatDao.changePrixAchat(id, achatJson.get("prix").getAsDouble());
