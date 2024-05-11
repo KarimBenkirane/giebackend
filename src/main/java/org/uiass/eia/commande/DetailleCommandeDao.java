@@ -1,5 +1,6 @@
 package org.uiass.eia.commande;
 
+import org.uiass.eia.achat.Produit;
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.*;
@@ -26,7 +27,7 @@ public class DetailleCommandeDao {
         return query.getResultList();
     }
 
-    public void addDetailleCommande(Commande c,Produit p,int quantiteCommander, double remise,double prix) {
+    public void addDetailleCommande(Commande c, Produit p, int quantiteCommander, double remise, double prix) {
         try {
             tr.begin();
             em.persist(new DetailleCommande(c,p,quantiteCommander, remise,prix));

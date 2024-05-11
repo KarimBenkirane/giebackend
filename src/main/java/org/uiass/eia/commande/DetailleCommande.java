@@ -1,6 +1,7 @@
 package org.uiass.eia.commande;
 
 import javax.persistence.*;
+import org.uiass.eia.achat.Produit;
 
 @Entity
 @Table(name="DetailleCommande")

@@ -1,6 +1,8 @@
 package org.uiass.eia.controller;
 
 import com.google.gson.*;
+import org.uiass.eia.achat.ProduitDao;
+import org.uiass.eia.achat.Produit;
 import org.uiass.eia.commande.*;
 import org.uiass.eia.crm.Contact;
 import org.uiass.eia.crm.ContactDao;
@@ -15,12 +17,10 @@ import static spark.Spark.*;
 
 public class CommandeController {
 
-    private CommandeDAO commandeDAO = CommandeDAO.getInstance();
-    private ProduitDao produitDao =ProduitDao.getInstance();
+    CommandeDAO commandeDAO = CommandeDAO.getInstance();
+    ProduitDao produitDao =ProduitDao.getInstance();
     private DetailleCommandeDao detailleCommandeDao =DetailleCommandeDao.getInstance();
-    private MarqueDao marqueDao=MarqueDao.getInstance();
-    private CategorieProduitDao categorieProduitDao=CategorieProduitDao.getInstance();
-    private ContactDao contactDao = ContactDao.getInstance();
+    ContactDao contactDao = ContactDao.getInstance();
 
     public CommandeController(){}
     private static DetailleCommande parseDetailCommande(JsonObject detailCommandeJson) {
@@ -28,7 +28,7 @@ public class CommandeController {
         CommandeController commandeController = new CommandeController();
 
         Produit produit = detailCommandeJson.has("produitObjet") ?
-                commandeController.produitDao.findProduitById(detailCommandeJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
+                commandeController.produitDao.getProduitByID(detailCommandeJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
                 null;
 
         int qteAchetee = detailCommandeJson.has("qteAchetee") ?

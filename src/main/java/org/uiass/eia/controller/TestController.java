@@ -2,6 +2,7 @@ package org.uiass.eia.controller;
 
 import com.google.gson.*;
 import org.uiass.eia.achat.*;
+import org.uiass.eia.commande.*;
 import org.uiass.eia.crm.*;
 
 import java.sql.Date;
@@ -17,6 +18,9 @@ public class TestController {
     private AchatDao achatDao = AchatDao.getInstance();
     private ContactDao contactDao = ContactDao.getInstance();
     private AdresseDao adresseDao = AdresseDao.getInstance();
+    private CommandeDAO commandeDAO = CommandeDAO.getInstance();
+    private DetailleCommandeDao detailleCommandeDao =DetailleCommandeDao.getInstance();
+
 
 
     public TestController() {
@@ -44,9 +48,28 @@ public class TestController {
                 0.0;
 
         return new DetailAchat(produit,qteAchetee,prixAchat,reduction);
+    }
+    private static DetailleCommande parseDetailCommande(JsonObject detailCommandeJson) {
 
+        CommandeController commandeController = new CommandeController();
 
+        Produit produit = detailCommandeJson.has("produitObjet") ?
+                commandeController.produitDao.getProduitByID(detailCommandeJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
+                null;
 
+        int qteAchetee = detailCommandeJson.has("qteAchetee") ?
+                detailCommandeJson.get("qteAchetee").getAsInt():
+                -1;
+
+        double prixAchat = detailCommandeJson.has("prixAchat") ?
+                detailCommandeJson.get("prixAchat").getAsDouble():
+                0.0;
+
+        double reduction =  detailCommandeJson.has("reduction") ?
+                detailCommandeJson.get("reduction").getAsDouble():
+                0.0;
+
+        return new DetailleCommande(produit,qteAchetee,prixAchat,reduction);
 
 
     }
@@ -57,6 +80,161 @@ public class TestController {
         TestController testController = new TestController();
 
         System.out.println("Serveur démarré sur l'adresse http://localhost:4567");
+
+
+        Gson gsonWithSerializer2 = new GsonBuilder()
+                .registerTypeAdapter(DetailleCommande.class, (JsonSerializer<DetailleCommande>) (detailCommande, typeOfSrc, context) -> {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("id", detailCommande.getDetailCommande_id());
+                    jsonObject.add("produitObjet", context.serialize(detailCommande.getProduit()));
+                    jsonObject.addProperty("qteCommande", detailCommande.getQuantiteCommander());
+                    jsonObject.addProperty("prixCommande", detailCommande.getPrixCommannde());
+                    jsonObject.addProperty("reduction", detailCommande.getRemise());
+                    return jsonObject;
+                })
+                .create();
+
+        get("/api/produit/get/all", (request, response) -> {
+            response.type("application/json");
+            try {
+                return testController.produitDao.getAllProduits();
+            } catch (Exception e) {
+                response.status(500);
+                return "Error retrieving produits: " + e.getMessage();
+            }
+        }, gson::toJson);
+
+
+        get("/api/commande/get/all", (request, response) -> {
+            response.type("application/json");
+            try {
+                return  testController.commandeDAO.getAllCommande();
+            } catch (Exception e) {
+                response.status(500);
+                return "Error retrieving produits: commande not found " + e.getMessage();
+            }
+        },gsonWithSerializer2::toJson);
+
+
+        get("/api/commande/get/cancelled", (req,res)-> {
+
+            res.type("application/json");
+
+            return testController.commandeDAO.getAllCommandeAnnules();
+
+        },gsonWithSerializer2::toJson);
+
+
+        get("/api/commande/get/inprogress", (req,res)-> {
+
+            res.type("application/json");
+
+            return testController.commandeDAO.getAllCommandeEnCours();
+
+        },gsonWithSerializer2::toJson);
+
+
+        get("/api/commande/get/done", (req,res)-> {
+
+            res.type("application/json");
+
+            return testController.commandeDAO.getAllCommandeEffectues();
+
+        },gsonWithSerializer2::toJson);
+
+        get("/api/commande/get/detailscommande/:id", (req,res)-> {
+
+            res.type("application/json");
+            long id = Long.parseLong(req.params("id"));
+            List<DetailleCommande> dcs = testController.commandeDAO.getDetailsCommande(id);
+            for(DetailleCommande d :dcs) {System.out.println(d);}
+            return dcs;
+
+        },gsonWithSerializer2::toJson);
+
+        get("/api/commande/get/byClient/:client_id", (req,res)-> {
+
+            res.type("application/json");
+            int contact_id = Integer.parseInt(req.params("client_id"));
+
+
+            return testController.commandeDAO.getCommandesByClient(contact_id);
+
+        },gsonWithSerializer2::toJson);
+
+        get("/api/commande/get/Client/:id", (req,res)-> {
+
+            res.type("application/json");
+            long id = Long.parseLong(req.params("id"));
+
+            return testController.commandeDAO.getClientCommande(id);
+
+        },gson::toJson);
+
+        get("/api/commande/get/prix/:id", (req,res)-> {
+
+            res.type("application/json");
+            long id = Long.parseLong(req.params("id"));
+
+            return testController.commandeDAO.getPrixCommande(id);
+
+        },gson::toJson);
+        get("/api/commande/get/id/:id", (req,res)-> {
+
+            res.type("application/json");
+
+            long id = Long.parseLong(req.params("id"));
+
+            return testController.commandeDAO.getCommandeByID(id);
+
+        },gsonWithSerializer2::toJson);
+
+        post("/api/commandes/add", (req, res) -> {
+            JsonObject commandeJson = JsonParser.parseString(req.body()).getAsJsonObject();
+            Contact contact = null;
+
+            if(commandeJson.has("client")){
+                JsonObject ClientJson = commandeJson.get("client").getAsJsonObject();
+                contact = testController.contactDao.findContactById(ClientJson.get("id").getAsInt());
+            }
+
+            List<DetailleCommande> detailCommandes = new ArrayList<>();
+            if(commandeJson.has("detailsCommandes")){
+                JsonArray detailsCommandesJson = commandeJson.get("detailsCommandes").getAsJsonArray();
+                for(int i = 0 ; i < detailsCommandesJson.size() ; i++){
+                    JsonObject detailCommandeJson = detailsCommandesJson.get(i).getAsJsonObject();
+                    DetailleCommande detailCommende = parseDetailCommande(detailCommandeJson);
+                    detailCommandes.add(detailCommende);
+                }
+            }
+
+
+            java.sql.Date dateCommande = commandeJson.has("dateCommande") ?
+                    java.sql.Date.valueOf(commandeJson.get("dateCommande").getAsString()) :
+                    new java.sql.Date(System.currentTimeMillis());
+            java.sql.Date dateReglement = commandeJson.has("dateReglement") ?
+                    java.sql.Date.valueOf(commandeJson.get("dateReglement").getAsString()) :
+                    new java.sql.Date(System.currentTimeMillis());
+
+            double prix = commandeJson.has("totalCommande") ?
+                    commandeJson.get("totalCommande").getAsDouble() :
+                    0.0;
+
+            EtatCmd statutCommande = commandeJson.has("etatCommande") ?
+                    EtatCmd.valueOf(commandeJson.get("etatCommande").getAsString()) :
+                    null;
+
+            Commande commandeCree = new Commande(contact,dateCommande,dateReglement,prix,statutCommande,detailCommandes);
+            if(!detailCommandes.isEmpty()){
+                for(DetailleCommande detailCommande: detailCommandes){
+                    detailCommande.setCommandeObjet(commandeCree);
+                }
+            }
+
+            testController.commandeDAO.addCommande(commandeCree);
+            return "commande ajouté avec succès !";
+
+        }, gson::toJson);
 
 
 
