@@ -67,10 +67,10 @@ public class CommandeDAO {
         return commande.getTotalCommande();
     }
 
-    public void addCommande(Contact contact, Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
+    public void addCommande(Contact contact, List<DetailleCommande> detailleCommande, Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande) {
         try {
             tr.begin();
-            Commande commande = new Commande(contact, dateCommande, dateReglement, totalCommande, etatCommande, detailleCommande);
+            Commande commande = new Commande(contact, detailleCommande, dateCommande, dateReglement, totalCommande, etatCommande);
             em.persist(commande);
             tr.commit();
         } catch (Exception e) {

@@ -16,10 +16,9 @@ public class TestController {
 
     private ProduitDao produitDao = ProduitDao.getInstance();
     private AchatDao achatDao = AchatDao.getInstance();
-    private ContactDao contactDao = ContactDao.getInstance();
+    private static ContactDao contactDao = ContactDao.getInstance();
     private AdresseDao adresseDao = AdresseDao.getInstance();
     private CommandeDAO commandeDAO = CommandeDAO.getInstance();
-    private DetailleCommandeDao detailleCommandeDao =DetailleCommandeDao.getInstance();
 
 
 
@@ -51,18 +50,18 @@ public class TestController {
     }
     private static DetailleCommande parseDetailCommande(JsonObject detailCommandeJson) {
 
-        CommandeController commandeController = new CommandeController();
+        TestController commandeController = new TestController();
 
         Produit produit = detailCommandeJson.has("produitObjet") ?
                 commandeController.produitDao.getProduitByID(detailCommandeJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
                 null;
 
-        int qteAchetee = detailCommandeJson.has("qteAchetee") ?
-                detailCommandeJson.get("qteAchetee").getAsInt():
+        int qteAchetee = detailCommandeJson.has("qteCommande") ?
+                detailCommandeJson.get("qteCommande").getAsInt():
                 -1;
 
-        double prixAchat = detailCommandeJson.has("prixAchat") ?
-                detailCommandeJson.get("prixAchat").getAsDouble():
+        double prixAchat = detailCommandeJson.has("prixCommande") ?
+                detailCommandeJson.get("prixCommande").getAsDouble():
                 0.0;
 
         double reduction =  detailCommandeJson.has("reduction") ?
@@ -194,8 +193,9 @@ public class TestController {
             Contact contact = null;
 
             if(commandeJson.has("client")){
-                JsonObject ClientJson = commandeJson.get("client").getAsJsonObject();
-                contact = testController.contactDao.findContactById(ClientJson.get("id").getAsInt());
+                JsonObject clientJson = commandeJson.get("client").getAsJsonObject();
+                int clientId = clientJson.get("id").getAsInt();
+                contact =TestController.contactDao.findContactById(clientId);
             }
 
             List<DetailleCommande> detailCommandes = new ArrayList<>();
@@ -224,7 +224,7 @@ public class TestController {
                     EtatCmd.valueOf(commandeJson.get("etatCommande").getAsString()) :
                     null;
 
-            Commande commandeCree = new Commande(contact,dateCommande,dateReglement,prix,statutCommande,detailCommandes);
+            Commande commandeCree = new Commande(contact, detailCommandes, dateCommande, dateReglement, prix, statutCommande);
             if(!detailCommandes.isEmpty()){
                 for(DetailleCommande detailCommande: detailCommandes){
                     detailCommande.setCommandeObjet(commandeCree);

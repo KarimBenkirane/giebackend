@@ -176,8 +176,8 @@ public class CommandeController {
                 JsonArray detailsCommandesJson = commandeJson.get("detailsCommandes").getAsJsonArray();
                 for(int i = 0 ; i < detailsCommandesJson.size() ; i++){
                     JsonObject detailCommandeJson = detailsCommandesJson.get(i).getAsJsonObject();
-                    DetailleCommande detailCommende = parseDetailCommande(detailCommandeJson);
-                    detailCommandes.add(detailCommende);
+                    DetailleCommande detailCommande = parseDetailCommande(detailCommandeJson);
+                    detailCommandes.add(detailCommande);
                 }
             }
 
@@ -197,7 +197,7 @@ public class CommandeController {
                     EtatCmd.valueOf(commandeJson.get("etatCommande").getAsString()) :
                     null;
 
-            Commande commandeCree = new Commande(contact,dateCommande,dateReglement,prix,statutCommande,detailCommandes);
+            Commande commandeCree = new Commande(contact, detailCommandes, dateCommande, dateReglement, prix, statutCommande);
             if(!detailCommandes.isEmpty()){
                 for(DetailleCommande detailCommande: detailCommandes){
                     detailCommande.setCommandeObjet(commandeCree);
@@ -269,7 +269,7 @@ public class CommandeController {
             // Créer une instance de DetailleCommande et de Commande
             DetailleCommande detailCommandeObject = new DetailleCommande(quantiteCommande, remise);
             commandeController.detailleCommandeDao.addDetailleCommande(detailCommandeObject);
-            commandeController.commandeDAO.addCommande(new Commande(contact,dateCommande, dateReglement, totalCommande, etatCommande, (List<DetailleCommande>) detailCommandeObject));
+           // commandeController.commandeDAO.addCommande(new Commande(contact,dateCommande, dateReglement, totalCommande, etatCommande, (List<DetailleCommande>) detailCommandeObject));
 
             return "Commande créée avec succès!";
         }, gson::toJson);

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.sql.Date;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,7 +40,7 @@ public class Commande {
     public Commande(){}
 
 
-    public Commande(Contact contact,Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande, List<DetailleCommande> detailleCommande) {
+    public Commande(Contact contact, List<DetailleCommande> detailleCommande,Date dateCommande, Date dateReglement, double totalCommande, EtatCmd etatCommande) {
         this.client=contact;
         this.dateCommande = dateCommande;
         this.dateReglement = dateReglement;
@@ -48,6 +49,10 @@ public class Commande {
         this.detailsCommandes = detailleCommande;
     }
 
+
+    public void setClient(Contact client) {
+        this.client = client;
+    }
 
     // Getters and Setters
     public long getNumBonCommande() {
