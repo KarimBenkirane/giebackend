@@ -556,6 +556,46 @@ public class AchatController {
         }, gson::toJson);
 
 
+        get("/api/achats/get/fournisseurs", (req,res)-> {
+
+            res.type("application/json");
+
+            return achatController.achatDao.getAllFournisseurs();
+
+        },gson::toJson);
+
+
+        post("/api/achats/advSearch", (req, res) -> {
+
+            JsonObject reqBody = JsonParser.parseString(req.body()).getAsJsonObject();
+
+            String fournisseur = reqBody.has("fournisseur") ?
+                    reqBody.get("fournisseur").getAsString() : null;
+
+            String statut = reqBody.has("statut") ?
+                    reqBody.get("statut").getAsString() : null;
+
+            String dateApres = reqBody.has("dateApres") ?
+                    reqBody.get("dateApres").getAsString() : null;
+
+            String dateAvant = reqBody.has("dateAvant") ?
+                    reqBody.get("dateAvant").getAsString() : null;
+
+            Double prixMin = reqBody.has("prixMin") ?
+                    reqBody.get("prixMin").getAsDouble() : null;
+
+            Double prixMax = reqBody.has("prixMax") ?
+                    reqBody.get("prixMax").getAsDouble() : null;
+
+
+            return achatController.achatDao.getAchatsByCriteria(fournisseur,statut,dateApres,dateAvant,prixMin,prixMax);
+
+
+
+
+        }, gsonWithSerializer::toJson);
+
+
     }
 
 }
