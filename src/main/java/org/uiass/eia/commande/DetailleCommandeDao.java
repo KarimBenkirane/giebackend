@@ -43,6 +43,7 @@ public class DetailleCommandeDao {
             tr.begin();
             em.persist(detailleCommande);
             tr.commit();
+
         } catch (Exception e) {
             tr.rollback();
             System.out.println(e);

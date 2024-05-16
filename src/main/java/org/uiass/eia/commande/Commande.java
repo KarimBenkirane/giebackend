@@ -34,7 +34,7 @@ public class Commande {
     @Column(name = "etatCommande")
     private EtatCmd etatCommande;
 
-    @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "commandeObjet", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<DetailleCommande> detailsCommandes;
 
     public Commande(){}

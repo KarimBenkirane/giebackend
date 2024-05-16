@@ -84,6 +84,7 @@ public class CommandeDAO {
             tr.begin();
             em.persist(commande);
             tr.commit();
+
         } catch (Exception e) {
             tr.rollback();
             System.out.println(e);

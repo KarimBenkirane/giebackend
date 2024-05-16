@@ -50,10 +50,10 @@ public class TestController {
     }
     private static DetailleCommande parseDetailCommande(JsonObject detailCommandeJson) {
 
-        TestController commandeController = new TestController();
+        TestController testController = new TestController();
 
-        Produit produit = detailCommandeJson.has("produitObjet") ?
-                commandeController.produitDao.getProduitByID(detailCommandeJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
+        Produit produit = detailCommandeJson.has("produitDTO") ?
+                testController.produitDao.getProduitByID(detailCommandeJson.get("produitDTO").getAsJsonObject().get("id").getAsLong()):
                 null;
 
         int qteAchetee = detailCommandeJson.has("qteCommande") ?
@@ -67,7 +67,7 @@ public class TestController {
         double reduction =  detailCommandeJson.has("reduction") ?
                 detailCommandeJson.get("reduction").getAsDouble():
                 0.0;
-
+cd d
         return new DetailleCommande(produit,qteAchetee,prixAchat,reduction);
 
 
@@ -199,12 +199,12 @@ public class TestController {
             }
 
             List<DetailleCommande> detailCommandes = new ArrayList<>();
-            if(commandeJson.has("detailsCommandes")){
-                JsonArray detailsCommandesJson = commandeJson.get("detailsCommandes").getAsJsonArray();
+            if(commandeJson.has("detailsCommande")){
+                JsonArray detailsCommandesJson = commandeJson.get("detailsCommande").getAsJsonArray();
                 for(int i = 0 ; i < detailsCommandesJson.size() ; i++){
                     JsonObject detailCommandeJson = detailsCommandesJson.get(i).getAsJsonObject();
-                    DetailleCommande detailCommende = parseDetailCommande(detailCommandeJson);
-                    detailCommandes.add(detailCommende);
+                    DetailleCommande detailCommande = parseDetailCommande(detailCommandeJson);
+                    detailCommandes.add(detailCommande);
                 }
             }
 

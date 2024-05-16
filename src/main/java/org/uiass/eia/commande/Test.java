@@ -82,8 +82,11 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-        CommandeDAO cda0=CommandeDAO.getInstance();
-        Commande c=  cda0.getCommandeByID(3);
+        ContactDao c=ContactDao.getInstance();
+        CommandeDAO cdao=CommandeDAO.getInstance();
+        Contact contact=c.findContactById(1);
+        cdao.addCommande(contact,null,dateActuelle,dateReglement,prix,EtatCmd.LIVRÉ);
+
 
         };
     }
