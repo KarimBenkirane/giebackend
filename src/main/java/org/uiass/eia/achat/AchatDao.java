@@ -1,10 +1,13 @@
 package org.uiass.eia.achat;
 
 import org.uiass.eia.crm.Contact;
+import org.uiass.eia.crm.Entreprise;
+import org.uiass.eia.crm.Particulier;
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AchatDao {
@@ -231,5 +234,88 @@ public class AchatDao {
         query.executeUpdate();
         em.flush();
         tr.commit();
+    }
+
+    public List<String> getAllFournisseurs() {
+        List<String> fournisseurs = new ArrayList<>();
+        TypedQuery<Contact> query = em.createQuery( "SELECT DISTINCT c FROM Achat a JOIN a.fournisseur c", Contact.class);
+        List<Contact> contacts = query.getResultList();
+        for(Contact c : contacts){
+            if(c instanceof Particulier){
+                Particulier p = (Particulier)c;
+                fournisseurs.add(p.getNom());
+            }
+            else{
+                Entreprise e = (Entreprise) c;
+                fournisseurs.add(e.getRaisonSociale());
+            }
+        }
+
+        return fournisseurs;
+
+    }
+
+
+    public List<Achat> getAchatsByCriteria(String fournisseur, String statut, String dateApres, String dateAvant, Double prixMin, Double prixMax) {
+        StringBuilder queryString = new StringBuilder("SELECT a FROM Achat a JOIN a.fournisseur f WHERE 1=1");
+
+        List<Object> parameters = new ArrayList<>();
+        int paramIndex = 1;
+
+        if (fournisseur != null && !fournisseur.isEmpty()) {
+            queryString.append(" AND (");
+
+            // Condition for Particulier
+            queryString.append(" (TYPE(f) = Particulier AND f.nom LIKE ?").append(paramIndex).append(")");
+            parameters.add("%" + fournisseur + "%");
+            paramIndex++;
+
+            queryString.append(" OR ");
+
+            // Condition for Entreprise
+            queryString.append(" (TYPE(f) = Entreprise AND f.raisonSociale LIKE ?").append(paramIndex).append(")");
+            parameters.add("%" + fournisseur + "%");
+            paramIndex++;
+
+            queryString.append(")");
+        }
+
+        if (statut != null && !statut.isEmpty()) {
+            queryString.append(" AND a.statutAchat = ?").append(paramIndex);
+            parameters.add(StatutAchat.valueOf(statut));
+            paramIndex++;
+        }
+
+        if (dateApres != null && !dateApres.isEmpty()) {
+            queryString.append(" AND a.dateAchat >= ?").append(paramIndex);
+            parameters.add(java.sql.Date.valueOf(dateApres));
+            paramIndex++;
+        }
+
+        if (dateAvant != null && !dateAvant.isEmpty()) {
+            queryString.append(" AND a.dateAchat <= ?").append(paramIndex);
+            parameters.add(java.sql.Date.valueOf(dateAvant));
+            paramIndex++;
+        }
+
+        if (prixMin != null) {
+            queryString.append(" AND a.prix >= ?").append(paramIndex);
+            parameters.add(prixMin);
+            paramIndex++;
+        }
+
+        if (prixMax != null) {
+            queryString.append(" AND a.prix <= ?").append(paramIndex);
+            parameters.add(prixMax);
+            paramIndex++;
+        }
+
+        TypedQuery<Achat> query = em.createQuery(queryString.toString(), Achat.class);
+
+        for (int i = 0; i < parameters.size(); i++) {
+            query.setParameter(i + 1, parameters.get(i));
+        }
+
+        return query.getResultList();
     }
 }
