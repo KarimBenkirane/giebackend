@@ -211,7 +211,7 @@ public class ProduitDao {
                 jpql += " AND p.marque = :marque";
             }
             if (modele != null) {
-                jpql += " AND p.modele = :modele";
+                jpql += " AND p.modele LIKE :modele";
             }
             if ("disponible".equals(disponibilite)) {
                 jpql += " AND p.qteStock > 0";
@@ -251,7 +251,7 @@ public class ProduitDao {
                 query.setParameter("marque", marque);
             }
             if (modele != null) {
-                query.setParameter("modele", modele);
+                query.setParameter("modele", "%" + modele + "%");
             }
             if (qteStock != null) {
                 query.setParameter("qteStock", qteStock);
@@ -265,7 +265,7 @@ public class ProduitDao {
             if (description != null) {
                 query.setParameter("description", "%" + description + "%");
             }
-            if (categorieProduits != null && !categorieProduits.isEmpty()) {
+            if (categoriesList != null && !categoriesList.isEmpty()) {
                 query.setParameter("categories", categorieProduits);
             }
 
