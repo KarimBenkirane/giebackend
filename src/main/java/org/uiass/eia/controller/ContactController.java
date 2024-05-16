@@ -107,9 +107,14 @@ public class ContactController {
             }
             //Récupérer l'ID de l'adresse afin de la supprimer une fois que le contact a été lui aussi supprimé
             int adresse_id = contactController.contactDao.findAdresseIdByContactId(id);
-            contactController.contactDao.deleteContactById(id);
+            boolean status = contactController.contactDao.deleteContactById(id);
             contactController.adresseDao.deleteAdresse(adresse_id);
-            return "Suppression effectuée avec succès!";
+            if(status){
+                return "Suppression effectuée avec succès!";
+            }else{
+                throw new RuntimeException("Suppression ne marche pas");
+            }
+
         }, gson::toJson);
 
 

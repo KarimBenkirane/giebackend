@@ -1,5 +1,6 @@
 package org.uiass.eia.crm;
 
+import org.uiass.eia.achat.Achat;
 import org.uiass.eia.helper.HibernateUtility;
 
 import javax.persistence.*;
@@ -176,21 +177,40 @@ public class ContactDao {
 	}
 
 
-	public void deleteContactById(int id) {
-		String hql = "delete from Contact where id = :id";
-		try {
+	public boolean deleteContactById(int id) {
+		try{
 			tr.begin();
-			Query query = em.createQuery(hql);
-			query.setParameter("id", id);
-			query.executeUpdate();
+			Contact entity = em.find(Contact.class,id);
+			if(entity != null){
+				em.remove(entity);
+			}
+			em.flush();
 			tr.commit();
-
-		} catch (Exception e) {
+			return true;
+		}catch (Exception e) {
 			tr.rollback();
 			System.out.println(e);
-
+			return false;
 		}
 	}
+
+	public boolean deleteContact(Contact contact){
+		try{
+			tr.begin();
+			Contact entity = em.find(Contact.class,contact.getId());
+			if(entity != null){
+				em.remove(entity);
+			}
+			em.flush();
+			tr.commit();
+			return true;
+		}catch (Exception e) {
+			tr.rollback();
+			System.out.println(e);
+			return false;
+		}
+	}
+
 
 	public void changeTelephone(int id, String telephone) {
 		try {
