@@ -80,7 +80,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>org.uiass.eia.controller.ContactController</mainClass>
+                            <mainClass>org.uiass.eia.controller.TestController</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
