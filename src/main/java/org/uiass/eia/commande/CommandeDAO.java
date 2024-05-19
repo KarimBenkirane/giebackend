@@ -1,6 +1,10 @@
 package org.uiass.eia.commande;
 
 
+import org.uiass.eia.achat.Achat;
+import org.uiass.eia.achat.CategorieProduit;
+import org.uiass.eia.achat.Produit;
+import org.uiass.eia.achat.StatutAchat;
 import org.uiass.eia.crm.Contact;
 import org.uiass.eia.helper.HibernateUtility;
 
@@ -9,6 +13,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.*;
 import javax.persistence.TypedQuery;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CommandeDAO {
@@ -197,5 +202,71 @@ public class CommandeDAO {
         tr.commit();
     }
 
+    public List<Commande> getCommandesByCriteria(String client, String statut, String dateApres, String dateAvant, Double prixMin, Double prixMax) {
+        StringBuilder queryString = new StringBuilder("SELECT a FROM Commande a JOIN a.client f WHERE 1=1");
+
+        List<Object> parameters = new ArrayList<>();
+        int paramIndex = 1;
+
+        if (client != null && !client.isEmpty()) {
+            queryString.append(" AND (");
+
+            // Condition for Particulier
+            queryString.append(" (TYPE(f) = Particulier AND f.nom LIKE ?").append(paramIndex).append(")");
+            parameters.add("%" + client + "%");
+            paramIndex++;
+
+            queryString.append(" OR ");
+
+            // Condition for Entreprise
+            queryString.append(" (TYPE(f) = Entreprise AND f.raisonSociale LIKE ?").append(paramIndex).append(")");
+            parameters.add("%" + client + "%");
+            paramIndex++;
+
+            queryString.append(")");
+        }
+
+        if (statut != null && !statut.isEmpty()) {
+            queryString.append(" AND a.etatCommande = ?").append(paramIndex);
+            parameters.add(EtatCmd.valueOf(statut));
+            paramIndex++;
+        }
+
+        if (dateApres != null && !dateApres.isEmpty()) {
+            queryString.append(" AND a.dateCommande >= ?").append(paramIndex);
+            parameters.add(java.sql.Date.valueOf(dateApres));
+            paramIndex++;
+        }
+
+        if (dateAvant != null && !dateAvant.isEmpty()) {
+            queryString.append(" AND a.dateCommande <= ?").append(paramIndex);
+            parameters.add(java.sql.Date.valueOf(dateAvant));
+            paramIndex++;
+        }
+
+        if (prixMin != null) {
+            queryString.append(" AND a.totalCommande >= ?").append(paramIndex);
+            parameters.add(prixMin);
+            paramIndex++;
+        }
+
+        if (prixMax != null) {
+            queryString.append(" AND a.totalCommande <= ?").append(paramIndex);
+            parameters.add(prixMax);
+            paramIndex++;
+        }
+
+        TypedQuery<Commande> query = em.createQuery(queryString.toString(), Commande.class);
+
+        for (int i = 0; i < parameters.size(); i++) {
+            query.setParameter(i + 1, parameters.get(i));
+        }
+
+        return query.getResultList();
+    }
+
+
 
 }
+
+

@@ -82,12 +82,23 @@ public class Test {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
-        ContactDao c=ContactDao.getInstance();
-        CommandeDAO cdao=CommandeDAO.getInstance();
-        Contact contact=c.findContactById(1);
-        cdao.addCommande(contact,null,dateActuelle,dateReglement,prix,EtatCmd.LIVRÉ);
+        CommandeDAO commandeDAO = CommandeDAO.getInstance();
 
+        // Provide test data
+        String clientT = "araoui";
+        String statut = "Tous les statuts";
+        String dateApres = "2024-01-01";
+        String dateAvant = "2024-12-31";
+        Double prixMin = 100.0;
+        Double prixMax = 500.0;
 
-        };
+        // Call the method
+        List<Commande> commandes = commandeDAO.getCommandesByCriteria(clientT, statut, dateApres, dateAvant, prixMin, prixMax);
+
+        // Output the result
+        for (Commande commandeT : commandes) {
+            System.out.println(commandeT);
+        }
+    }
     }
 

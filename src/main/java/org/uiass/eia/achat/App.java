@@ -7,7 +7,7 @@ public class App {
 
     public static void main(String[] args) {
         Gson gson = new Gson();
-        ProduitDao produitDao = ProduitDao.getInstance();
+        AchatDao.ProduitDao produitDao = AchatDao.ProduitDao.getInstance();
         AchatDao achatDao = AchatDao.getInstance();
         ContactDao contactDao = ContactDao.getInstance();
 

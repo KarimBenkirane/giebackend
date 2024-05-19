@@ -14,12 +14,11 @@ import static spark.Spark.*;
 
 public class TestController {
 
-    private ProduitDao produitDao = ProduitDao.getInstance();
+    private AchatDao.ProduitDao produitDao = AchatDao.ProduitDao.getInstance();
     private AchatDao achatDao = AchatDao.getInstance();
     private static ContactDao contactDao = ContactDao.getInstance();
     private AdresseDao adresseDao = AdresseDao.getInstance();
-    private CommandeDAO commandeDAO = CommandeDAO.getInstance();
-
+    private static CommandeDAO commandeDAO = CommandeDAO.getInstance();
 
 
     public TestController() {
@@ -31,44 +30,45 @@ public class TestController {
         TestController testController = new TestController();
 
         Produit produit = detailAchatJson.has("produitObjet") ?
-                testController.produitDao.getProduitByID(detailAchatJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()):
+                testController.produitDao.getProduitByID(detailAchatJson.get("produitObjet").getAsJsonObject().get("id").getAsLong()) :
                 null;
 
         int qteAchetee = detailAchatJson.has("qteAchetee") ?
-                detailAchatJson.get("qteAchetee").getAsInt():
+                detailAchatJson.get("qteAchetee").getAsInt() :
                 -1;
 
         double prixAchat = detailAchatJson.has("prixAchat") ?
-                detailAchatJson.get("prixAchat").getAsDouble():
+                detailAchatJson.get("prixAchat").getAsDouble() :
                 0.0;
 
-        double reduction =  detailAchatJson.has("reduction") ?
-                detailAchatJson.get("reduction").getAsDouble():
+        double reduction = detailAchatJson.has("reduction") ?
+                detailAchatJson.get("reduction").getAsDouble() :
                 0.0;
 
-        return new DetailAchat(produit,qteAchetee,prixAchat,reduction);
+        return new DetailAchat(produit, qteAchetee, prixAchat, reduction);
     }
+
     private static DetailleCommande parseDetailCommande(JsonObject detailCommandeJson) {
 
         TestController testController = new TestController();
 
         Produit produit = detailCommandeJson.has("produitDTO") ?
-                testController.produitDao.getProduitByID(detailCommandeJson.get("produitDTO").getAsJsonObject().get("id").getAsLong()):
+                testController.produitDao.getProduitByID(detailCommandeJson.get("produitDTO").getAsJsonObject().get("id").getAsLong()) :
                 null;
 
         int qteAchetee = detailCommandeJson.has("qteCommande") ?
-                detailCommandeJson.get("qteCommande").getAsInt():
+                detailCommandeJson.get("qteCommande").getAsInt() :
                 -1;
 
         double prixAchat = detailCommandeJson.has("prixCommande") ?
-                detailCommandeJson.get("prixCommande").getAsDouble():
+                detailCommandeJson.get("prixCommande").getAsDouble() :
                 0.0;
 
-        double reduction =  detailCommandeJson.has("reduction") ?
-                detailCommandeJson.get("reduction").getAsDouble():
+        double reduction = detailCommandeJson.has("reduction") ?
+                detailCommandeJson.get("reduction").getAsDouble() :
                 0.0;
-cd d
-        return new DetailleCommande(produit,qteAchetee,prixAchat,reduction);
+
+        return new DetailleCommande(produit, qteAchetee, prixAchat, reduction);
 
 
     }
@@ -107,51 +107,53 @@ cd d
         get("/api/commande/get/all", (request, response) -> {
             response.type("application/json");
             try {
-                return  testController.commandeDAO.getAllCommande();
+                return testController.commandeDAO.getAllCommande();
             } catch (Exception e) {
                 response.status(500);
                 return "Error retrieving produits: commande not found " + e.getMessage();
             }
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
 
-        get("/api/commande/get/cancelled", (req,res)-> {
+        get("/api/commande/get/cancelled", (req, res) -> {
 
             res.type("application/json");
 
             return testController.commandeDAO.getAllCommandeAnnules();
 
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
 
-        get("/api/commande/get/inprogress", (req,res)-> {
+        get("/api/commande/get/inprogress", (req, res) -> {
 
             res.type("application/json");
 
             return testController.commandeDAO.getAllCommandeEnCours();
 
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
 
-        get("/api/commande/get/done", (req,res)-> {
+        get("/api/commande/get/done", (req, res) -> {
 
             res.type("application/json");
 
             return testController.commandeDAO.getAllCommandeEffectues();
 
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
-        get("/api/commande/get/detailscommande/:id", (req,res)-> {
+        get("/api/commande/get/detailscommande/:id", (req, res) -> {
 
             res.type("application/json");
             long id = Long.parseLong(req.params("id"));
             List<DetailleCommande> dcs = testController.commandeDAO.getDetailsCommande(id);
-            for(DetailleCommande d :dcs) {System.out.println(d);}
+            for (DetailleCommande d : dcs) {
+                System.out.println(d);
+            }
             return dcs;
 
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
-        get("/api/commande/get/byClient/:client_id", (req,res)-> {
+        get("/api/commande/get/byClient/:client_id", (req, res) -> {
 
             res.type("application/json");
             int contact_id = Integer.parseInt(req.params("client_id"));
@@ -159,26 +161,26 @@ cd d
 
             return testController.commandeDAO.getCommandesByClient(contact_id);
 
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
-        get("/api/commande/get/Client/:id", (req,res)-> {
+        get("/api/commande/get/Client/:id", (req, res) -> {
 
             res.type("application/json");
             long id = Long.parseLong(req.params("id"));
 
             return testController.commandeDAO.getClientCommande(id);
 
-        },gson::toJson);
+        }, gson::toJson);
 
-        get("/api/commande/get/prix/:id", (req,res)-> {
+        get("/api/commande/get/prix/:id", (req, res) -> {
 
             res.type("application/json");
             long id = Long.parseLong(req.params("id"));
 
             return testController.commandeDAO.getPrixCommande(id);
 
-        },gson::toJson);
-        get("/api/commande/get/id/:id", (req,res)-> {
+        }, gson::toJson);
+        get("/api/commande/get/id/:id", (req, res) -> {
 
             res.type("application/json");
 
@@ -186,22 +188,22 @@ cd d
 
             return testController.commandeDAO.getCommandeByID(id);
 
-        },gsonWithSerializer2::toJson);
+        }, gsonWithSerializer2::toJson);
 
         post("/api/commandes/add", (req, res) -> {
             JsonObject commandeJson = JsonParser.parseString(req.body()).getAsJsonObject();
             Contact contact = null;
 
-            if(commandeJson.has("client")){
+            if (commandeJson.has("client")) {
                 JsonObject clientJson = commandeJson.get("client").getAsJsonObject();
                 int clientId = clientJson.get("id").getAsInt();
-                contact =TestController.contactDao.findContactById(clientId);
+                contact = TestController.contactDao.findContactById(clientId);
             }
 
             List<DetailleCommande> detailCommandes = new ArrayList<>();
-            if(commandeJson.has("detailsCommande")){
+            if (commandeJson.has("detailsCommande")) {
                 JsonArray detailsCommandesJson = commandeJson.get("detailsCommande").getAsJsonArray();
-                for(int i = 0 ; i < detailsCommandesJson.size() ; i++){
+                for (int i = 0; i < detailsCommandesJson.size(); i++) {
                     JsonObject detailCommandeJson = detailsCommandesJson.get(i).getAsJsonObject();
                     DetailleCommande detailCommande = parseDetailCommande(detailCommandeJson);
                     detailCommandes.add(detailCommande);
@@ -225,8 +227,8 @@ cd d
                     null;
 
             Commande commandeCree = new Commande(contact, detailCommandes, dateCommande, dateReglement, prix, statutCommande);
-            if(!detailCommandes.isEmpty()){
-                for(DetailleCommande detailCommande: detailCommandes){
+            if (!detailCommandes.isEmpty()) {
+                for (DetailleCommande detailCommande : detailCommandes) {
                     detailCommande.setCommandeObjet(commandeCree);
                 }
             }
@@ -235,6 +237,31 @@ cd d
             return "commande ajouté avec succès !";
 
         }, gson::toJson);
+        post("/api/commandes/advSearch", (req, res) -> {
+            JsonObject reqBody = JsonParser.parseString(req.body()).getAsJsonObject();
+
+            String etatCommande = reqBody.has("etatCommande") && !reqBody.get("etatCommande").isJsonNull() ?
+                    reqBody.get("etatCommande").getAsString() : null;
+            // Handle null values or missing keys gracefully
+            String client = reqBody.has("client") && !reqBody.get("client").isJsonNull() ?
+                    reqBody.get("client").getAsString() : null;
+            String dateApres = reqBody.has("dateApres") && !reqBody.get("dateApres").isJsonNull() ?
+                    reqBody.get("dateApres").getAsString() : null;
+
+            String dateAvant = reqBody.has("dateAvant") && !reqBody.get("dateAvant").isJsonNull() ?
+                    reqBody.get("dateAvant").getAsString() : null;
+
+            Double prixMin = reqBody.has("prixMin") && !reqBody.get("prixMin").isJsonNull() ?
+                    reqBody.get("prixMin").getAsDouble() : null;
+
+            Double prixMax = reqBody.has("prixMax") && !reqBody.get("prixMax").isJsonNull() ?
+                    reqBody.get("prixMax").getAsDouble() : null;
+
+            // Call your DAO method with the parameters
+            return TestController.commandeDAO.getCommandesByCriteria(client, etatCommande, dateApres, dateAvant, prixMin, prixMax);
+        }, gsonWithSerializer2::toJson);
+
+
 
 
 

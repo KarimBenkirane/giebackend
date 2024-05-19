@@ -1,7 +1,7 @@
 package org.uiass.eia.controller;
 
 import com.google.gson.*;
-import org.uiass.eia.achat.ProduitDao;
+import org.uiass.eia.achat.AchatDao;
 import org.uiass.eia.achat.Produit;
 import org.uiass.eia.commande.*;
 import org.uiass.eia.crm.Contact;
@@ -9,7 +9,6 @@ import org.uiass.eia.crm.ContactDao;
 
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static spark.Spark.*;
@@ -18,7 +17,7 @@ import static spark.Spark.*;
 public class CommandeController {
 
     CommandeDAO commandeDAO = CommandeDAO.getInstance();
-    ProduitDao produitDao =ProduitDao.getInstance();
+    AchatDao.ProduitDao produitDao = AchatDao.ProduitDao.getInstance();
     private DetailleCommandeDao detailleCommandeDao =DetailleCommandeDao.getInstance();
     ContactDao contactDao = ContactDao.getInstance();
 

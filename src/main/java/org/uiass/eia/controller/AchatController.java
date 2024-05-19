@@ -15,7 +15,7 @@ import static spark.Spark.*;
 
 public class AchatController {
 
-    private ProduitDao produitDao = ProduitDao.getInstance();
+    private AchatDao.ProduitDao produitDao = AchatDao.ProduitDao.getInstance();
     private AchatDao achatDao = AchatDao.getInstance();
     private ContactDao contactDao = ContactDao.getInstance();
     private AdresseDao adresseDao = AdresseDao.getInstance();
