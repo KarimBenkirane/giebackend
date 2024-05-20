@@ -262,6 +262,24 @@ public class TestController {
         }, gsonWithSerializer2::toJson);
 
 
+        put("/api/commandes/update/:id", (req, res) -> {
+            long id = Long.parseLong(req.params("id"));
+            res.type("application/json");
+
+            Commande commande = TestController.commandeDAO.getCommandeByID(id);
+            if (commande == null) {
+                res.status(404);
+                return "Commande non trouvé";
+            }
+            JsonObject commandeJson = JsonParser.parseString(req.body()).getAsJsonObject();
+
+            if (commandeJson.has("etatCommande")) {
+                TestController.commandeDAO.changeStatutAchat(id, commandeJson.get("etatCommande").getAsString());
+            }
+            return "Changements effectués avec succès !";
+        }, gson::toJson);
+
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

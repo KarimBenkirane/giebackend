@@ -73,16 +73,19 @@ public class Test {
         }*/
         // Initialize the list
 
-       /* try {
-            ContactDao c=ContactDao.getInstance();
+        try {
+            //ContactDao c=ContactDao.getInstance();
             CommandeDAO cdao=CommandeDAO.getInstance();
-            Contact contact=c.findContactById(1);
-            cdao.addCommande(contact,detailsCommandes,dateActuelle,dateReglement,prix,EtatCmd.LIVRÉ);
+            //Contact contact=c.findContactById(1);
+            //cdao.addCommande(contact,detailsCommandes,dateActuelle,dateReglement,prix,EtatCmd.LIVRÉ);
+            Commande c = cdao.getCommandeByID(6);
+            System.out.println(c);
+            // cdao.changeStatutAchat(4, String.valueOf(EtatCmd.ANNULÉ));
 
         } catch (Exception e) {
             e.printStackTrace();
-        }*/
-        CommandeDAO commandeDAO = CommandeDAO.getInstance();
+        }
+        /*CommandeDAO commandeDAO = CommandeDAO.getInstance();
 
         // Provide test data
         String clientT = "araoui";
@@ -98,7 +101,7 @@ public class Test {
         // Output the result
         for (Commande commandeT : commandes) {
             System.out.println(commandeT);
-        }
+        }*/
     }
     }
 
