@@ -8,10 +8,10 @@ import org.uiass.eia.achat.Produit;
 public class DetailleCommande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long detailCommande_id;
+    private int detailCommande_id;
 
     @Column(name="quantite_commander")
-    private int quantiteCommander;
+    private int qteCommander;
 
     @Column(name="remise")
     private double remise;
@@ -37,31 +37,31 @@ public class DetailleCommande {
         return prixCommannde;
     }
 
-    public DetailleCommande(Commande commandeObjet,Produit produitObjet,int quantiteCommander, double remise, double prixCommannde) {
+    public DetailleCommande(Commande commandeObjet,Produit produitObjet,int qteCommander, double remise, double prixCommannde) {
         this.commandeObjet=commandeObjet;
         this.produitObjet=produitObjet;
-        this.quantiteCommander = quantiteCommander;
+        this.qteCommander = qteCommander;
         this.remise = remise;
         this.prixCommannde=prixCommannde;
     }
-    public DetailleCommande( Produit produitObjet,int quantiteCommander, double remise, double prixCommannde) {
+    public DetailleCommande( Produit produitObjet,int qteCommander, double remise, double prixCommannde) {
         this.produitObjet=produitObjet;
-        this.quantiteCommander = quantiteCommander;
+        this.qteCommander = qteCommander;
         this.remise = remise;
         this.prixCommannde=prixCommannde;
     }
-    public DetailleCommande(int quantiteCommander,double remise){
-        this.quantiteCommander=quantiteCommander;
+    public DetailleCommande(int qteCommander,double remise){
+        this.qteCommander=qteCommander;
         this.remise=remise;
     }
 
     // Getters and Setters
     public int getQuantiteCommander() {
-        return quantiteCommander;
+        return qteCommander;
     }
 
     public void setQuantiteCommander(int quantiteCommander) {
-        this.quantiteCommander = quantiteCommander;
+        this.qteCommander = quantiteCommander;
     }
 
     public double getRemise() {
@@ -81,14 +81,14 @@ public class DetailleCommande {
 
     public double calculerPrix() {
 
-        return quantiteCommander * (1 - remise) * prixCommannde;
+        return qteCommander * (1 - remise) * prixCommannde;
     }
 
     public long getDetailCommande_id() {
         return detailCommande_id;
     }
 
-    public void setDetailCommande_id(long detailCommande_id) {
+    public void setDetailCommande_id(int detailCommande_id) {
         this.detailCommande_id = detailCommande_id;
     }
     public Commande getCommandeObjet() {
@@ -103,7 +103,7 @@ public class DetailleCommande {
     @Override
     public String toString() {
         return "DetailleCommande{" +
-                "quantiteCommander=" + quantiteCommander +
+                "qteCommander=" + qteCommander +
                 ", remise=" + remise +
                 '}';
     }

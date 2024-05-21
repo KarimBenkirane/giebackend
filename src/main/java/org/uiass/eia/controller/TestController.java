@@ -56,8 +56,8 @@ public class TestController {
                 testController.produitDao.getProduitByID(detailCommandeJson.get("produitDTO").getAsJsonObject().get("id").getAsLong()) :
                 null;
 
-        int qteAchetee = detailCommandeJson.has("qteCommande") ?
-                detailCommandeJson.get("qteCommande").getAsInt() :
+        int qteAchetee = detailCommandeJson.has("qteCommander") ?
+                detailCommandeJson.get("qteCommander").getAsInt() :
                 -1;
 
         double prixAchat = detailCommandeJson.has("prixCommande") ?
@@ -68,9 +68,10 @@ public class TestController {
                 detailCommandeJson.get("reduction").getAsDouble() :
                 0.0;
 
-        return new DetailleCommande(produit, qteAchetee, prixAchat, reduction);
-
-
+        DetailleCommande d  = null;
+         d = new DetailleCommande(produit, qteAchetee, prixAchat, reduction);
+        System.out.println(d);
+         return d;
     }
 
     public static void main(String[] args) {
@@ -278,6 +279,16 @@ public class TestController {
             }
             return "Changements effectués avec succès !";
         }, gson::toJson);
+
+        get("/api/commandes/get/detailscommandes/:id", (req,res)-> {
+
+            res.type("application/json");
+            long id = Long.parseLong(req.params("id"));
+
+
+            return testController.commandeDAO.getDetailsCommande(id);
+
+        },gsonWithSerializer2::toJson);
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
