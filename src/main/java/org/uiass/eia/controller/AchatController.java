@@ -268,7 +268,7 @@ public class AchatController {
 
             List<String> categoriesList = null;
 
-            if(categoriesArray != null || !categoriesArray.isEmpty()){
+            if(categoriesArray != null && !categoriesArray.isEmpty()){
                 categoriesList = new ArrayList<>();
                 for(int i = 0; i < categoriesArray.size(); i++){
                     categoriesList.add(categoriesArray.get(i).getAsString());
